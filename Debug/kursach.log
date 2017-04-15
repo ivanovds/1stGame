@@ -1,4 +1,0 @@
-﻿  main.cpp
-d:\univer\proga\курсач\kursach\kursach\main.cpp(744): warning C4715: 'gameboard::MachinCommand': not all control paths return a value
-  kursach.vcxproj -> D:\univer\Proga\курсач\kursach\kursach\Debug\kursach.exe
-  kursach.vcxproj -> D:\univer\Proga\курсач\kursach\kursach\Debug\kursach.pdb (Partial PDB)
