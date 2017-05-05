@@ -6,10 +6,10 @@
 using namespace std;
 using namespace sf;
 
-class Game {
+class Game{
 
 
 public:
-	void draw_field(RenderWindow & window);
+	void draw_game(RenderWindow & window);
 
 };

@@ -5,6 +5,7 @@ using namespace std;
 using namespace sf;
 
 void Menu::draw_menu(RenderWindow & window) {
+	
 	Texture menuTexture1, menuTexture2, menuTexture3, menuTexture4,
 		menuTexture5, menuTexture6, menuTexture7, aboutTexture, menuBackground;
 	menuTexture1.loadFromFile("images/new.png");

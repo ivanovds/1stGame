@@ -9,9 +9,9 @@ using namespace sf;
 int main()
 {
 	RenderWindow window(sf::VideoMode(322, 345), "MyGame");
-	//Menu menu;
-	//menu.draw_menu(window);//вызов меню
+	Menu menu;
+	menu.draw_menu(window);//вызов меню
 	Game gm;
-	gm.draw_field(window);
+	gm.draw_game(window);
 	return 0;
 }
