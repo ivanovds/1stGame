@@ -5,6 +5,16 @@
 using namespace std;
 using namespace sf;
 
+// ################## class Figure ##################
+Figure & Figure::set_figure_i(int i) {
+	figure_i = i;
+	return *this;
+};
+Figure & Figure::set_figure_j(int j) {
+	figure_j = j;
+	return *this;
+};
+
 
 // ################## class Player ##################
 Player & Player::set_step(bool stp) {
@@ -43,6 +53,7 @@ MyLines & MyLines::set_coord(float coord_x, float coord_y) {
 	this->coord_y = coord_y;
 	return *this;
 };
+
 
 // Mouse position 
 int gt_ms_position(int ms_position, RenderWindow & window) {
@@ -208,19 +219,61 @@ int gt_ms_position(int ms_position, RenderWindow & window) {
 		if (IntRect(272, 160, 30, 16).contains(Mouse::getPosition(window))) { ms_position = 139; }
 		if (IntRect(306, 160, 30, 16).contains(Mouse::getPosition(window))) { ms_position = 140; }
 
+		if (IntRect(0, 194, 30, 16).contains(Mouse::getPosition(window))) { ms_position = 141; }
+		if (IntRect(34, 194, 30, 16).contains(Mouse::getPosition(window))) { ms_position = 142; }
+		if (IntRect(68, 194, 30, 16).contains(Mouse::getPosition(window))) { ms_position = 143; }
+		if (IntRect(102, 194, 30, 16).contains(Mouse::getPosition(window))) { ms_position = 144; }
+		if (IntRect(136, 194, 30, 16).contains(Mouse::getPosition(window))) { ms_position = 145; }
+		if (IntRect(170, 194, 30, 16).contains(Mouse::getPosition(window))) { ms_position = 146; }
+		if (IntRect(204, 194, 30, 16).contains(Mouse::getPosition(window))) { ms_position = 147; }
+		if (IntRect(238, 194, 30, 16).contains(Mouse::getPosition(window))) { ms_position = 148; }
+		if (IntRect(272, 194, 30, 16).contains(Mouse::getPosition(window))) { ms_position = 149; }
+		if (IntRect(306, 194, 30, 16).contains(Mouse::getPosition(window))) { ms_position = 150; }
 
+		if (IntRect(0, 228, 30, 16).contains(Mouse::getPosition(window))) { ms_position = 151; }
+		if (IntRect(34, 228, 30, 16).contains(Mouse::getPosition(window))) { ms_position = 152; }
+		if (IntRect(68, 228, 30, 16).contains(Mouse::getPosition(window))) { ms_position = 153; }
+		if (IntRect(102, 228, 30, 16).contains(Mouse::getPosition(window))) { ms_position = 154; }
+		if (IntRect(136, 228, 30, 16).contains(Mouse::getPosition(window))) { ms_position = 155; }
+		if (IntRect(170, 228, 30, 16).contains(Mouse::getPosition(window))) { ms_position = 156; }
+		if (IntRect(204, 228, 30, 16).contains(Mouse::getPosition(window))) { ms_position = 157; }
+		if (IntRect(238, 228, 30, 16).contains(Mouse::getPosition(window))) { ms_position = 158; }
+		if (IntRect(272, 228, 30, 16).contains(Mouse::getPosition(window))) { ms_position = 159; }
+		if (IntRect(306, 228, 30, 16).contains(Mouse::getPosition(window))) { ms_position = 160; }
 
+		if (IntRect(0, 262, 30, 16).contains(Mouse::getPosition(window))) { ms_position = 161; }
+		if (IntRect(34, 262, 30, 16).contains(Mouse::getPosition(window))) { ms_position = 162; }
+		if (IntRect(68, 262, 30, 16).contains(Mouse::getPosition(window))) { ms_position = 163; }
+		if (IntRect(102, 262, 30, 16).contains(Mouse::getPosition(window))) { ms_position = 164; }
+		if (IntRect(136, 262, 30, 16).contains(Mouse::getPosition(window))) { ms_position = 165; }
+		if (IntRect(170, 262, 30, 16).contains(Mouse::getPosition(window))) { ms_position = 166; }
+		if (IntRect(204, 262, 30, 16).contains(Mouse::getPosition(window))) { ms_position = 167; }
+		if (IntRect(238, 262, 30, 16).contains(Mouse::getPosition(window))) { ms_position = 168; }
+		if (IntRect(272, 262, 30, 16).contains(Mouse::getPosition(window))) { ms_position = 169; }
+		if (IntRect(306, 262, 30, 16).contains(Mouse::getPosition(window))) { ms_position = 170; }
 
+		if (IntRect(0, 296, 30, 16).contains(Mouse::getPosition(window))) { ms_position = 171; }
+		if (IntRect(34, 296, 30, 16).contains(Mouse::getPosition(window))) { ms_position = 172; }
+		if (IntRect(68, 296, 30, 16).contains(Mouse::getPosition(window))) { ms_position = 173; }
+		if (IntRect(102, 296, 30, 16).contains(Mouse::getPosition(window))) { ms_position = 174; }
+		if (IntRect(136, 296, 30, 16).contains(Mouse::getPosition(window))) { ms_position = 175; }
+		if (IntRect(170, 296, 30, 16).contains(Mouse::getPosition(window))) { ms_position = 176; }
+		if (IntRect(204, 296, 30, 16).contains(Mouse::getPosition(window))) { ms_position = 177; }
+		if (IntRect(238, 296, 30, 16).contains(Mouse::getPosition(window))) { ms_position = 178; }
+		if (IntRect(272, 296, 30, 16).contains(Mouse::getPosition(window))) { ms_position = 179; }
+		if (IntRect(306, 296, 30, 16).contains(Mouse::getPosition(window))) { ms_position = 180; }
 
+		if (IntRect(0, 333, 340, 84).contains(Mouse::getPosition(window))) { ms_position = 0; } // нижняя часть поля(инфоблок)
+		
 	return ms_position;
 }
 
 // ################## class Game ##################
 void Game::draw_game(RenderWindow & window) {
-	// ############## draw field
+	// ############## задаем координаты палочек
 	float x = 30, y = 0;
-	const int size_rect_x = 30, size_rect_y = 30;
-	RectangleShape rectangle[size_rect_x][size_rect_y];
+	
+	RectangleShape rectangle[20][20];
 	for (int i = 0; i < 9; i++) {				// vertical
 		for (int j = 0; j < 10; j++) {
 			rectangle[i][j].setSize(Vector2f(4, 34));
@@ -244,21 +297,24 @@ void Game::draw_game(RenderWindow & window) {
 		}
 		x = 0;
 		y += 34;
-	} //draw field ###############
+	} //задали координаты палочек ###############
 
-	const int xindex = 10, yindex = 10;
-	MyLines arr[xindex][yindex];
+	MyLines arr[10][10];
 	for (int i = 0; i < 10; i++) {
 		arr[i][0].set_left(1);
+		++arr[i][0];
 	};
 	for (int i = 0; i < 10; i++) {
 		arr[i][9].set_right(1);
+		++arr[i][9];
 	};
 	for (int i = 0; i < 10; i++) {
 		arr[0][i].set_top(1);
+		++arr[0][i];
 	};
 	for (int i = 0; i < 10; i++) {
 		arr[9][i].set_bottom(1);
+		++arr[9][i];
 	}; // задали начальные значения для крайних квадратиков 
 	float temp_x = 0, temp_y = 0;
 	for (int i = 0; i < 10; i++) {
@@ -271,1911 +327,2456 @@ void Game::draw_game(RenderWindow & window) {
 	} // задали координаты для спрайтов
 
 	MyLines xx[10][10], oo[10][10];
-	int i = 0, j = 0;
-	for(int i = 0; i < 10; i++){
-		for (int j = 0; j < 10; j++) {
-			xx[i][j].krestik_txt.loadFromFile("images/x.png");					//загрузили текстуру
-			xx[i][j].krestik;													//объявили спрайт 
-			xx[i][j].krestik.setTexture(xx[i][j].krestik_txt);					//загрузили текстуру в спрайт
-			//xx[i][j].krestik.setPosition(arr[i][j].coord_x, arr[i][j].coord_y); //задали позицию
-		}
-	}
-			
 	
+	int size_krestik = 0 , size_nolik = 0;
+	Figure fig1[101], fig2[101]; 
 	int ms_position = 0;
 	Player player_x, player_o;
-	player_x.set_step(true);
+	
+	int sensor_klick[20][20];
+	for (int i = 0; i < 20; i++) {
+		for (int j = 0; j < 20; j++) {
+			sensor_klick[i][j] = 0;
+		}
+	}
+
+	int queue = 1; // 0 - ходит нолик, 1 - ходит крестик
 				//######## game loop
 	while (!Keyboard::isKeyPressed(Keyboard::Escape))
 	{
+		int queue_2 = 0;
 		window.clear(Color::White);
 		ms_position = gt_ms_position(ms_position, window);
 
 		Event event;
-		while (window.pollEvent(event))
-		{
-			if (event.type == Event::Closed) { window.close(); }
+		while (window.pollEvent(event)) {
 			
-			while (player_x.step)
-			{
+				if (event.type == Event::Closed) { window.close(); }
 				if (event.type == event.MouseButtonReleased && event.mouseButton.button == Mouse::Left)
 				{
-				switch (ms_position) {
-					// vertical
-				case 1:
-				{
-					arr[0][0].set_right(1);
-					arr[0][1].set_left(1);
-					++arr[0][0];
-					++arr[0][1];
-					rectangle[0][0].setFillColor(Color::Blue);
-					break;
-				}
-				case 2:
-				{
-					arr[1][0].set_right(1);
-					arr[1][1].set_left(1);
-					++arr[1][0];
-					++arr[1][1];
-					rectangle[0][1].setFillColor(Color::Blue);
-					break;
-				}
-				case 3:
-				{
-					arr[2][0].set_right(1);
-					arr[2][1].set_left(1);
-					++arr[2][0];
-					++arr[2][1];
-					rectangle[0][2].setFillColor(Color::Blue);
-					break;
-				}
-				case 4:
-				{
-					arr[3][0].set_right(1);
-					arr[3][1].set_left(1);
-					++arr[3][0];
-					++arr[3][1];
-					rectangle[0][3].setFillColor(Color::Blue);
-					break;
-				}
-				case 5:
-				{
-					arr[4][0].set_right(1);
-					arr[4][1].set_left(1);
-					++arr[4][0];
-					++arr[4][1];
-					rectangle[0][4].setFillColor(Color::Blue);
-					break;
-				}
-				case 6:
-				{
-					arr[5][0].set_right(1);
-					arr[5][1].set_left(1);
-					++arr[5][0];
-					++arr[5][1];
-					rectangle[0][5].setFillColor(Color::Blue);
-					break;
-				}
-				case 7:
-				{
-					arr[6][0].set_right(1);
-					arr[6][1].set_left(1);
-					++arr[6][0];
-					++arr[6][1];
-					rectangle[0][6].setFillColor(Color::Blue);
-					break;
-				}
-				case 8:
-				{
-					arr[7][0].set_right(1);
-					arr[7][1].set_left(1);
-					++arr[7][0];
-					++arr[7][1];
-					rectangle[0][7].setFillColor(Color::Blue);
-					break;
-				}
-				case 9:
-				{
-					arr[8][0].set_right(1);
-					arr[8][1].set_left(1);
-					++arr[8][0];
-					++arr[8][1];
-					rectangle[0][8].setFillColor(Color::Blue);
-					break;
-				}
-				case 10:
-				{
-					arr[9][0].set_right(1);
-					arr[9][1].set_left(1);
-					++arr[9][0];
-					++arr[9][1];
-					rectangle[0][9].setFillColor(Color::Blue);
-					break;
-				}
-				case 11:
-				{
-					arr[0][1].set_right(1);
-					arr[0][2].set_left(1);
-					++arr[0][1];
-					++arr[0][2];
-					rectangle[1][0].setFillColor(Color::Blue);
-					break;
-				}
-				case 12:
-				{
-					arr[1][1].set_right(1);
-					arr[1][2].set_left(1);
-					++arr[1][1];
-					++arr[1][2];
-					rectangle[1][1].setFillColor(Color::Blue);
-					break;
-				}
-				case 13:
-				{
-					arr[2][1].set_right(1);
-					arr[2][2].set_left(1);
-					++arr[2][1];
-					++arr[2][2];
-					rectangle[1][2].setFillColor(Color::Blue);
-					break;
-				}
-				case 14:
-				{
-					arr[3][1].set_right(1);
-					arr[3][2].set_left(1);
-					++arr[3][1];
-					++arr[3][2];
-					rectangle[1][3].setFillColor(Color::Blue);
-					break;
-				}
-				case 15:
-				{
-					arr[4][1].set_right(1);
-					arr[4][2].set_left(1);
-					++arr[4][1];
-					++arr[4][2];
-					rectangle[1][4].setFillColor(Color::Blue);
-					break;
-				}
-				case 16:
-				{
-					arr[5][1].set_right(1);
-					arr[5][2].set_left(1);
-					++arr[5][1];
-					++arr[5][2];
-					rectangle[1][5].setFillColor(Color::Blue);
-					break;
-				}
-				case 17:
-				{
-					arr[6][1].set_right(1);
-					arr[6][2].set_left(1);
-					++arr[6][1];
-					++arr[6][2];
-					rectangle[1][6].setFillColor(Color::Blue);
-					break;
-				}
-				case 18:
-				{
-					arr[7][1].set_right(1);
-					arr[7][2].set_left(1);
-					++arr[7][1];
-					++arr[7][2];
-					rectangle[1][7].setFillColor(Color::Blue);
-					break;
-				}
-				case 19:
-				{
-					arr[8][1].set_right(1);
-					arr[8][2].set_left(1);
-					++arr[8][1];
-					++arr[8][2];
-					rectangle[1][8].setFillColor(Color::Blue);
-					break;
-				}
-				case 20:
-				{
-					arr[9][1].set_right(1);
-					arr[9][2].set_left(1);
-					++arr[9][1];
-					++arr[9][2];
-					rectangle[1][9].setFillColor(Color::Blue);
-					break;
-				}
-				case 21:
-				{
-					arr[0][2].set_right(1);
-					arr[0][3].set_left(1);
-					++arr[0][2];
-					++arr[0][3];
-					rectangle[2][0].setFillColor(Color::Blue);
-					break;
-				}
-				case 22:
-				{
-					arr[1][2].set_right(1);
-					arr[1][3].set_left(1);
-					++arr[1][2];
-					++arr[1][3];
-					rectangle[2][1].setFillColor(Color::Blue);
-					break;
-				}
-				case 23:
-				{
-					arr[2][2].set_right(1);
-					arr[2][3].set_left(1);
-					++arr[2][2];
-					++arr[2][3];
-					rectangle[2][2].setFillColor(Color::Blue);
-					break;
-				}
-				case 24:
-				{
-					arr[3][2].set_right(1);
-					arr[3][3].set_left(1);
-					++arr[3][2];
-					++arr[3][3];
-					rectangle[2][3].setFillColor(Color::Blue);
-					break;
-				}
-				case 25:
-				{
-					arr[4][2].set_right(1);
-					arr[4][3].set_left(1);
-					++arr[4][2];
-					++arr[4][3];
-					rectangle[2][4].setFillColor(Color::Blue);
-					break;
-				}
-				case 26:
-				{
-					arr[5][2].set_right(1);
-					arr[5][3].set_left(1);
-					++arr[5][2];
-					++arr[5][3];
-					rectangle[2][5].setFillColor(Color::Blue);
-					break;
-				}
-				case 27:
-				{
-					arr[6][2].set_right(1);
-					arr[6][3].set_left(1);
-					++arr[6][2];
-					++arr[6][3];
-					rectangle[2][6].setFillColor(Color::Blue);
-					break;
-				}
-				case 28:
-				{
-					arr[7][2].set_right(1);
-					arr[7][3].set_left(1);
-					++arr[7][2];
-					++arr[7][3];
-					rectangle[2][7].setFillColor(Color::Blue);
-					break;
-				}
-				case 29:
-				{
-					arr[8][2].set_right(1);
-					arr[8][3].set_left(1);
-					++arr[8][2];
-					++arr[8][3];
-					rectangle[2][8].setFillColor(Color::Blue);
-					break;
-				}
-				case 30:
-				{
-					arr[9][2].set_right(1);
-					arr[9][3].set_left(1);
-					++arr[9][2];
-					++arr[9][3];
-					rectangle[2][9].setFillColor(Color::Blue);
-					break;
-				}
-				case 31:
-				{
-					arr[0][3].set_right(1);
-					arr[0][4].set_left(1);
-					++arr[0][3];
-					++arr[0][4];
-					rectangle[3][0].setFillColor(Color::Blue);
-					break;
-				}
-				case 32:
-				{
-					arr[1][3].set_right(1);
-					arr[1][4].set_left(1);
-					++arr[1][3];
-					++arr[1][4];
-					rectangle[3][1].setFillColor(Color::Blue);
-					break;
-				}
-				case 33:
-				{
-					arr[2][3].set_right(1);
-					arr[2][4].set_left(1);
-					++arr[2][3];
-					++arr[2][4];
-					rectangle[3][2].setFillColor(Color::Blue);
-					break;
-				}
-				case 34:
-				{
-					arr[3][3].set_right(1);
-					arr[3][4].set_left(1);
-					++arr[3][3];
-					++arr[3][4];
-					rectangle[3][3].setFillColor(Color::Blue);
-					break;
-				}
-				case 35:
-				{
-					arr[4][3].set_right(1);
-					arr[4][4].set_left(1);
-					++arr[4][3];
-					++arr[4][4];
-					rectangle[3][4].setFillColor(Color::Blue);
-					break;
-				}
-				case 36:
-				{
-					arr[5][3].set_right(1);
-					arr[5][4].set_left(1);
-					++arr[5][4];
-					++arr[5][3];
-					rectangle[3][5].setFillColor(Color::Blue);
-					break;
-				}
-				case 37:
-				{
-					arr[6][3].set_right(1);
-					arr[6][4].set_left(1);
-					++arr[6][4];
-					++arr[6][3];
-					rectangle[3][6].setFillColor(Color::Blue);
-					break;
-				}
-				case 38:
-				{
-					arr[7][3].set_right(1);
-					arr[7][4].set_left(1);
-					++arr[7][4];
-					++arr[7][3];
-					rectangle[3][7].setFillColor(Color::Blue);
-					break;
-				}
-				case 39:
-				{
-					arr[8][3].set_right(1);
-					arr[8][4].set_left(1);
-					++arr[8][4];
-					++arr[8][3];
-					rectangle[3][8].setFillColor(Color::Blue);
-					break;
-				}
-				case 40:
-				{
-					arr[9][3].set_right(1);
-					arr[9][4].set_left(1);
-					++arr[9][4];
-					++arr[9][3];
-					rectangle[3][9].setFillColor(Color::Blue);
-					break;
-				}
-				case 41:
-				{
-					arr[0][4].set_right(1);
-					arr[0][5].set_left(1);
-					++arr[0][5];
-					++arr[0][4];
-					rectangle[4][0].setFillColor(Color::Blue);
-					break;
-				}
-				case 42:
-				{
-					arr[1][4].set_right(1);
-					arr[1][5].set_left(1);
-					++arr[1][5];
-					++arr[1][4];
-					rectangle[4][1].setFillColor(Color::Blue);
-					break;
-				}
-				case 43:
-				{
-					arr[2][4].set_right(1);
-					arr[2][5].set_left(1);
-					++arr[2][5];
-					++arr[2][4];
-					rectangle[4][2].setFillColor(Color::Blue);
-					break;
-				}
-				case 44:
-				{
-					arr[3][4].set_right(1);
-					arr[3][5].set_left(1);
-					++arr[3][4];
-					++arr[3][5];
-					rectangle[4][3].setFillColor(Color::Blue);
-					break;
-				}
-				case 45:
-				{
-					arr[4][4].set_right(1);
-					arr[4][5].set_left(1);
-					++arr[4][5];
-					++arr[4][4];
-					rectangle[4][4].setFillColor(Color::Blue);
-					break;
-				}
-				case 46:
-				{
-					arr[5][4].set_right(1);
-					arr[5][5].set_left(1);
-					++arr[5][4];
-					++arr[5][5];
-					rectangle[4][5].setFillColor(Color::Blue);
-					break;
-				}
-				case 47:
-				{
-					arr[6][4].set_right(1);
-					arr[6][5].set_left(1);
-					++arr[6][4];
-					++arr[6][5];
-					rectangle[4][6].setFillColor(Color::Blue);
-					break;
-				}
-				case 48:
-				{
-					arr[7][4].set_right(1);
-					arr[7][5].set_left(1);
-					++arr[7][4];
-					++arr[7][5];
-					rectangle[4][7].setFillColor(Color::Blue);
-					break;
-				}
-				case 49:
-				{
-					arr[8][4].set_right(1);
-					arr[8][5].set_left(1);
-					++arr[8][4];
-					++arr[8][5];
-					rectangle[4][8].setFillColor(Color::Blue);
-					break;
-				}
-				case 50:
-				{
-					arr[9][4].set_right(1);
-					arr[9][5].set_left(1);
-					++arr[9][4];
-					++arr[9][5];
-					rectangle[4][9].setFillColor(Color::Blue);
-					break;
-				}
-				// horizontal
-				case 91:
-				{
-					arr[0][0].set_bottom(1);
-					arr[1][0].set_top(1);
-					++arr[0][0];
-					++arr[1][0];
-					rectangle[9][10].setFillColor(Color::Blue);
-					break;
-				}
-				case 92:
-				{
-					arr[0][1].set_bottom(1);
-					arr[1][1].set_top(1);
-					++arr[0][1];
-					++arr[1][1];
-					rectangle[9][11].setFillColor(Color::Blue);
-					break;
-				}
-				case 93:
-				{
-					arr[0][2].set_bottom(1);
-					arr[1][2].set_top(1);
-					++arr[0][2];
-					++arr[1][2];
-					rectangle[9][12].setFillColor(Color::Blue);
-					break;
-				}
-				case 94:
-				{
-					arr[0][3].set_bottom(1);
-					arr[1][3].set_top(1);
-					++arr[0][3];
-					++arr[1][3];
-					rectangle[9][13].setFillColor(Color::Blue);
-					break;
-				}
-				case 95:
-				{
-					arr[0][4].set_bottom(1);
-					arr[1][4].set_top(1);
-					++arr[0][4];
-					++arr[1][4];
-					rectangle[9][14].setFillColor(Color::Blue);
-					break;
-				}
-				case 96:
-				{
-					arr[0][5].set_bottom(1);
-					arr[1][5].set_top(1);
-					++arr[0][5];
-					++arr[1][5];
-					rectangle[9][15].setFillColor(Color::Blue);
-					break;
-				}
-				case 97:
-				{
-					arr[0][6].set_bottom(1);
-					arr[1][6].set_top(1);
-					++arr[0][6];
-					++arr[1][6];
-					rectangle[9][16].setFillColor(Color::Blue);
-					break;
-				}
-				case 98:
-				{
-					arr[0][7].set_bottom(1);
-					arr[1][7].set_top(1);
-					++arr[0][7];
-					++arr[1][7];
-					rectangle[9][17].setFillColor(Color::Blue);
-					break;
-				}
-				case 99:
-				{
-					arr[0][8].set_bottom(1);
-					arr[1][8].set_top(1);
-					++arr[0][8];
-					++arr[1][8];
-					rectangle[9][18].setFillColor(Color::Blue);
-					break;
-				}
-				case 100:
-				{
-					arr[0][9].set_bottom(1);
-					arr[1][9].set_top(1);
-					++arr[0][9];
-					++arr[1][9];
-					rectangle[9][19].setFillColor(Color::Blue);
-					break;
-				}
-				case 101:
-				{
-					arr[1][0].set_bottom(1);
-					arr[2][0].set_top(1);
-					++arr[1][0];
-					++arr[2][0];
-					rectangle[10][10].setFillColor(Color::Blue);
-					break;
-				}
-				case 102:
-				{
-					arr[1][1].set_bottom(1);
-					arr[2][1].set_top(1);
-					++arr[2][1];
-					++arr[1][1];
-					rectangle[10][11].setFillColor(Color::Blue);
-					break;
-				}
-				case 103:
-				{
-					arr[1][2].set_bottom(1);
-					arr[2][2].set_top(1);
-					++arr[1][2];
-					++arr[2][2];
-					rectangle[10][12].setFillColor(Color::Blue);
-					break;
-				}
-				case 104:
-				{
-					arr[1][3].set_bottom(1);
-					arr[2][3].set_top(1);
-					++arr[1][3];
-					++arr[2][3];
-					rectangle[10][13].setFillColor(Color::Blue);
-					break;
-				}
-				case 105:
-				{
-					arr[1][4].set_bottom(1);
-					arr[2][4].set_top(1);
-					++arr[1][4];
-					++arr[2][4];
-					rectangle[10][14].setFillColor(Color::Blue);
-					break;
-				}
-				case 106:
-				{
-					arr[1][5].set_bottom(1);
-					arr[2][5].set_top(1);
-					++arr[1][5];
-					++arr[2][5];
-					rectangle[10][15].setFillColor(Color::Blue);
-					break;
-				}
-				case 107:
-				{
-					arr[1][6].set_bottom(1);
-					arr[2][6].set_top(1);
-					++arr[2][6];
-					++arr[1][6];
-					rectangle[10][16].setFillColor(Color::Blue);
-					break;
-				}
-				case 108:
-				{
-					arr[1][7].set_bottom(1);
-					arr[2][7].set_top(1);
-					++arr[2][7];
-					++arr[1][7];
-					rectangle[10][17].setFillColor(Color::Blue);
-					break;
-				}
-				case 109:
-				{
-					arr[1][8].set_bottom(1);
-					arr[2][8].set_top(1);
-					++arr[1][8];
-					++arr[2][8];
-					rectangle[10][18].setFillColor(Color::Blue);
-					break;
-				}
-				case 110:
-				{
-					arr[1][9].set_bottom(1);
-					arr[2][9].set_top(1);
-					++arr[1][9];
-					++arr[2][9];
-					rectangle[10][19].setFillColor(Color::Blue);
-					break;
-				}
-				case 111:
-				{
-					arr[2][0].set_bottom(1);
-					arr[3][0].set_top(1);
-					++arr[3][0];
-					++arr[2][0];
-					rectangle[11][10].setFillColor(Color::Blue);
-					break;
-				}
-				case 112:
-				{
-					arr[2][1].set_bottom(1);
-					arr[3][1].set_top(1);
-					++arr[2][1];
-					++arr[3][1];
-					rectangle[11][11].setFillColor(Color::Blue);
-					break;
-				}
-				case 113:
-				{
-					arr[2][2].set_bottom(1);
-					arr[3][2].set_top(1);
-					++arr[3][2];
-					++arr[2][2];
-					rectangle[11][12].setFillColor(Color::Blue);
-					break;
-				}
-				case 114:
-				{
-					arr[2][3].set_bottom(1);
-					arr[3][3].set_top(1);
-					++arr[3][3];
-					++arr[2][3];
-					rectangle[11][13].setFillColor(Color::Blue);
-					break;
-				}
-				case 115:
-				{
-					arr[2][4].set_bottom(1);
-					arr[3][4].set_top(1);
-					++arr[2][4];
-					++arr[3][4];
-					rectangle[11][14].setFillColor(Color::Blue);
-					break;
-				}
-				case 116:
-				{
-					arr[2][5].set_bottom(1);
-					arr[3][5].set_top(1);
-					++arr[3][5];
-					++arr[2][5];
-					rectangle[11][15].setFillColor(Color::Blue);
-					break;
-				}
-				case 117:
-				{
-					arr[2][6].set_bottom(1);
-					arr[3][6].set_top(1);
-					++arr[3][6];
-					++arr[2][6];
-					rectangle[11][16].setFillColor(Color::Blue);
-					break;
-				}
-				case 118:
-				{
-					arr[2][7].set_bottom(1);
-					arr[3][7].set_top(1);
-					++arr[3][7];
-					++arr[2][7];
-					rectangle[11][17].setFillColor(Color::Blue);
-					break;
-				}
-				case 119:
-				{
-					arr[2][8].set_bottom(1);
-					arr[3][8].set_top(1);
-					++arr[2][8];
-					++arr[3][8];
-					rectangle[11][18].setFillColor(Color::Blue);
-					break;
-				}
-				case 120:
-				{
-					arr[2][9].set_bottom(1);
-					arr[3][9].set_top(1);
-					++arr[3][9];
-					++arr[2][9];
-					rectangle[11][19].setFillColor(Color::Blue);
-					break;
-				}
-				case 121:
-				{
-					arr[3][0].set_bottom(1);
-					arr[4][0].set_top(1);
-					++arr[3][0];
-					++arr[4][0];
-					rectangle[12][10].setFillColor(Color::Blue);
-					break;
-				}
-				case 122:
-				{
-					arr[3][1].set_bottom(1);
-					arr[4][1].set_top(1);
-					++arr[3][1];
-					++arr[4][1];
-					rectangle[12][11].setFillColor(Color::Blue);
-					break;
-				}
-				case 123:
-				{
-					arr[3][2].set_bottom(1);
-					arr[4][2].set_top(1);
-					++arr[4][2];
-					++arr[3][2];
-					rectangle[12][12].setFillColor(Color::Blue);
-					break;
-				}
-				case 124:
-				{
-					arr[3][3].set_bottom(1);
-					arr[4][3].set_top(1);
-					++arr[3][3];
-					++arr[4][3];
-					rectangle[12][13].setFillColor(Color::Blue);
-					break;
-				}
-				case 125:
-				{
-					arr[3][4].set_bottom(1);
-					arr[4][4].set_top(1);
-					++arr[3][4];
-					++arr[4][4];
-					rectangle[12][14].setFillColor(Color::Blue);
-					break;
-				}
-				case 126:
-				{
-					arr[3][5].set_bottom(1);
-					arr[4][5].set_top(1);
-					++arr[3][5];
-					++arr[4][5];
-					rectangle[12][15].setFillColor(Color::Blue);
-					break;
-				}
-				case 127:
-				{
-					arr[3][6].set_bottom(1);
-					arr[4][6].set_top(1);
-					++arr[3][6];
-					++arr[4][6];
-					rectangle[12][16].setFillColor(Color::Blue);
-					break;
-				}
-				case 128:
-				{
-					arr[3][7].set_bottom(1);
-					arr[4][7].set_top(1);
-					++arr[3][7];
-					++arr[4][7];
-					rectangle[12][17].setFillColor(Color::Blue);
-					break;
-				}
-				case 129:
-				{
-					arr[3][8].set_bottom(1);
-					arr[4][8].set_top(1);
-					++arr[4][8];
-					++arr[3][8];
-					rectangle[12][18].setFillColor(Color::Blue);
-					break;
-				}
-				case 130:
-				{
-					arr[3][9].set_bottom(1);
-					arr[4][9].set_top(1);
-					++arr[3][9];
-					++arr[4][9];
-					rectangle[12][19].setFillColor(Color::Blue);
-					break;
-				}
-				case 131:
-				{
-					arr[4][0].set_bottom(1);
-					arr[5][0].set_top(1);
-					++arr[4][0];
-					++arr[5][0];
-					rectangle[13][10].setFillColor(Color::Blue);
-					break;
-				}
-				case 132:
-				{
-					arr[4][1].set_bottom(1);
-					arr[5][1].set_top(1);
-					++arr[5][1];
-					++arr[4][1];
-					rectangle[13][11].setFillColor(Color::Blue);
-					break;
-				}
-				case 133:
-				{
-					arr[4][2].set_bottom(1);
-					arr[5][2].set_top(1);
-					++arr[4][2];
-					++arr[5][2];
-					rectangle[13][12].setFillColor(Color::Blue);
-					break;
-				}
-				case 134:
-				{
-					arr[4][3].set_bottom(1);
-					arr[5][3].set_top(1);
-					++arr[4][3];
-					++arr[5][3];
-					rectangle[13][13].setFillColor(Color::Blue);
-					break;
-				}
-				case 135:
-				{
-					arr[4][4].set_bottom(1);
-					arr[5][4].set_top(1);
-					++arr[5][4];
-					++arr[4][4];
-					rectangle[13][14].setFillColor(Color::Blue);
-					break;
-				}
-				case 136:
-				{
-					arr[4][5].set_bottom(1);
-					arr[5][5].set_top(1);
-					++arr[5][5];
-					++arr[4][5];
-					rectangle[13][15].setFillColor(Color::Blue);
-					break;
-				}
-				case 137:
-				{
-					arr[4][6].set_bottom(1);
-					arr[5][6].set_top(1);
-					++arr[4][6];
-					++arr[5][6];
-					rectangle[13][16].setFillColor(Color::Blue);
-					break;
-				}
-				case 138:
-				{
-					arr[4][7].set_bottom(1);
-					arr[5][7].set_top(1);
-					++arr[5][7];
-					++arr[4][7];
-					rectangle[13][17].setFillColor(Color::Blue);
-					break;
-				}
-				case 139:
-				{
-					arr[4][8].set_bottom(1);
-					arr[5][8].set_top(1);
-					++arr[4][8];
-					++arr[5][8];
-					rectangle[13][18].setFillColor(Color::Blue);
-					break;
-				}
-				case 140:
-				{
-					arr[4][9].set_bottom(1);
-					arr[5][9].set_top(1);
-					++arr[5][9];
-					++arr[4][9];
-					rectangle[13][19].setFillColor(Color::Blue);
-					break;
-				}
-				};
-				}
-				//проход массива объектов(проверка на 4 палочки в квадрате):
-				for (int i = 0; i < 10; i++) 
-				{
-					for (int j = 0; j < 10; j++)
-					{
-						if (arr[i][j].get_count() == 4) 
-						{	
-							xx[i][j].krestik_txt.loadFromFile("images/x.png");					//загрузили текстуру
-							xx[i][j].krestik;													//объявили спрайт 
-							xx[i][j].krestik.setTexture(xx[i][j].krestik_txt);					//загрузили текстуру в спрайт
-							xx[i][j].krestik.setPosition(arr[i][j].coord_x, arr[i][j].coord_y); //задали позицию		
-							window.draw(xx[i][j].krestik);
-							++player_x;
-							++arr[i][j];
-						}
-						else {
-							player_x.set_step(false);
-							player_o.set_step(true);
-						}
-					}
-				}
-			}
-
-			while (player_o.step) {
-				if (event.type == event.MouseButtonReleased && event.mouseButton.button == Mouse::Left)
-				{
+					cout << "ms_position = " << ms_position << endl; //test
+					cout << queue << endl; //test
 					switch (ms_position) {
 						// vertical
 					case 1:
-					{
-						arr[0][0].set_right(1);
-						arr[0][1].set_left(1);
-						++arr[0][0];
-						++arr[0][1];
-						rectangle[0][0].setFillColor(Color::Red);
+					{		if (sensor_klick[0][0] == 0) {
+							arr[0][0].set_right(1);
+							arr[0][1].set_left(1);
+							++arr[0][0];
+							++arr[0][1];
+							if (queue == 1) { rectangle[0][0].setFillColor(Color::Blue); }
+							else { rectangle[0][0].setFillColor(Color::Red); }
+						}
+					else { ms_position = 0; };
+					sensor_klick[0][0] = 1;
 						break;
 					}
 					case 2:
-					{
+					{	if (sensor_klick[0][1] == 0) {
 						arr[1][0].set_right(1);
 						arr[1][1].set_left(1);
 						++arr[1][0];
 						++arr[1][1];
-						rectangle[0][1].setFillColor(Color::Red);
-						break;
+						if (queue == 1) { rectangle[0][1].setFillColor(Color::Blue); }
+						else { rectangle[0][1].setFillColor(Color::Red); }
+					}
+					else { ms_position = 0; };
+					sensor_klick[0][1] = 1;
+					break;
 					}
 					case 3:
-					{
+					{	if (sensor_klick[0][2] == 0) {
 						arr[2][0].set_right(1);
 						arr[2][1].set_left(1);
 						++arr[2][0];
 						++arr[2][1];
-						rectangle[0][2].setFillColor(Color::Red);
-						break;
+						if (queue == 1) { rectangle[0][2].setFillColor(Color::Blue); }
+						else { rectangle[0][2].setFillColor(Color::Red); }
+					}
+					else { ms_position = 0; };
+					sensor_klick[0][2] = 1;
+					break;
 					}
 					case 4:
-					{
+					{	if (sensor_klick[0][3] == 0) {
 						arr[3][0].set_right(1);
 						arr[3][1].set_left(1);
 						++arr[3][0];
 						++arr[3][1];
-						rectangle[0][3].setFillColor(Color::Red);
-						break;
+						if (queue == 1) { rectangle[0][3].setFillColor(Color::Blue); }
+						else { rectangle[0][3].setFillColor(Color::Red); }
+					}
+					else { ms_position = 0; };
+					sensor_klick[0][3] = 1;
+					break;
 					}
 					case 5:
-					{
+					{	if (sensor_klick[0][4] == 0) {
 						arr[4][0].set_right(1);
 						arr[4][1].set_left(1);
 						++arr[4][0];
 						++arr[4][1];
-						rectangle[0][4].setFillColor(Color::Red);
-						break;
+						if (queue == 1) { rectangle[0][4].setFillColor(Color::Blue); }
+						else { rectangle[0][4].setFillColor(Color::Red); }
+					}
+					else { ms_position = 0; };
+					sensor_klick[0][4] = 1;
+					break;
 					}
 					case 6:
-					{
+					{	if (sensor_klick[0][5] == 0) {
 						arr[5][0].set_right(1);
 						arr[5][1].set_left(1);
 						++arr[5][0];
 						++arr[5][1];
-						rectangle[0][5].setFillColor(Color::Red);
-						break;
+						if (queue == 1) { rectangle[0][5].setFillColor(Color::Blue); }
+						else { rectangle[0][5].setFillColor(Color::Red); }
+					}
+					else { ms_position = 0; };
+					sensor_klick[0][5] = 1;
+					break;
 					}
 					case 7:
-					{
+					{	if (sensor_klick[0][6] == 0) {
 						arr[6][0].set_right(1);
 						arr[6][1].set_left(1);
 						++arr[6][0];
 						++arr[6][1];
-						rectangle[0][6].setFillColor(Color::Red);
-						break;
+						if (queue == 1) { rectangle[0][6].setFillColor(Color::Blue); }
+						else { rectangle[0][6].setFillColor(Color::Red); }
+					}
+					else { ms_position = 0; };
+					sensor_klick[0][6] = 1;
+					break;
 					}
 					case 8:
-					{
+					{	if (sensor_klick[0][7] == 0) {
 						arr[7][0].set_right(1);
 						arr[7][1].set_left(1);
 						++arr[7][0];
 						++arr[7][1];
-						rectangle[0][7].setFillColor(Color::Red);
-						break;
+						if (queue == 1) { rectangle[0][7].setFillColor(Color::Blue); }
+						else { rectangle[0][7].setFillColor(Color::Red); }
+					}
+					else { ms_position = 0; };
+					sensor_klick[0][7] = 1;
+					break;
 					}
 					case 9:
-					{
+					{	if (sensor_klick[0][8] == 0) {
 						arr[8][0].set_right(1);
 						arr[8][1].set_left(1);
 						++arr[8][0];
 						++arr[8][1];
-						rectangle[0][8].setFillColor(Color::Red);
-						break;
+						if (queue == 1) { rectangle[0][8].setFillColor(Color::Blue); }
+						else { rectangle[0][8].setFillColor(Color::Red); }
+					}
+					else { ms_position = 0; };
+					sensor_klick[0][8] = 1;
+					break;
 					}
 					case 10:
-					{
+					{	if (sensor_klick[0][9] == 0) {
 						arr[9][0].set_right(1);
 						arr[9][1].set_left(1);
 						++arr[9][0];
 						++arr[9][1];
-						rectangle[0][9].setFillColor(Color::Red);
-						break;
+						if (queue == 1) { rectangle[0][9].setFillColor(Color::Blue); }
+						else { rectangle[0][9].setFillColor(Color::Red); }
+					}
+					else { ms_position = 0; };
+					sensor_klick[0][9] = 1;
+					break;
 					}
 					case 11:
-					{
+					{	if (sensor_klick[1][0] == 0) {
 						arr[0][1].set_right(1);
 						arr[0][2].set_left(1);
 						++arr[0][1];
 						++arr[0][2];
-						rectangle[1][0].setFillColor(Color::Red);
-						break;
+						if (queue == 1) { rectangle[1][0].setFillColor(Color::Blue); }
+						else { rectangle[1][0].setFillColor(Color::Red); }
+					}
+					else { ms_position = 0; };
+					sensor_klick[1][0] = 1;
+					break;
 					}
 					case 12:
-					{
+					{	if (sensor_klick[1][1] == 0) {
 						arr[1][1].set_right(1);
 						arr[1][2].set_left(1);
 						++arr[1][1];
 						++arr[1][2];
-						rectangle[1][1].setFillColor(Color::Red);
-						break;
+						if (queue == 1) { rectangle[1][1].setFillColor(Color::Blue); }
+						else { rectangle[1][1].setFillColor(Color::Red); }
+					}
+					else { ms_position = 0; };
+					sensor_klick[1][1] = 1;
+					break;
 					}
 					case 13:
-					{
+					{	if (sensor_klick[1][2] == 0) {
 						arr[2][1].set_right(1);
 						arr[2][2].set_left(1);
 						++arr[2][1];
 						++arr[2][2];
-						rectangle[1][2].setFillColor(Color::Red);
-						break;
+						if (queue == 1) { rectangle[1][2].setFillColor(Color::Blue); }
+						else { rectangle[1][2].setFillColor(Color::Red); }
+					}
+					else { ms_position = 0; };
+					sensor_klick[1][2] = 1;
+					break;
 					}
 					case 14:
-					{
+					{	if (sensor_klick[1][3] == 0) {
 						arr[3][1].set_right(1);
 						arr[3][2].set_left(1);
 						++arr[3][1];
 						++arr[3][2];
-						rectangle[1][3].setFillColor(Color::Red);
-						break;
+						if (queue == 1) { rectangle[1][3].setFillColor(Color::Blue); }
+						else { rectangle[1][3].setFillColor(Color::Red); }
+					}
+					else { ms_position = 0; };
+					sensor_klick[1][3] = 1;
+					break;
 					}
 					case 15:
-					{
+					{	if (sensor_klick[1][4] == 0) {
 						arr[4][1].set_right(1);
 						arr[4][2].set_left(1);
 						++arr[4][1];
 						++arr[4][2];
-						rectangle[1][4].setFillColor(Color::Red);
-						break;
+						if (queue == 1) { rectangle[1][4].setFillColor(Color::Blue); }
+						else { rectangle[1][4].setFillColor(Color::Red); }
+					}
+					else { ms_position = 0; };
+					sensor_klick[1][4] = 1;
+					break;
 					}
 					case 16:
-					{
+					{	if (sensor_klick[1][5] == 0) {
 						arr[5][1].set_right(1);
 						arr[5][2].set_left(1);
 						++arr[5][1];
 						++arr[5][2];
-						rectangle[1][5].setFillColor(Color::Red);
-						break;
+						if (queue == 1) { rectangle[1][5].setFillColor(Color::Blue); }
+						else { rectangle[1][5].setFillColor(Color::Red); }
+					}
+					else { ms_position = 0; };
+					sensor_klick[1][5] = 1;
+					break;
 					}
 					case 17:
-					{
+					{	if (sensor_klick[1][6] == 0) {
 						arr[6][1].set_right(1);
 						arr[6][2].set_left(1);
 						++arr[6][1];
 						++arr[6][2];
-						rectangle[1][6].setFillColor(Color::Red);
-						break;
+						if (queue == 1) { rectangle[1][6].setFillColor(Color::Blue); }
+						else { rectangle[1][6].setFillColor(Color::Red); }
+					}
+					else { ms_position = 0; };
+					sensor_klick[1][6] = 1;
+					break;
 					}
 					case 18:
-					{
+					{	if (sensor_klick[1][7] == 0) {
 						arr[7][1].set_right(1);
 						arr[7][2].set_left(1);
 						++arr[7][1];
 						++arr[7][2];
-						rectangle[1][7].setFillColor(Color::Red);
-						break;
+						if (queue == 1) { rectangle[1][7].setFillColor(Color::Blue); }
+						else { rectangle[1][7].setFillColor(Color::Red); }
+					}
+					else { ms_position = 0; };
+					sensor_klick[1][7] = 1;
+					break;
 					}
 					case 19:
-					{
+					{	if (sensor_klick[1][8] == 0) {
 						arr[8][1].set_right(1);
 						arr[8][2].set_left(1);
 						++arr[8][1];
 						++arr[8][2];
-						rectangle[1][8].setFillColor(Color::Red);
-						break;
+						if (queue == 1) { rectangle[1][8].setFillColor(Color::Blue); }
+						else { rectangle[1][8].setFillColor(Color::Red); }
+					}
+					else { ms_position = 0; };
+					sensor_klick[1][8] = 1;
+					break;
 					}
 					case 20:
-					{
+					{	if (sensor_klick[1][9] == 0) {
 						arr[9][1].set_right(1);
 						arr[9][2].set_left(1);
 						++arr[9][1];
 						++arr[9][2];
-						rectangle[1][9].setFillColor(Color::Red);
-						break;
+						if (queue == 1) { rectangle[1][9].setFillColor(Color::Blue); }
+						else { rectangle[1][9].setFillColor(Color::Red); }
+					}
+					else { ms_position = 0; };
+					sensor_klick[1][9] = 1;
+					break;
 					}
 					case 21:
-					{
+					{	if (sensor_klick[2][0] == 0) {
 						arr[0][2].set_right(1);
 						arr[0][3].set_left(1);
 						++arr[0][2];
 						++arr[0][3];
-						rectangle[2][0].setFillColor(Color::Red);
-						break;
+						if (queue == 1) { rectangle[2][0].setFillColor(Color::Blue); }
+						else { rectangle[2][0].setFillColor(Color::Red); }
+					}
+					else { ms_position = 0; };
+					sensor_klick[2][0] = 1;
+					break;
 					}
 					case 22:
-					{
+					{	if (sensor_klick[2][1] == 0) {
 						arr[1][2].set_right(1);
 						arr[1][3].set_left(1);
 						++arr[1][2];
 						++arr[1][3];
-						rectangle[2][1].setFillColor(Color::Red);
-						break;
+						if (queue == 1) { rectangle[2][1].setFillColor(Color::Blue); }
+						else { rectangle[2][1].setFillColor(Color::Red); }
+					}
+					else { ms_position = 0; };
+					sensor_klick[2][1] = 1;
+					break;
 					}
 					case 23:
-					{
+					{	if (sensor_klick[2][2] == 0) {
 						arr[2][2].set_right(1);
 						arr[2][3].set_left(1);
 						++arr[2][2];
 						++arr[2][3];
-						rectangle[2][2].setFillColor(Color::Red);
-						break;
+						if (queue == 1) { rectangle[2][2].setFillColor(Color::Blue); }
+						else { rectangle[2][2].setFillColor(Color::Red); }
+					}
+					else { ms_position = 0; };
+					sensor_klick[2][2] = 1;
+					break;
 					}
 					case 24:
-					{
+					{	if (sensor_klick[2][3] == 0) {
 						arr[3][2].set_right(1);
 						arr[3][3].set_left(1);
 						++arr[3][2];
 						++arr[3][3];
-						rectangle[2][3].setFillColor(Color::Red);
-						break;
+						if (queue == 1) { rectangle[2][3].setFillColor(Color::Blue); }
+						else { rectangle[2][3].setFillColor(Color::Red); }
+					}
+					else { ms_position = 0; };
+					sensor_klick[2][3] = 1;
+					break;
 					}
 					case 25:
-					{
+					{	if (sensor_klick[2][4] == 0) {
 						arr[4][2].set_right(1);
 						arr[4][3].set_left(1);
 						++arr[4][2];
 						++arr[4][3];
-						rectangle[2][4].setFillColor(Color::Red);
-						break;
+						if (queue == 1) { rectangle[2][4].setFillColor(Color::Blue); }
+						else { rectangle[2][4].setFillColor(Color::Red); }
+					}
+					else { ms_position = 0; };
+					sensor_klick[2][4] = 1;
+					break;
 					}
 					case 26:
-					{
+					{	if (sensor_klick[2][5] == 0) {
 						arr[5][2].set_right(1);
 						arr[5][3].set_left(1);
 						++arr[5][2];
 						++arr[5][3];
-						rectangle[2][5].setFillColor(Color::Red);
-						break;
+						if (queue == 1) { rectangle[2][5].setFillColor(Color::Blue); }
+						else { rectangle[2][5].setFillColor(Color::Red); }
+					}
+					else { ms_position = 0; };
+					sensor_klick[2][5] = 1;
+					break;
 					}
 					case 27:
-					{
+					{	if (sensor_klick[2][6] == 0) {
 						arr[6][2].set_right(1);
 						arr[6][3].set_left(1);
 						++arr[6][2];
 						++arr[6][3];
-						rectangle[2][6].setFillColor(Color::Red);
-						break;
+						if (queue == 1) { rectangle[2][6].setFillColor(Color::Blue); }
+						else { rectangle[2][6].setFillColor(Color::Red); }
+					}
+					else { ms_position = 0; };
+					sensor_klick[2][6] = 1;
+					break;
 					}
 					case 28:
-					{
+					{	if (sensor_klick[2][7] == 0) {
 						arr[7][2].set_right(1);
 						arr[7][3].set_left(1);
 						++arr[7][2];
 						++arr[7][3];
-						rectangle[2][7].setFillColor(Color::Red);
-						break;
+						if (queue == 1) { rectangle[2][7].setFillColor(Color::Blue); }
+						else { rectangle[2][7].setFillColor(Color::Red); }
+					}
+					else { ms_position = 0; };
+					sensor_klick[2][7] = 1;
+					break;
 					}
 					case 29:
-					{
+					{	if (sensor_klick[2][8] == 0) {
 						arr[8][2].set_right(1);
 						arr[8][3].set_left(1);
 						++arr[8][2];
 						++arr[8][3];
-						rectangle[2][8].setFillColor(Color::Red);
-						break;
+						if (queue == 1) { rectangle[2][8].setFillColor(Color::Blue); }
+						else { rectangle[2][8].setFillColor(Color::Red); }
+					}
+					else { ms_position = 0; };
+					sensor_klick[2][8] = 1;
+					break;
 					}
 					case 30:
-					{
+					{	if (sensor_klick[2][9] == 0) {
 						arr[9][2].set_right(1);
 						arr[9][3].set_left(1);
 						++arr[9][2];
 						++arr[9][3];
-						rectangle[2][9].setFillColor(Color::Red);
-						break;
+						if (queue == 1) { rectangle[2][9].setFillColor(Color::Blue); }
+						else { rectangle[2][9].setFillColor(Color::Red); }
+					}
+					else { ms_position = 0; };
+					sensor_klick[2][9] = 1;
+					break;
 					}
 					case 31:
-					{
+					{	if (sensor_klick[3][0] == 0) {
 						arr[0][3].set_right(1);
 						arr[0][4].set_left(1);
 						++arr[0][3];
 						++arr[0][4];
-						rectangle[3][0].setFillColor(Color::Red);
-						break;
+						if (queue == 1) { rectangle[3][0].setFillColor(Color::Blue); }
+						else { rectangle[3][0].setFillColor(Color::Red); }
+					}
+					else { ms_position = 0; };
+					sensor_klick[3][0] = 1;
+					break;
 					}
 					case 32:
-					{
+					{	if (sensor_klick[3][1] == 0) {
 						arr[1][3].set_right(1);
 						arr[1][4].set_left(1);
 						++arr[1][3];
 						++arr[1][4];
-						rectangle[3][1].setFillColor(Color::Red);
-						break;
+						if (queue == 1) { rectangle[3][1].setFillColor(Color::Blue); }
+						else { rectangle[3][1].setFillColor(Color::Red); }
 					}
+					else { ms_position = 0; };
+					sensor_klick[3][1] = 1;
+					break;
+					}	
 					case 33:
-					{
+					{	if (sensor_klick[3][2] == 0) {
 						arr[2][3].set_right(1);
 						arr[2][4].set_left(1);
 						++arr[2][3];
 						++arr[2][4];
-						rectangle[3][2].setFillColor(Color::Red);
-						break;
+						if (queue == 1) { rectangle[3][2].setFillColor(Color::Blue); }
+						else { rectangle[3][2].setFillColor(Color::Red); }
+					}
+					else { ms_position = 0; };
+					sensor_klick[3][2] = 1;
+					break;
 					}
 					case 34:
-					{
+					{	if (sensor_klick[3][3] == 0) {
 						arr[3][3].set_right(1);
 						arr[3][4].set_left(1);
 						++arr[3][3];
 						++arr[3][4];
-						rectangle[3][3].setFillColor(Color::Red);
-						break;
+						if (queue == 1) { rectangle[3][3].setFillColor(Color::Blue); }
+						else { rectangle[3][3].setFillColor(Color::Red); }
+					}
+					else { ms_position = 0; };
+					sensor_klick[3][3] = 1;
+					break;
 					}
 					case 35:
-					{
+					{	if (sensor_klick[3][4] == 0) {
 						arr[4][3].set_right(1);
 						arr[4][4].set_left(1);
 						++arr[4][3];
 						++arr[4][4];
-						rectangle[3][4].setFillColor(Color::Red);
-						break;
+						if (queue == 1) { rectangle[3][4].setFillColor(Color::Blue); }
+						else { rectangle[3][4].setFillColor(Color::Red); }
+					}
+					else { ms_position = 0; };
+					sensor_klick[3][4] = 1;
+					break;
 					}
 					case 36:
-					{
+					{	if (sensor_klick[3][5] == 0) {
 						arr[5][3].set_right(1);
 						arr[5][4].set_left(1);
 						++arr[5][4];
 						++arr[5][3];
-						rectangle[3][5].setFillColor(Color::Red);
-						break;
+						if (queue == 1) { rectangle[3][5].setFillColor(Color::Blue); }
+						else { rectangle[3][5].setFillColor(Color::Red); }
+					}
+					else { ms_position = 0; };
+					sensor_klick[3][5] = 1;
+					break;
 					}
 					case 37:
-					{
+					{	if (sensor_klick[3][6] == 0) {
 						arr[6][3].set_right(1);
 						arr[6][4].set_left(1);
 						++arr[6][4];
 						++arr[6][3];
-						rectangle[3][6].setFillColor(Color::Red);
-						break;
+						if (queue == 1) { rectangle[3][6].setFillColor(Color::Blue); }
+						else { rectangle[3][6].setFillColor(Color::Red); }
+					}
+					else { ms_position = 0; };
+					sensor_klick[3][6] = 1;
+					break;
 					}
 					case 38:
-					{
+					{	if (sensor_klick[3][7] == 0) {
 						arr[7][3].set_right(1);
 						arr[7][4].set_left(1);
 						++arr[7][4];
 						++arr[7][3];
-						rectangle[3][7].setFillColor(Color::Red);
-						break;
+						if (queue == 1) { rectangle[3][7].setFillColor(Color::Blue); }
+						else { rectangle[3][7].setFillColor(Color::Red); }
+					}
+					else { ms_position = 0; };
+					sensor_klick[3][7] = 1;
+					break;
 					}
 					case 39:
-					{
+					{	if (sensor_klick[3][8] == 0) {
 						arr[8][3].set_right(1);
 						arr[8][4].set_left(1);
 						++arr[8][4];
 						++arr[8][3];
-						rectangle[3][8].setFillColor(Color::Red);
-						break;
+						if (queue == 1) { rectangle[3][8].setFillColor(Color::Blue); }
+						else { rectangle[3][8].setFillColor(Color::Red); }
+					}
+					else { ms_position = 0; };
+					sensor_klick[3][8] = 1;
+					break;
 					}
 					case 40:
-					{
+					{	if (sensor_klick[3][9] == 0) {
 						arr[9][3].set_right(1);
 						arr[9][4].set_left(1);
 						++arr[9][4];
 						++arr[9][3];
-						rectangle[3][9].setFillColor(Color::Red);
-						break;
+						if (queue == 1) { rectangle[3][9].setFillColor(Color::Blue); }
+						else { rectangle[3][9].setFillColor(Color::Red); }
+					}
+					else { ms_position = 0; };
+					sensor_klick[3][9] = 1;
+					break;
 					}
 					case 41:
-					{
+					{	if (sensor_klick[4][0] == 0) {
 						arr[0][4].set_right(1);
 						arr[0][5].set_left(1);
 						++arr[0][5];
 						++arr[0][4];
-						rectangle[4][0].setFillColor(Color::Red);
-						break;
+						if (queue == 1) { rectangle[4][0].setFillColor(Color::Blue); }
+						else { rectangle[4][0].setFillColor(Color::Red); }
+					}
+					else { ms_position = 0; };
+					sensor_klick[4][0] = 1;
+					break;
 					}
 					case 42:
-					{
+					{	if (sensor_klick[4][1] == 0) {
 						arr[1][4].set_right(1);
 						arr[1][5].set_left(1);
 						++arr[1][5];
 						++arr[1][4];
-						rectangle[4][1].setFillColor(Color::Red);
-						break;
+						if (queue == 1) { rectangle[4][1].setFillColor(Color::Blue); }
+						else { rectangle[4][1].setFillColor(Color::Red); }
+					}
+					else { ms_position = 0; };
+					sensor_klick[4][1] = 1;
+					break;
 					}
 					case 43:
-					{
+					{	if (sensor_klick[4][2] == 0) {
 						arr[2][4].set_right(1);
 						arr[2][5].set_left(1);
 						++arr[2][5];
 						++arr[2][4];
-						rectangle[4][2].setFillColor(Color::Red);
-						break;
+						if (queue == 1) { rectangle[4][2].setFillColor(Color::Blue); }
+						else { rectangle[4][2].setFillColor(Color::Red); }
+					}
+					else { ms_position = 0; };
+					sensor_klick[4][2] = 1;
+					break;
 					}
 					case 44:
-					{
+					{	if (sensor_klick[4][3] == 0) {
 						arr[3][4].set_right(1);
 						arr[3][5].set_left(1);
 						++arr[3][4];
 						++arr[3][5];
-						rectangle[4][3].setFillColor(Color::Red);
-						break;
+						if (queue == 1) { rectangle[4][3].setFillColor(Color::Blue); }
+						else { rectangle[4][3].setFillColor(Color::Red); }
+					}
+					else { ms_position = 0; };
+					sensor_klick[4][3] = 1;
+					break;
 					}
 					case 45:
-					{
+					{	if (sensor_klick[4][4] == 0) {
 						arr[4][4].set_right(1);
 						arr[4][5].set_left(1);
 						++arr[4][5];
 						++arr[4][4];
-						rectangle[4][4].setFillColor(Color::Red);
-						break;
+						if (queue == 1) { rectangle[4][4].setFillColor(Color::Blue); }
+						else { rectangle[4][4].setFillColor(Color::Red); }
+					}
+					else { ms_position = 0; };
+					sensor_klick[4][4] = 1;
+					break;
 					}
 					case 46:
-					{
+					{	if (sensor_klick[4][5] == 0) {
 						arr[5][4].set_right(1);
 						arr[5][5].set_left(1);
 						++arr[5][4];
 						++arr[5][5];
-						rectangle[4][5].setFillColor(Color::Red);
-						break;
+						if (queue == 1) { rectangle[4][5].setFillColor(Color::Blue); }
+						else { rectangle[4][5].setFillColor(Color::Red); }
+					}
+					else { ms_position = 0; };
+					sensor_klick[4][5] = 1;
+					break;
 					}
 					case 47:
-					{
+					{	if (sensor_klick[4][6] == 0) {
 						arr[6][4].set_right(1);
 						arr[6][5].set_left(1);
 						++arr[6][4];
 						++arr[6][5];
-						rectangle[4][6].setFillColor(Color::Red);
-						break;
+						if (queue == 1) { rectangle[4][6].setFillColor(Color::Blue); }
+						else { rectangle[4][6].setFillColor(Color::Red); }
+					}
+					else { ms_position = 0; };
+					sensor_klick[4][6] = 1;
+					break;
 					}
 					case 48:
-					{
+					{	if (sensor_klick[4][7] == 0) {
 						arr[7][4].set_right(1);
 						arr[7][5].set_left(1);
 						++arr[7][4];
 						++arr[7][5];
-						rectangle[4][7].setFillColor(Color::Red);
-						break;
+						if (queue == 1) { rectangle[4][7].setFillColor(Color::Blue); }
+						else { rectangle[4][7].setFillColor(Color::Red); }
+					}
+					else { ms_position = 0; };
+					sensor_klick[4][7] = 1;
+					break;
 					}
 					case 49:
-					{
+					{	if (sensor_klick[4][8] == 0) {
 						arr[8][4].set_right(1);
 						arr[8][5].set_left(1);
 						++arr[8][4];
 						++arr[8][5];
-						rectangle[4][8].setFillColor(Color::Red);
-						break;
+						if (queue == 1) { rectangle[4][8].setFillColor(Color::Blue); }
+						else { rectangle[4][8].setFillColor(Color::Red); }
+					}
+					else { ms_position = 0; };
+					sensor_klick[4][8] = 1;
+					break;
 					}
 					case 50:
-					{
+					{	if (sensor_klick[4][9] == 0) {
 						arr[9][4].set_right(1);
 						arr[9][5].set_left(1);
 						++arr[9][4];
 						++arr[9][5];
-						rectangle[4][9].setFillColor(Color::Red);
-						break;
+						if (queue == 1) { rectangle[4][9].setFillColor(Color::Blue); }
+						else { rectangle[4][9].setFillColor(Color::Red); }
+					}
+					else { ms_position = 0; };
+					sensor_klick[4][9] = 1;
+					break;
+					}
+					case 51:
+					{	if (sensor_klick[5][0] == 0) {
+						arr[0][5].set_right(1);
+						arr[0][6].set_left(1);
+						++arr[0][5];
+						++arr[0][6];
+						if (queue == 1) { rectangle[5][0].setFillColor(Color::Blue); }
+						else { rectangle[5][0].setFillColor(Color::Red); }
+					}
+					else { ms_position = 0; };
+					sensor_klick[5][0] = 1;
+					break;
+					}
+					case 52:
+					{	if (sensor_klick[5][1] == 0) {
+						arr[1][5].set_right(1);
+						arr[1][6].set_left(1);
+						++arr[1][5];
+						++arr[1][6];
+						if (queue == 1) { rectangle[5][1].setFillColor(Color::Blue); }
+						else { rectangle[5][1].setFillColor(Color::Red); }
+					}
+					else { ms_position = 0; };
+					sensor_klick[5][1] = 1;
+					break;
+					}
+					case 53:
+					{	if (sensor_klick[5][2] == 0) {
+						arr[2][5].set_right(1);
+						arr[2][6].set_left(1);
+						++arr[2][5];
+						++arr[2][6];
+						if (queue == 1) { rectangle[5][2].setFillColor(Color::Blue); }
+						else { rectangle[5][2].setFillColor(Color::Red); }
+					}
+					else { ms_position = 0; };
+					sensor_klick[5][2] = 1;
+					break;
+					}
+					case 54:
+					{	if (sensor_klick[5][3] == 0) {
+						arr[3][5].set_right(1);
+						arr[3][6].set_left(1);
+						++arr[3][6];
+						++arr[3][5];
+						if (queue == 1) { rectangle[5][3].setFillColor(Color::Blue); }
+						else { rectangle[5][3].setFillColor(Color::Red); }
+					}
+					else { ms_position = 0; };
+					sensor_klick[5][3] = 1;
+					break;
+					}
+					case 55:
+					{	if (sensor_klick[5][4] == 0) {
+						arr[4][5].set_right(1);
+						arr[4][6].set_left(1);
+						++arr[4][5];
+						++arr[4][6];
+						if (queue == 1) { rectangle[5][4].setFillColor(Color::Blue); }
+						else { rectangle[5][4].setFillColor(Color::Red); }
+					}
+					else { ms_position = 0; };
+					sensor_klick[5][4] = 1;
+					break;
+					}
+					case 56:
+					{	if (sensor_klick[5][5] == 0) {
+						arr[5][5].set_right(1);
+						arr[5][6].set_left(1);
+						++arr[5][6];
+						++arr[5][5];
+						if (queue == 1) { rectangle[5][5].setFillColor(Color::Blue); }
+						else { rectangle[5][5].setFillColor(Color::Red); }
+					}
+					else { ms_position = 0; };
+					sensor_klick[5][5] = 1;
+					break;
+					}
+					case 57:
+					{	if (sensor_klick[5][6] == 0) {
+						arr[6][5].set_right(1);
+						arr[6][6].set_left(1);
+						++arr[6][6];
+						++arr[6][5];
+						if (queue == 1) { rectangle[5][6].setFillColor(Color::Blue); }
+						else { rectangle[5][6].setFillColor(Color::Red); }
+					}
+					else { ms_position = 0; };
+					sensor_klick[5][6] = 1;
+					break;
+					}
+					case 58:
+					{	if (sensor_klick[5][7] == 0) {
+						arr[7][5].set_right(1);
+						arr[7][6].set_left(1);
+						++arr[7][6];
+						++arr[7][5];
+						if (queue == 1) { rectangle[5][7].setFillColor(Color::Blue); }
+						else { rectangle[5][7].setFillColor(Color::Red); }
+					}
+					else { ms_position = 0; };
+					sensor_klick[5][7] = 1;
+					break;
+					}
+					case 59:
+					{	if (sensor_klick[5][8] == 0) {
+						arr[8][5].set_right(1);
+						arr[8][6].set_left(1);
+						++arr[8][6];
+						++arr[8][5];
+						if (queue == 1) { rectangle[5][8].setFillColor(Color::Blue); }
+						else { rectangle[5][8].setFillColor(Color::Red); }
+					}
+					else { ms_position = 0; };
+					sensor_klick[5][8] = 1;
+					break;
+					}
+					case 60:
+					{	if (sensor_klick[5][9] == 0) {
+						arr[9][5].set_right(1);
+						arr[9][6].set_left(1);
+						++arr[9][6];
+						++arr[9][5];
+						if (queue == 1) { rectangle[5][9].setFillColor(Color::Blue); }
+						else { rectangle[5][9].setFillColor(Color::Red); }
+					}
+					else { ms_position = 0; };
+					sensor_klick[5][9] = 1;
+					break;
+					}
+					case 61:
+					{	if (sensor_klick[6][0] == 0) {
+						arr[0][6].set_right(1);
+						arr[0][7].set_left(1);
+						++arr[0][7];
+						++arr[0][6];
+						if (queue == 1) { rectangle[6][0].setFillColor(Color::Blue); }
+						else { rectangle[6][0].setFillColor(Color::Red); }
+					}
+					else { ms_position = 0; };
+					sensor_klick[6][0] = 1;
+					break;
+					}
+					case 62:
+					{	if (sensor_klick[6][1] == 0) {
+						arr[1][6].set_right(1);
+						arr[1][7].set_left(1);
+						++arr[1][7];
+						++arr[1][6];
+						if (queue == 1) { rectangle[6][1].setFillColor(Color::Blue); }
+						else { rectangle[6][1].setFillColor(Color::Red); }
+					}
+					else { ms_position = 0; };
+					sensor_klick[6][1] = 1;
+					break;
+					}
+					case 63:
+					{	if (sensor_klick[6][2] == 0) {
+						arr[2][6].set_right(1);
+						arr[2][7].set_left(1);
+						++arr[2][6];
+						++arr[2][7];
+						if (queue == 1) { rectangle[6][2].setFillColor(Color::Blue); }
+						else { rectangle[6][2].setFillColor(Color::Red); }
+					}
+					else { ms_position = 0; };
+					sensor_klick[6][2] = 1;
+					break;
+					}
+					case 64:
+					{	if (sensor_klick[6][3] == 0) {
+						arr[3][6].set_right(1);
+						arr[3][7].set_left(1);
+						++arr[3][6];
+						++arr[3][7];
+						if (queue == 1) { rectangle[6][3].setFillColor(Color::Blue); }
+						else { rectangle[6][3].setFillColor(Color::Red); }
+					}
+					else { ms_position = 0; };
+					sensor_klick[6][3] = 1;
+					break;
+					}
+					case 65:
+					{	if (sensor_klick[6][4] == 0) {
+						arr[4][6].set_right(1);
+						arr[4][7].set_left(1);
+						++arr[4][7];
+						++arr[4][6];
+						if (queue == 1) { rectangle[6][4].setFillColor(Color::Blue); }
+						else { rectangle[6][4].setFillColor(Color::Red); }
+					}
+					else { ms_position = 0; };
+					sensor_klick[6][4] = 1;
+					break;
+					}
+					case 66:
+					{	if (sensor_klick[6][5] == 0) {
+						arr[5][6].set_right(1);
+						arr[5][7].set_left(1);
+						++arr[5][6];
+						++arr[5][7];
+						if (queue == 1) { rectangle[6][5].setFillColor(Color::Blue); }
+						else { rectangle[6][5].setFillColor(Color::Red); }
+					}
+					else { ms_position = 0; };
+					sensor_klick[6][5] = 1;
+					break;
+					}
+					case 67:
+					{	if (sensor_klick[6][6] == 0) {
+						arr[6][6].set_right(1);
+						arr[6][7].set_left(1);
+						++arr[6][6];
+						++arr[6][7];
+						if (queue == 1) { rectangle[6][6].setFillColor(Color::Blue); }
+						else { rectangle[6][6].setFillColor(Color::Red); }
+					}
+					else { ms_position = 0; };
+					sensor_klick[6][6] = 1;
+					break;
+					}
+					case 68:
+					{	if (sensor_klick[6][7] == 0) {
+						arr[7][6].set_right(1);
+						arr[7][7].set_left(1);
+						++arr[7][6];
+						++arr[7][7];
+						if (queue == 1) { rectangle[6][7].setFillColor(Color::Blue); }
+						else { rectangle[6][7].setFillColor(Color::Red); }
+					}
+					else { ms_position = 0; };
+					sensor_klick[6][7] = 1;
+					break;
+					}
+					case 69:
+					{	if (sensor_klick[6][8] == 0) {
+						arr[8][6].set_right(1);
+						arr[8][7].set_left(1);
+						++arr[8][6];
+						++arr[8][7];
+						if (queue == 1) { rectangle[6][8].setFillColor(Color::Blue); }
+						else { rectangle[6][8].setFillColor(Color::Red); }
+					}
+					else { ms_position = 0; };
+					sensor_klick[6][8] = 1;
+					break;
+					}
+					case 70:
+					{	if (sensor_klick[6][9] == 0) {
+						arr[9][6].set_right(1);
+						arr[9][7].set_left(1);
+						++arr[9][6];
+						++arr[9][7];
+						if (queue == 1) { rectangle[6][9].setFillColor(Color::Blue); }
+						else { rectangle[6][9].setFillColor(Color::Red); }
+					}
+					else { ms_position = 0; };
+					sensor_klick[6][9] = 1;
+					break;
+					}
+					case 71:
+					{	if (sensor_klick[7][0] == 0) {
+						arr[0][7].set_right(1);
+						arr[0][8].set_left(1);
+						++arr[0][7];
+						++arr[0][8];
+						if (queue == 1) { rectangle[7][0].setFillColor(Color::Blue); }
+						else { rectangle[7][0].setFillColor(Color::Red); }
+					}
+					else { ms_position = 0; };
+					sensor_klick[7][0] = 1;
+					break;
+					}
+					case 72:
+					{	if (sensor_klick[7][1] == 0) {
+						arr[1][7].set_right(1);
+						arr[1][8].set_left(1);
+						++arr[1][7];
+						++arr[1][8];
+						if (queue == 1) { rectangle[7][1].setFillColor(Color::Blue); }
+						else { rectangle[7][1].setFillColor(Color::Red); }
+					}
+					else { ms_position = 0; };
+					sensor_klick[7][1] = 1;
+					break;
+					}
+					case 73:
+					{	if (sensor_klick[7][2] == 0) {
+						arr[2][7].set_right(1);
+						arr[2][8].set_left(1);
+						++arr[2][8];
+						++arr[2][7];
+						if (queue == 1) { rectangle[7][2].setFillColor(Color::Blue); }
+						else { rectangle[7][2].setFillColor(Color::Red); }
+					}
+					else { ms_position = 0; };
+					sensor_klick[7][2] = 1;
+					break;
+					}
+					case 74:
+					{	if (sensor_klick[7][3] == 0) {
+						arr[3][7].set_right(1);
+						arr[3][8].set_left(1);
+						++arr[3][7];
+						++arr[3][8];
+						if (queue == 1) { rectangle[7][3].setFillColor(Color::Blue); }
+						else { rectangle[7][3].setFillColor(Color::Red); }
+					}
+					else { ms_position = 0; };
+					sensor_klick[7][3] = 1;
+					break;
+					}
+					case 75:
+					{	if (sensor_klick[7][4] == 0) {
+						arr[4][7].set_right(1);
+						arr[4][8].set_left(1);
+						++arr[4][7];
+						++arr[4][8];
+						if (queue == 1) { rectangle[7][4].setFillColor(Color::Blue); }
+						else { rectangle[7][4].setFillColor(Color::Red); }
+					}
+					else { ms_position = 0; };
+					sensor_klick[7][4] = 1;
+					break;
+					}
+					case 76:
+					{	if (sensor_klick[7][5] == 0) {
+						arr[5][7].set_right(1);
+						arr[5][8].set_left(1);
+						++arr[5][8];
+						++arr[5][7];
+						if (queue == 1) { rectangle[7][5].setFillColor(Color::Blue); }
+						else { rectangle[7][5].setFillColor(Color::Red); }
+					}
+					else { ms_position = 0; };
+					sensor_klick[7][5] = 1;
+					break;
+					}
+					case 77:
+					{	if (sensor_klick[7][6] == 0) {
+						arr[6][7].set_right(1);
+						arr[6][8].set_left(1);
+						++arr[6][8];
+						++arr[6][7];
+						if (queue == 1) { rectangle[7][6].setFillColor(Color::Blue); }
+						else { rectangle[7][6].setFillColor(Color::Red); }
+					}
+					else { ms_position = 0; };
+					sensor_klick[7][6] = 1;
+					break;
+					}
+					case 78:
+					{	if (sensor_klick[7][7] == 0) {
+						arr[7][7].set_right(1);
+						arr[7][8].set_left(1);
+						++arr[7][8];
+						++arr[7][7];
+						if (queue == 1) { rectangle[7][7].setFillColor(Color::Blue); }
+						else { rectangle[7][7].setFillColor(Color::Red); }
+					}
+					else { ms_position = 0; };
+					sensor_klick[7][7] = 1;
+					break;
+					}
+					case 79:
+					{	if (sensor_klick[7][8] == 0) {
+						arr[8][7].set_right(1);
+						arr[8][8].set_left(1);
+						++arr[8][8];
+						++arr[8][7];
+						if (queue == 1) { rectangle[7][8].setFillColor(Color::Blue); }
+						else { rectangle[7][8].setFillColor(Color::Red); }
+					}
+					else { ms_position = 0; };
+					sensor_klick[7][8] = 1;
+					break;
+					}
+					case 80:
+					{	if (sensor_klick[7][9] == 0) {
+						arr[9][7].set_right(1);
+						arr[9][8].set_left(1);
+						++arr[9][7];
+						++arr[9][8];
+						if (queue == 1) { rectangle[7][9].setFillColor(Color::Blue); }
+						else { rectangle[7][9].setFillColor(Color::Red); }
+					}
+					else { ms_position = 0; };
+					sensor_klick[7][9] = 1;
+					break;
+					}
+					case 81:
+					{	if (sensor_klick[8][0] == 0) {
+						arr[0][8].set_right(1);
+						arr[0][9].set_left(1);
+						++arr[0][9];
+						++arr[0][8];
+						if (queue == 1) { rectangle[8][0].setFillColor(Color::Blue); }
+						else { rectangle[8][0].setFillColor(Color::Red); }
+					}
+					else { ms_position = 0; };
+					sensor_klick[8][0] = 1;
+					break;
+					}
+					case 82:
+					{	if (sensor_klick[8][1] == 0) {
+						arr[1][8].set_right(1);
+						arr[1][9].set_left(1);
+						++arr[1][9];
+						++arr[1][8];
+						if (queue == 1) { rectangle[8][1].setFillColor(Color::Blue); }
+						else { rectangle[8][1].setFillColor(Color::Red); }
+					}
+					else { ms_position = 0; };
+					sensor_klick[8][1] = 1;
+					break;
+					}
+					case 83:
+					{	if (sensor_klick[8][2] == 0) {
+						arr[2][8].set_right(1);
+						arr[2][9].set_left(1);
+						++arr[2][8];
+						++arr[2][9];
+						if (queue == 1) { rectangle[8][2].setFillColor(Color::Blue); }
+						else { rectangle[8][2].setFillColor(Color::Red); }
+					}
+					else { ms_position = 0; };
+					sensor_klick[8][2] = 1;
+					break;
+					}
+					case 84:
+					{	if (sensor_klick[8][3] == 0) {
+						arr[3][8].set_right(1);
+						arr[3][9].set_left(1);
+						++arr[3][9];
+						++arr[3][8];
+						if (queue == 1) { rectangle[8][3].setFillColor(Color::Blue); }
+						else { rectangle[8][3].setFillColor(Color::Red); }
+					}
+					else { ms_position = 0; };
+					sensor_klick[8][3] = 1;
+					break;
+					}
+					case 85:
+					{	if (sensor_klick[8][4] == 0) {
+						arr[4][8].set_right(1);
+						arr[4][9].set_left(1);
+						++arr[4][9];
+						++arr[4][8];
+						if (queue == 1) { rectangle[8][4].setFillColor(Color::Blue); }
+						else { rectangle[8][4].setFillColor(Color::Red); }
+					}
+					else { ms_position = 0; };
+					sensor_klick[8][4] = 1;
+					break;
+					}
+					case 86:
+					{	if (sensor_klick[8][5] == 0) {
+						arr[5][8].set_right(1);
+						arr[5][9].set_left(1);
+						++arr[5][8];
+						++arr[5][9];
+						if (queue == 1) { rectangle[8][5].setFillColor(Color::Blue); }
+						else { rectangle[8][5].setFillColor(Color::Red); }
+					}
+					else { ms_position = 0; };
+					sensor_klick[8][5] = 1;
+					break;
+					}
+					case 87:
+					{	if (sensor_klick[8][6] == 0) {
+						arr[6][8].set_right(1);
+						arr[6][9].set_left(1);
+						++arr[6][8];
+						++arr[6][9];
+						if (queue == 1) { rectangle[8][6].setFillColor(Color::Blue); }
+						else { rectangle[8][6].setFillColor(Color::Red); }
+					}
+					else { ms_position = 0; };
+					sensor_klick[8][6] = 1;
+					break;
+					}
+					case 88:
+					{	if (sensor_klick[8][7] == 0) {
+						arr[7][8].set_right(1);
+						arr[7][9].set_left(1);
+						++arr[7][8];
+						++arr[7][9];
+						if (queue == 1) { rectangle[8][7].setFillColor(Color::Blue); }
+						else { rectangle[8][7].setFillColor(Color::Red); }
+					}
+					else { ms_position = 0; };
+					sensor_klick[8][7] = 1;
+					break;
+					}
+					case 89:
+					{	if (sensor_klick[8][8] == 0) {
+						arr[8][8].set_right(1);
+						arr[8][9].set_left(1);
+						++arr[8][8];
+						++arr[8][9];
+						if (queue == 1) { rectangle[8][8].setFillColor(Color::Blue); }
+						else { rectangle[8][8].setFillColor(Color::Red); }
+					}
+					else { ms_position = 0; };
+					sensor_klick[8][8] = 1;
+					break;
+					}
+					case 90:
+					{	if (sensor_klick[8][9] == 0) {
+						arr[9][8].set_right(1);
+						arr[9][9].set_left(1);
+						++arr[9][9];
+						++arr[9][8];
+						if (queue == 1) { rectangle[8][9].setFillColor(Color::Blue); }
+						else { rectangle[8][9].setFillColor(Color::Red); }
+					}
+					else { ms_position = 0; };
+					sensor_klick[8][9] = 1;
+					break;
 					}
 					// horizontal
 					case 91:
-					{
+					{	if (sensor_klick[9][10] == 0) {
 						arr[0][0].set_bottom(1);
 						arr[1][0].set_top(1);
 						++arr[0][0];
 						++arr[1][0];
-						rectangle[9][10].setFillColor(Color::Red);
-						break;
+						if (queue == 1) { rectangle[9][10].setFillColor(Color::Blue); }
+						else { rectangle[9][10].setFillColor(Color::Red); }
+					}
+					else { ms_position = 0; };
+					sensor_klick[9][10] = 1;
+					break;
 					}
 					case 92:
-					{
+					{	if (sensor_klick[9][11] == 0) {
 						arr[0][1].set_bottom(1);
 						arr[1][1].set_top(1);
 						++arr[0][1];
 						++arr[1][1];
-						rectangle[9][11].setFillColor(Color::Red);
-						break;
+						if (queue == 1) { rectangle[9][11].setFillColor(Color::Blue); }
+						else { rectangle[9][11].setFillColor(Color::Red); }
+					}
+					else { ms_position = 0; };
+					sensor_klick[9][11] = 1;
+					break;
 					}
 					case 93:
-					{
+					{	if (sensor_klick[9][12] == 0) {
 						arr[0][2].set_bottom(1);
 						arr[1][2].set_top(1);
 						++arr[0][2];
 						++arr[1][2];
-						rectangle[9][12].setFillColor(Color::Red);
-						break;
+						if (queue == 1) { rectangle[9][12].setFillColor(Color::Blue); }
+						else { rectangle[9][12].setFillColor(Color::Red); }
+					}
+					else { ms_position = 0; };
+					sensor_klick[9][12] = 1;
+					break;
 					}
 					case 94:
-					{
+					{	if (sensor_klick[9][13] == 0) {
 						arr[0][3].set_bottom(1);
 						arr[1][3].set_top(1);
 						++arr[0][3];
 						++arr[1][3];
-						rectangle[9][13].setFillColor(Color::Red);
-						break;
+						if (queue == 1) { rectangle[9][13].setFillColor(Color::Blue); }
+						else { rectangle[9][13].setFillColor(Color::Red); }
+					}
+					else { ms_position = 0; };
+					sensor_klick[9][13] = 1;
+					break;
 					}
 					case 95:
-					{
+					{	if (sensor_klick[9][14] == 0) {
 						arr[0][4].set_bottom(1);
 						arr[1][4].set_top(1);
 						++arr[0][4];
 						++arr[1][4];
-						rectangle[9][14].setFillColor(Color::Red);
-						break;
+						if (queue == 1) { rectangle[9][14].setFillColor(Color::Blue); }
+						else { rectangle[9][14].setFillColor(Color::Red); }
+					}
+					else { ms_position = 0; };
+					sensor_klick[9][14] = 1;
+					break;
 					}
 					case 96:
-					{
+					{	if (sensor_klick[9][15] == 0) {
 						arr[0][5].set_bottom(1);
 						arr[1][5].set_top(1);
 						++arr[0][5];
 						++arr[1][5];
-						rectangle[9][15].setFillColor(Color::Red);
-						break;
+						if (queue == 1) { rectangle[9][15].setFillColor(Color::Blue); }
+						else { rectangle[9][15].setFillColor(Color::Red); }
+					}
+					else { ms_position = 0; };
+					sensor_klick[9][15] = 1;
+					break;
 					}
 					case 97:
-					{
+					{	if (sensor_klick[9][16] == 0) {
 						arr[0][6].set_bottom(1);
 						arr[1][6].set_top(1);
 						++arr[0][6];
 						++arr[1][6];
-						rectangle[9][16].setFillColor(Color::Red);
-						break;
+						if (queue == 1) { rectangle[9][16].setFillColor(Color::Blue); }
+						else { rectangle[9][16].setFillColor(Color::Red); }
+					}
+					else { ms_position = 0; };
+					sensor_klick[9][16] = 1;
+					break;
 					}
 					case 98:
-					{
+					{	if (sensor_klick[9][17] == 0) {
 						arr[0][7].set_bottom(1);
 						arr[1][7].set_top(1);
 						++arr[0][7];
 						++arr[1][7];
-						rectangle[9][17].setFillColor(Color::Red);
-						break;
+						if (queue == 1) { rectangle[9][17].setFillColor(Color::Blue); }
+						else { rectangle[9][17].setFillColor(Color::Red); }
+					}
+					else { ms_position = 0; };
+					sensor_klick[9][17] = 1;
+					break;
 					}
 					case 99:
-					{
+					{	if (sensor_klick[9][18] == 0) {
 						arr[0][8].set_bottom(1);
 						arr[1][8].set_top(1);
 						++arr[0][8];
 						++arr[1][8];
-						rectangle[9][18].setFillColor(Color::Red);
-						break;
+						if (queue == 1) { rectangle[9][18].setFillColor(Color::Blue); }
+						else { rectangle[9][18].setFillColor(Color::Red); }
+					}
+					else { ms_position = 0; };
+					sensor_klick[9][18] = 1;
+					break;
 					}
 					case 100:
-					{
+					{	if (sensor_klick[9][19] == 0) {
 						arr[0][9].set_bottom(1);
 						arr[1][9].set_top(1);
 						++arr[0][9];
 						++arr[1][9];
-						rectangle[9][19].setFillColor(Color::Red);
-						break;
+						if (queue == 1) { rectangle[9][19].setFillColor(Color::Blue); }
+						else { rectangle[9][19].setFillColor(Color::Red); }
+					}
+					else { ms_position = 0; };
+					sensor_klick[9][19] = 1;
+					break;
 					}
 					case 101:
-					{
+					{	if (sensor_klick[10][10] == 0) {
 						arr[1][0].set_bottom(1);
 						arr[2][0].set_top(1);
 						++arr[1][0];
 						++arr[2][0];
-						rectangle[10][10].setFillColor(Color::Red);
-						break;
+						if (queue == 1) { rectangle[10][10].setFillColor(Color::Blue); }
+						else { rectangle[10][10].setFillColor(Color::Red); }
+					}
+					else { ms_position = 0; };
+					sensor_klick[10][10] = 1;
+					break;
 					}
 					case 102:
-					{
+					{	if (sensor_klick[10][11] == 0) {
 						arr[1][1].set_bottom(1);
 						arr[2][1].set_top(1);
 						++arr[2][1];
 						++arr[1][1];
-						rectangle[10][11].setFillColor(Color::Red);
-						break;
+						if (queue == 1) { rectangle[10][11].setFillColor(Color::Blue); }
+						else { rectangle[10][11].setFillColor(Color::Red); }
+					}
+					else { ms_position = 0; };
+					sensor_klick[10][11] = 1;
+					break;
 					}
 					case 103:
-					{
+					{	if (sensor_klick[10][12] == 0) {
 						arr[1][2].set_bottom(1);
 						arr[2][2].set_top(1);
 						++arr[1][2];
 						++arr[2][2];
-						rectangle[10][12].setFillColor(Color::Red);
-						break;
+						if (queue == 1) { rectangle[10][12].setFillColor(Color::Blue); }
+						else { rectangle[10][12].setFillColor(Color::Red); }
+					}
+					else { ms_position = 0; };
+					sensor_klick[10][12] = 1;
+					break;
 					}
 					case 104:
-					{
+					{	if (sensor_klick[10][13] == 0) {
 						arr[1][3].set_bottom(1);
 						arr[2][3].set_top(1);
 						++arr[1][3];
 						++arr[2][3];
-						rectangle[10][13].setFillColor(Color::Red);
-						break;
+						if (queue == 1) { rectangle[10][13].setFillColor(Color::Blue); }
+						else { rectangle[10][13].setFillColor(Color::Red); }
+					}
+					else { ms_position = 0; };
+					sensor_klick[10][13] = 1;
+					break;
 					}
 					case 105:
-					{
+					{	if (sensor_klick[10][14] == 0) {
 						arr[1][4].set_bottom(1);
 						arr[2][4].set_top(1);
 						++arr[1][4];
 						++arr[2][4];
-						rectangle[10][14].setFillColor(Color::Red);
-						break;
+						if (queue == 1) { rectangle[10][14].setFillColor(Color::Blue); }
+						else { rectangle[10][14].setFillColor(Color::Red); }
+					}
+					else { ms_position = 0; };
+					sensor_klick[10][14] = 1;
+					break;
 					}
 					case 106:
-					{
+					{	if (sensor_klick[10][15] == 0) {
 						arr[1][5].set_bottom(1);
 						arr[2][5].set_top(1);
 						++arr[1][5];
 						++arr[2][5];
-						rectangle[10][15].setFillColor(Color::Red);
-						break;
+						if (queue == 1) { rectangle[10][15].setFillColor(Color::Blue); }
+						else { rectangle[10][15].setFillColor(Color::Red); }
+					}
+					else { ms_position = 0; };
+					sensor_klick[10][15] = 1;
+					break;
 					}
 					case 107:
-					{
+					{	if (sensor_klick[10][16] == 0) {
 						arr[1][6].set_bottom(1);
 						arr[2][6].set_top(1);
 						++arr[2][6];
 						++arr[1][6];
-						rectangle[10][16].setFillColor(Color::Red);
-						break;
+						if (queue == 1) { rectangle[10][16].setFillColor(Color::Blue); }
+						else { rectangle[10][16].setFillColor(Color::Red); }
+					}
+					else { ms_position = 0; };
+					sensor_klick[10][16] = 1;
+					break;
 					}
 					case 108:
-					{
+					{	if (sensor_klick[10][17] == 0) {
 						arr[1][7].set_bottom(1);
 						arr[2][7].set_top(1);
 						++arr[2][7];
 						++arr[1][7];
-						rectangle[10][17].setFillColor(Color::Red);
-						break;
+						if (queue == 1) { rectangle[10][17].setFillColor(Color::Blue); }
+						else { rectangle[10][17].setFillColor(Color::Red); }
+					}
+					else { ms_position = 0; };
+					sensor_klick[10][17] = 1;
+					break;
 					}
 					case 109:
-					{
+					{	if (sensor_klick[10][18] == 0) {
 						arr[1][8].set_bottom(1);
 						arr[2][8].set_top(1);
 						++arr[1][8];
 						++arr[2][8];
-						rectangle[10][18].setFillColor(Color::Red);
-						break;
+						if (queue == 1) { rectangle[10][18].setFillColor(Color::Blue); }
+						else { rectangle[10][18].setFillColor(Color::Red); }
+					}
+					else { ms_position = 0; };
+					sensor_klick[10][18] = 1;
+					break;
 					}
 					case 110:
-					{
+					{	if (sensor_klick[10][19] == 0) {
 						arr[1][9].set_bottom(1);
 						arr[2][9].set_top(1);
 						++arr[1][9];
 						++arr[2][9];
-						rectangle[10][19].setFillColor(Color::Red);
-						break;
+						if (queue == 1) { rectangle[10][19].setFillColor(Color::Blue); }
+						else { rectangle[10][19].setFillColor(Color::Red); }
+					}
+					else { ms_position = 0; };
+					sensor_klick[10][19] = 1;
+					break;
 					}
 					case 111:
-					{
+					{	if (sensor_klick[11][10] == 0) {
 						arr[2][0].set_bottom(1);
 						arr[3][0].set_top(1);
 						++arr[3][0];
 						++arr[2][0];
-						rectangle[11][10].setFillColor(Color::Red);
-						break;
+						if (queue == 1) { rectangle[11][10].setFillColor(Color::Blue); }
+						else { rectangle[11][10].setFillColor(Color::Red); }
+					}
+					else { ms_position = 0; };
+					sensor_klick[11][10] = 1;
+					break;
 					}
 					case 112:
-					{
+					{	if (sensor_klick[11][11] == 0) {
 						arr[2][1].set_bottom(1);
 						arr[3][1].set_top(1);
 						++arr[2][1];
 						++arr[3][1];
-						rectangle[11][11].setFillColor(Color::Red);
-						break;
+						if (queue == 1) { rectangle[11][11].setFillColor(Color::Blue); }
+						else { rectangle[11][11].setFillColor(Color::Red); }
+					}
+					else { ms_position = 0; };
+					sensor_klick[11][11] = 1;
+					break;
 					}
 					case 113:
-					{
+					{	if (sensor_klick[11][12] == 0) {
 						arr[2][2].set_bottom(1);
 						arr[3][2].set_top(1);
 						++arr[3][2];
 						++arr[2][2];
-						rectangle[11][12].setFillColor(Color::Red);
-						break;
+						if (queue == 1) { rectangle[11][12].setFillColor(Color::Blue); }
+						else { rectangle[11][12].setFillColor(Color::Red); }
+					}
+					else { ms_position = 0; };
+					sensor_klick[11][12] = 1;
+					break;
 					}
 					case 114:
-					{
+					{	if (sensor_klick[11][13] == 0) {
 						arr[2][3].set_bottom(1);
 						arr[3][3].set_top(1);
 						++arr[3][3];
 						++arr[2][3];
-						rectangle[11][13].setFillColor(Color::Red);
-						break;
+						if (queue == 1) { rectangle[11][13].setFillColor(Color::Blue); }
+						else { rectangle[11][13].setFillColor(Color::Red); }
+					}
+					else { ms_position = 0; };
+					sensor_klick[11][13] = 1;
+					break;
 					}
 					case 115:
-					{
+					{	if (sensor_klick[11][14] == 0) {
 						arr[2][4].set_bottom(1);
 						arr[3][4].set_top(1);
 						++arr[2][4];
 						++arr[3][4];
-						rectangle[11][14].setFillColor(Color::Red);
-						break;
+						if (queue == 1) { rectangle[11][14].setFillColor(Color::Blue); }
+						else { rectangle[11][14].setFillColor(Color::Red); }
+					}
+					else { ms_position = 0; };
+					sensor_klick[11][14] = 1;
+					break;
 					}
 					case 116:
-					{
+					{	if (sensor_klick[11][15] == 0) {
 						arr[2][5].set_bottom(1);
 						arr[3][5].set_top(1);
 						++arr[3][5];
 						++arr[2][5];
-						rectangle[11][15].setFillColor(Color::Red);
-						break;
+						if (queue == 1) { rectangle[11][15].setFillColor(Color::Blue); }
+						else { rectangle[11][15].setFillColor(Color::Red); }
+					}
+					else { ms_position = 0; };
+					sensor_klick[11][15] = 1;
+					break;
 					}
 					case 117:
-					{
+					{	if (sensor_klick[11][16] == 0) {
 						arr[2][6].set_bottom(1);
 						arr[3][6].set_top(1);
 						++arr[3][6];
 						++arr[2][6];
-						rectangle[11][16].setFillColor(Color::Red);
-						break;
+						if (queue == 1) { rectangle[11][16].setFillColor(Color::Blue); }
+						else { rectangle[11][16].setFillColor(Color::Red); }
+					}
+					else { ms_position = 0; };
+					sensor_klick[11][16] = 1;
+					break;
 					}
 					case 118:
-					{
+					{	if (sensor_klick[11][17] == 0) {
 						arr[2][7].set_bottom(1);
 						arr[3][7].set_top(1);
 						++arr[3][7];
 						++arr[2][7];
-						rectangle[11][17].setFillColor(Color::Red);
-						break;
+						if (queue == 1) { rectangle[11][17].setFillColor(Color::Blue); }
+						else { rectangle[11][17].setFillColor(Color::Red); }
+					}
+					else { ms_position = 0; };
+					sensor_klick[11][17] = 1;
+					break;
 					}
 					case 119:
-					{
+					{	if (sensor_klick[11][18] == 0) {
 						arr[2][8].set_bottom(1);
 						arr[3][8].set_top(1);
 						++arr[2][8];
 						++arr[3][8];
-						rectangle[11][18].setFillColor(Color::Red);
-						break;
+						if (queue == 1) { rectangle[11][18].setFillColor(Color::Blue); }
+						else { rectangle[11][18].setFillColor(Color::Red); }
+					}
+					else { ms_position = 0; };
+					sensor_klick[11][18] = 1;
+					break;
 					}
 					case 120:
-					{
+					{	if (sensor_klick[11][19] == 0) {
 						arr[2][9].set_bottom(1);
 						arr[3][9].set_top(1);
 						++arr[3][9];
 						++arr[2][9];
-						rectangle[11][19].setFillColor(Color::Red);
-						break;
+						if (queue == 1) { rectangle[11][19].setFillColor(Color::Blue); }
+						else { rectangle[11][19].setFillColor(Color::Red); }
+					}
+					else { ms_position = 0; };
+					sensor_klick[11][19] = 1;
+					break;
 					}
 					case 121:
-					{
+					{	if (sensor_klick[12][10] == 0) {
 						arr[3][0].set_bottom(1);
 						arr[4][0].set_top(1);
 						++arr[3][0];
 						++arr[4][0];
-						rectangle[12][10].setFillColor(Color::Red);
-						break;
+						if (queue == 1) { rectangle[12][10].setFillColor(Color::Blue); }
+						else { rectangle[12][10].setFillColor(Color::Red); }
+					}
+					else { ms_position = 0; };
+					sensor_klick[12][10] = 1;
+					break;
 					}
 					case 122:
-					{
+					{	if (sensor_klick[12][11] == 0) {
 						arr[3][1].set_bottom(1);
 						arr[4][1].set_top(1);
 						++arr[3][1];
 						++arr[4][1];
-						rectangle[12][11].setFillColor(Color::Red);
-						break;
+						if (queue == 1) { rectangle[12][11].setFillColor(Color::Blue); }
+						else { rectangle[12][11].setFillColor(Color::Red); }
+					}
+					else { ms_position = 0; };
+					sensor_klick[12][11] = 1;
+					break;
 					}
 					case 123:
-					{
+					{	if (sensor_klick[12][12] == 0) {
 						arr[3][2].set_bottom(1);
 						arr[4][2].set_top(1);
 						++arr[4][2];
 						++arr[3][2];
-						rectangle[12][12].setFillColor(Color::Red);
-						break;
+						if (queue == 1) { rectangle[12][12].setFillColor(Color::Blue); }
+						else { rectangle[12][12].setFillColor(Color::Red); }
+					}
+					else { ms_position = 0; };
+					sensor_klick[12][12] = 1;
+					break;
 					}
 					case 124:
-					{
+					{	if (sensor_klick[12][13] == 0) {
 						arr[3][3].set_bottom(1);
 						arr[4][3].set_top(1);
 						++arr[3][3];
 						++arr[4][3];
-						rectangle[12][13].setFillColor(Color::Red);
-						break;
+						if (queue == 1) { rectangle[12][13].setFillColor(Color::Blue); }
+						else { rectangle[12][13].setFillColor(Color::Red); }
+					}
+					else { ms_position = 0; };
+					sensor_klick[12][13] = 1;
+					break;
 					}
 					case 125:
-					{
+					{	if (sensor_klick[12][14] == 0) {
 						arr[3][4].set_bottom(1);
 						arr[4][4].set_top(1);
 						++arr[3][4];
 						++arr[4][4];
-						rectangle[12][14].setFillColor(Color::Red);
-						break;
+						if (queue == 1) { rectangle[12][14].setFillColor(Color::Blue); }
+						else { rectangle[12][14].setFillColor(Color::Red); }
+					}
+					else { ms_position = 0; };
+					sensor_klick[12][14] = 1;
+					break;
 					}
 					case 126:
-					{
+					{	if (sensor_klick[12][15] == 0) {
 						arr[3][5].set_bottom(1);
 						arr[4][5].set_top(1);
 						++arr[3][5];
 						++arr[4][5];
-						rectangle[12][15].setFillColor(Color::Red);
-						break;
+						if (queue == 1) { rectangle[12][15].setFillColor(Color::Blue); }
+						else { rectangle[12][15].setFillColor(Color::Red); }
+					}
+					else { ms_position = 0; };
+					sensor_klick[12][15] = 1;
+					break;
 					}
 					case 127:
-					{
+					{	if (sensor_klick[12][16] == 0) {
 						arr[3][6].set_bottom(1);
 						arr[4][6].set_top(1);
 						++arr[3][6];
 						++arr[4][6];
-						rectangle[12][16].setFillColor(Color::Red);
-						break;
+						if (queue == 1) { rectangle[12][16].setFillColor(Color::Blue); }
+						else { rectangle[12][16].setFillColor(Color::Red); }
+					}
+					else { ms_position = 0; };
+					sensor_klick[12][16] = 1;
+					break;
 					}
 					case 128:
-					{
+					{	if (sensor_klick[12][17] == 0) {
 						arr[3][7].set_bottom(1);
 						arr[4][7].set_top(1);
 						++arr[3][7];
 						++arr[4][7];
-						rectangle[12][17].setFillColor(Color::Red);
-						break;
+						if (queue == 1) { rectangle[12][17].setFillColor(Color::Blue); }
+						else { rectangle[12][17].setFillColor(Color::Red); }
+					}
+					else { ms_position = 0; };
+					sensor_klick[12][17] = 1;
+					break;
 					}
 					case 129:
-					{
+					{	if (sensor_klick[12][18] == 0) {
 						arr[3][8].set_bottom(1);
 						arr[4][8].set_top(1);
 						++arr[4][8];
 						++arr[3][8];
-						rectangle[12][18].setFillColor(Color::Red);
-						break;
+						if (queue == 1) { rectangle[12][18].setFillColor(Color::Blue); }
+						else { rectangle[12][18].setFillColor(Color::Red); }
+					}
+					else { ms_position = 0; };
+					sensor_klick[12][18] = 1;
+					break;
 					}
 					case 130:
-					{
+					{	if (sensor_klick[12][19] == 0) {
 						arr[3][9].set_bottom(1);
 						arr[4][9].set_top(1);
 						++arr[3][9];
 						++arr[4][9];
-						rectangle[12][19].setFillColor(Color::Red);
-						break;
+						if (queue == 1) { rectangle[12][19].setFillColor(Color::Blue); }
+						else { rectangle[12][19].setFillColor(Color::Red); }
+					}
+					else { ms_position = 0; };
+					sensor_klick[12][19] = 1;
+					break;
 					}
 					case 131:
-					{
+					{	if (sensor_klick[13][10] == 0) {
 						arr[4][0].set_bottom(1);
 						arr[5][0].set_top(1);
 						++arr[4][0];
 						++arr[5][0];
-						rectangle[13][10].setFillColor(Color::Red);
-						break;
+						if (queue == 1) { rectangle[13][10].setFillColor(Color::Blue); }
+						else { rectangle[13][10].setFillColor(Color::Red); }
+					}
+					else { ms_position = 0; };
+					sensor_klick[13][10] = 1;
+					break;
 					}
 					case 132:
-					{
+					{	if (sensor_klick[13][11] == 0) {
 						arr[4][1].set_bottom(1);
 						arr[5][1].set_top(1);
 						++arr[5][1];
 						++arr[4][1];
-						rectangle[13][11].setFillColor(Color::Red);
-						break;
+						if (queue == 1) { rectangle[13][11].setFillColor(Color::Blue); }
+						else { rectangle[13][11].setFillColor(Color::Red); }
+					}
+					else { ms_position = 0; };
+					sensor_klick[13][11] = 1;
+					break;
 					}
 					case 133:
-					{
+					{	if (sensor_klick[13][12] == 0) {
 						arr[4][2].set_bottom(1);
 						arr[5][2].set_top(1);
 						++arr[4][2];
 						++arr[5][2];
-						rectangle[13][12].setFillColor(Color::Red);
-						break;
+						if (queue == 1) { rectangle[13][12].setFillColor(Color::Blue); }
+						else { rectangle[13][12].setFillColor(Color::Red); }
+					}
+					else { ms_position = 0; };
+					sensor_klick[13][12] = 1;
+					break;
 					}
 					case 134:
-					{
+					{	if (sensor_klick[13][13] == 0) {
 						arr[4][3].set_bottom(1);
 						arr[5][3].set_top(1);
 						++arr[4][3];
 						++arr[5][3];
-						rectangle[13][13].setFillColor(Color::Red);
-						break;
+						if (queue == 1) { rectangle[13][13].setFillColor(Color::Blue); }
+						else { rectangle[13][13].setFillColor(Color::Red); }
+					}
+					else { ms_position = 0; };
+					sensor_klick[13][13] = 1;
+					break;
 					}
 					case 135:
-					{
+					{	if (sensor_klick[13][14] == 0) {
 						arr[4][4].set_bottom(1);
 						arr[5][4].set_top(1);
 						++arr[5][4];
 						++arr[4][4];
-						rectangle[13][14].setFillColor(Color::Red);
-						break;
+						if (queue == 1) { rectangle[13][14].setFillColor(Color::Blue); }
+						else { rectangle[13][14].setFillColor(Color::Red); }
+					}
+					else { ms_position = 0; };
+					sensor_klick[13][14] = 1;
+					break;
 					}
 					case 136:
-					{
+					{	if (sensor_klick[13][15] == 0) {
 						arr[4][5].set_bottom(1);
 						arr[5][5].set_top(1);
 						++arr[5][5];
 						++arr[4][5];
-						rectangle[13][15].setFillColor(Color::Red);
-						break;
+						if (queue == 1) { rectangle[13][15].setFillColor(Color::Blue); }
+						else { rectangle[13][15].setFillColor(Color::Red); }
+					}
+					else { ms_position = 0; };
+					sensor_klick[13][15] = 1;
+					break;
 					}
 					case 137:
-					{
+					{	if (sensor_klick[13][16] == 0) {
 						arr[4][6].set_bottom(1);
 						arr[5][6].set_top(1);
 						++arr[4][6];
 						++arr[5][6];
-						rectangle[13][16].setFillColor(Color::Red);
-						break;
+						if (queue == 1) { rectangle[13][16].setFillColor(Color::Blue); }
+						else { rectangle[13][16].setFillColor(Color::Red); }
+					}
+					else { ms_position = 0; };
+					sensor_klick[13][16] = 1;
+					break;
 					}
 					case 138:
-					{
+					{	if (sensor_klick[13][17] == 0) {
 						arr[4][7].set_bottom(1);
 						arr[5][7].set_top(1);
 						++arr[5][7];
 						++arr[4][7];
-						rectangle[13][17].setFillColor(Color::Red);
-						break;
+						if (queue == 1) { rectangle[13][17].setFillColor(Color::Blue); }
+						else { rectangle[13][17].setFillColor(Color::Red); }
+					}
+					else { ms_position = 0; };
+					sensor_klick[13][17] = 1;
+					break;
 					}
 					case 139:
-					{
+					{	if (sensor_klick[13][18] == 0) {
 						arr[4][8].set_bottom(1);
 						arr[5][8].set_top(1);
 						++arr[4][8];
 						++arr[5][8];
-						rectangle[13][18].setFillColor(Color::Red);
-						break;
+						if (queue == 1) { rectangle[13][18].setFillColor(Color::Blue); }
+						else { rectangle[13][18].setFillColor(Color::Red); }
+					}
+					else { ms_position = 0; };
+					sensor_klick[13][18] = 1;
+					break;
 					}
 					case 140:
-					{
+					{	if (sensor_klick[13][19] == 0) {
 						arr[4][9].set_bottom(1);
 						arr[5][9].set_top(1);
 						++arr[5][9];
 						++arr[4][9];
-						rectangle[13][19].setFillColor(Color::Red);
+						if (queue == 1) { rectangle[13][19].setFillColor(Color::Blue); }
+						else { rectangle[13][19].setFillColor(Color::Red); }
+					}
+					else { ms_position = 0; };
+					sensor_klick[13][19] = 1;
+					break;
+					}
+					case 141:
+					{	if (sensor_klick[14][10] == 0) {
+						arr[5][0].set_bottom(1);
+						arr[6][0].set_top(1);
+						++arr[6][0];
+						++arr[5][0];
+						if (queue == 1) { rectangle[14][10].setFillColor(Color::Blue); }
+						else { rectangle[14][10].setFillColor(Color::Red); }
+					}
+					else { ms_position = 0; };
+					sensor_klick[14][10] = 1;
+					break;
+					}
+					case 142:
+					{	if (sensor_klick[14][11] == 0) {
+						arr[5][1].set_bottom(1);
+						arr[6][1].set_top(1);
+						++arr[5][1];
+						++arr[6][1];
+						if (queue == 1) { rectangle[14][11].setFillColor(Color::Blue); }
+						else { rectangle[14][11].setFillColor(Color::Red); }
+					}
+					else { ms_position = 0; };
+					sensor_klick[14][11] = 1;
+					break;
+					}
+					case 143:
+					{	if (sensor_klick[14][12] == 0) {
+						arr[5][2].set_bottom(1);
+						arr[6][2].set_top(1);
+						++arr[5][2];
+						++arr[6][2];
+						if (queue == 1) { rectangle[14][12].setFillColor(Color::Blue); }
+						else { rectangle[14][12].setFillColor(Color::Red); }
+					}
+					else { ms_position = 0; };
+					sensor_klick[14][12] = 1;
+					break;
+					}
+					case 144:
+					{	if (sensor_klick[14][13] == 0) {
+						arr[5][3].set_bottom(1);
+						arr[6][3].set_top(1);
+						++arr[6][3];
+						++arr[5][3];
+						if (queue == 1) { rectangle[14][13].setFillColor(Color::Blue); }
+						else { rectangle[14][13].setFillColor(Color::Red); }
+					}
+					else { ms_position = 0; };
+					sensor_klick[14][13] = 1;
+					break;
+					}
+					case 145:
+					{	if (sensor_klick[14][14] == 0) {
+						arr[5][4].set_bottom(1);
+						arr[6][4].set_top(1);
+						++arr[5][4];
+						++arr[6][4];
+						if (queue == 1) { rectangle[14][14].setFillColor(Color::Blue); }
+						else { rectangle[14][14].setFillColor(Color::Red); }
+					}
+					else { ms_position = 0; };
+					sensor_klick[14][14] = 1;
+					break;
+					}
+					case 146:
+					{	if (sensor_klick[14][15] == 0) {
+						arr[5][5].set_bottom(1);
+						arr[6][5].set_top(1);
+						++arr[5][5];
+						++arr[6][5];
+						if (queue == 1) { rectangle[14][15].setFillColor(Color::Blue); }
+						else { rectangle[14][15].setFillColor(Color::Red); }
+					}
+					else { ms_position = 0; };
+					sensor_klick[14][15] = 1;
+					break;
+					}
+					case 147:
+					{	if (sensor_klick[14][16] == 0) {
+						arr[5][6].set_bottom(1);
+						arr[6][6].set_top(1);
+						++arr[5][6];
+						++arr[6][6];
+						if (queue == 1) { rectangle[14][16].setFillColor(Color::Blue); }
+						else { rectangle[14][16].setFillColor(Color::Red); }
+					}
+					else { ms_position = 0; };
+					sensor_klick[14][16] = 1;
+					break;
+					}
+					case 148:
+					{	if (sensor_klick[14][17] == 0) {
+						arr[5][7].set_bottom(1);
+						arr[6][7].set_top(1);
+						++arr[5][7];
+						++arr[6][7];
+						if (queue == 1) { rectangle[14][17].setFillColor(Color::Blue); }
+						else { rectangle[14][17].setFillColor(Color::Red); }
+					}
+					else { ms_position = 0; };
+					sensor_klick[14][17] = 1;
+					break;
+					}
+					case 149:
+					{	if (sensor_klick[14][18] == 0) {
+						arr[5][8].set_bottom(1);
+						arr[6][8].set_top(1);
+						++arr[5][8];
+						++arr[6][8];
+						if (queue == 1) { rectangle[14][18].setFillColor(Color::Blue); }
+						else { rectangle[14][18].setFillColor(Color::Red); }
+					}
+					else { ms_position = 0; };
+					sensor_klick[14][18] = 1;
+					break;
+					}
+					case 150:
+					{	if (sensor_klick[14][19] == 0) {
+						arr[5][9].set_bottom(1);
+						arr[6][9].set_top(1);
+						++arr[5][9];
+						++arr[6][9];
+						if (queue == 1) { rectangle[14][19].setFillColor(Color::Blue); }
+						else { rectangle[14][19].setFillColor(Color::Red); }
+					}
+					else { ms_position = 0; };
+					sensor_klick[14][19] = 1;
+					break;
+					}
+					case 151:
+					{	if (sensor_klick[15][10] == 0) {
+						arr[6][0].set_bottom(1);
+						arr[7][0].set_top(1);
+						++arr[6][0];
+						++arr[7][0];
+						if (queue == 1) { rectangle[15][10].setFillColor(Color::Blue); }
+						else { rectangle[15][10].setFillColor(Color::Red); }
+					}
+					else { ms_position = 0; };
+					sensor_klick[15][10] = 1;
+					break;
+					}
+					case 152:
+					{	if (sensor_klick[15][11] == 0) {
+						arr[6][1].set_bottom(1);
+						arr[7][1].set_top(1);
+						++arr[7][1];
+						++arr[6][1];
+						if (queue == 1) { rectangle[15][11].setFillColor(Color::Blue); }
+						else { rectangle[15][11].setFillColor(Color::Red); }
+					}
+					else { ms_position = 0; };
+					sensor_klick[15][11] = 1;
+					break;
+					}
+					case 153:
+					{	if (sensor_klick[15][12] == 0) {
+						arr[6][2].set_bottom(1);
+						arr[7][2].set_top(1);
+						++arr[7][2];
+						++arr[6][2];
+						if (queue == 1) { rectangle[15][12].setFillColor(Color::Blue); }
+						else { rectangle[15][12].setFillColor(Color::Red); }
+					}
+					else { ms_position = 0; };
+					sensor_klick[15][12] = 1;
+					break;
+					}
+					case 154:
+					{	if (sensor_klick[15][13] == 0) {
+						arr[6][3].set_bottom(1);
+						arr[7][3].set_top(1);
+						++arr[6][3];
+						++arr[7][3];
+						if (queue == 1) { rectangle[15][13].setFillColor(Color::Blue); }
+						else { rectangle[15][13].setFillColor(Color::Red); }
+					}
+					else { ms_position = 0; };
+					sensor_klick[15][13] = 1;
+					break;
+					}
+					case 155:
+					{	if (sensor_klick[15][14] == 0) {
+						arr[6][4].set_bottom(1);
+						arr[7][4].set_top(1);
+						++arr[7][4];
+						++arr[6][4];
+						if (queue == 1) { rectangle[15][14].setFillColor(Color::Blue); }
+						else { rectangle[15][14].setFillColor(Color::Red); }
+					}
+					else { ms_position = 0; };
+					sensor_klick[15][14] = 1;
+					break;
+					}
+					case 156:
+					{	if (sensor_klick[15][15] == 0) {
+						arr[6][5].set_bottom(1);
+						arr[7][5].set_top(1);
+						++arr[7][5];
+						++arr[6][5];
+						if (queue == 1) { rectangle[15][15].setFillColor(Color::Blue); }
+						else { rectangle[15][15].setFillColor(Color::Red); }
+					}
+					else { ms_position = 0; };
+					sensor_klick[15][15] = 1;
+					break;
+					}
+					case 157:
+					{	if (sensor_klick[15][16] == 0) {
+						arr[6][6].set_bottom(1);
+						arr[7][6].set_top(1);
+						++arr[7][6];
+						++arr[6][6];
+						if (queue == 1) { rectangle[15][16].setFillColor(Color::Blue); }
+						else { rectangle[15][16].setFillColor(Color::Red); }
+					}
+					else { ms_position = 0; };
+					sensor_klick[15][16] = 1;
+					break;
+					}
+					case 158:
+					{	if (sensor_klick[15][17] == 0) {
+						arr[6][7].set_bottom(1);
+						arr[7][7].set_top(1);
+						++arr[7][7];
+						++arr[6][7];
+						if (queue == 1) { rectangle[15][17].setFillColor(Color::Blue); }
+						else { rectangle[15][17].setFillColor(Color::Red); }
+					}
+					else { ms_position = 0; };
+					sensor_klick[15][17] = 1;
+					break;
+					}
+					case 159:
+					{	if (sensor_klick[15][18] == 0) {
+						arr[6][8].set_bottom(1);
+						arr[7][8].set_top(1);
+						++arr[7][8];
+						++arr[6][8];
+						if (queue == 1) { rectangle[15][18].setFillColor(Color::Blue); }
+						else { rectangle[15][18].setFillColor(Color::Red); }
+					}
+					else { ms_position = 0; };
+					sensor_klick[15][18] = 1;
+					break;
+					}
+					case 160:
+					{	if (sensor_klick[15][19] == 0) {
+						arr[6][9].set_bottom(1);
+						arr[7][9].set_top(1);
+						++arr[7][9];
+						++arr[6][9];
+						if (queue == 1) { rectangle[15][19].setFillColor(Color::Blue); }
+						else { rectangle[15][19].setFillColor(Color::Red); }
+					}
+					else { ms_position = 0; };
+					sensor_klick[15][19] = 1;
+					break;
+					}
+					case 161:
+					{	if (sensor_klick[16][10] == 0) {
+						arr[7][0].set_bottom(1);
+						arr[8][0].set_top(1);
+						++arr[7][0];
+						++arr[8][0];
+						if (queue == 1) { rectangle[16][10].setFillColor(Color::Blue); }
+						else { rectangle[16][10].setFillColor(Color::Red); }
+					}
+					else { ms_position = 0; };
+					sensor_klick[16][10] = 1;
+					break;
+					}
+					case 162:
+					{	if (sensor_klick[16][11] == 0) {
+						arr[7][1].set_bottom(1);
+						arr[8][1].set_top(1);
+						++arr[7][1];
+						++arr[8][1];
+						if (queue == 1) { rectangle[16][11].setFillColor(Color::Blue); }
+						else { rectangle[16][11].setFillColor(Color::Red); }
+					}
+					else { ms_position = 0; };
+					sensor_klick[16][11] = 1;
+					break;
+					}
+					case 163:
+					{	if (sensor_klick[16][12] == 0) {
+						arr[7][2].set_bottom(1);
+						arr[8][2].set_top(1);
+						++arr[7][2];
+						++arr[8][2];
+						if (queue == 1) { rectangle[16][12].setFillColor(Color::Blue); }
+						else { rectangle[16][12].setFillColor(Color::Red); }
+					}
+					else { ms_position = 0; };
+					sensor_klick[16][12] = 1;
+					break;
+					}
+					case 164:
+					{	if (sensor_klick[16][13] == 0) {
+						arr[7][3].set_bottom(1);
+						arr[8][3].set_top(1);
+						++arr[8][3];
+						++arr[7][3];
+						if (queue == 1) { rectangle[16][13].setFillColor(Color::Blue); }
+						else { rectangle[16][13].setFillColor(Color::Red); }
+					}
+					else { ms_position = 0; };
+					sensor_klick[16][13] = 1;
+					break;
+					}
+					case 165:
+					{	if (sensor_klick[16][14] == 0) {
+						arr[7][4].set_bottom(1);
+						arr[8][4].set_top(1);
+						++arr[7][4];
+						++arr[8][4];
+						if (queue == 1) { rectangle[16][14].setFillColor(Color::Blue); }
+						else { rectangle[16][14].setFillColor(Color::Red); }
+					}
+					else { ms_position = 0; };
+					sensor_klick[16][14] = 1;
+					break;
+					}
+					case 166:
+					{	if (sensor_klick[16][15] == 0) {
+						arr[7][5].set_bottom(1);
+						arr[8][5].set_top(1);
+						++arr[7][5];
+						++arr[8][5];
+						if (queue == 1) { rectangle[16][15].setFillColor(Color::Blue); }
+						else { rectangle[16][15].setFillColor(Color::Red); }
+					}
+					else { ms_position = 0; };
+					sensor_klick[16][15] = 1;
+					break;
+					}
+					case 167:
+					{	if (sensor_klick[16][16] == 0) {
+						arr[7][6].set_bottom(1);
+						arr[8][6].set_top(1);
+						++arr[7][6];
+						++arr[8][6];
+						if (queue == 1) { rectangle[16][16].setFillColor(Color::Blue); }
+						else { rectangle[16][16].setFillColor(Color::Red); }
+					}
+					else { ms_position = 0; };
+					sensor_klick[16][16] = 1;
+					break;
+					}
+					case 168:
+					{	if (sensor_klick[16][17] == 0) {
+						arr[7][7].set_bottom(1);
+						arr[8][7].set_top(1);
+						++arr[7][7];
+						++arr[8][7];
+						if (queue == 1) { rectangle[16][17].setFillColor(Color::Blue); }
+						else { rectangle[16][17].setFillColor(Color::Red); }
+					}
+					else { ms_position = 0; };
+					sensor_klick[16][17] = 1;
+					break;
+					}
+					case 169:
+					{	if (sensor_klick[16][18] == 0) {
+						arr[7][8].set_bottom(1);
+						arr[8][8].set_top(1);
+						++arr[7][8];
+						++arr[8][8];
+						if (queue == 1) { rectangle[16][18].setFillColor(Color::Blue); }
+						else { rectangle[16][18].setFillColor(Color::Red); }
+					}
+					else { ms_position = 0; };
+					sensor_klick[16][18] = 1;
+					break;
+					}
+					case 170:
+					{	if (sensor_klick[16][19] == 0) {
+						arr[7][9].set_bottom(1);
+						arr[8][9].set_top(1);
+						++arr[7][9];
+						++arr[8][9];
+						if (queue == 1) { rectangle[16][19].setFillColor(Color::Blue); }
+						else { rectangle[16][19].setFillColor(Color::Red); }
+					}
+					else { ms_position = 0; };
+					sensor_klick[16][19] = 1;
+					break;
+					}
+					case 171:
+					{	if (sensor_klick[17][10] == 0) {
+						arr[8][0].set_bottom(1);
+						arr[9][0].set_top(1);
+						++arr[8][0];
+						++arr[9][0];
+						if (queue == 1) { rectangle[17][10].setFillColor(Color::Blue); }
+						else { rectangle[17][10].setFillColor(Color::Red); }
+					}
+					else { ms_position = 0; };
+					sensor_klick[17][10] = 1;
+					break;
+					}
+					case 172:
+					{	if (sensor_klick[17][11] == 0) {
+						arr[8][1].set_bottom(1);
+						arr[9][1].set_top(1);
+						++arr[9][1];
+						++arr[8][1];
+						if (queue == 1) { rectangle[17][11].setFillColor(Color::Blue); }
+						else { rectangle[17][11].setFillColor(Color::Red); }
+					}
+					else { ms_position = 0; };
+					sensor_klick[17][11] = 1;
+					break;
+					}
+					case 173:
+					{	if (sensor_klick[17][12] == 0) {
+						arr[8][2].set_bottom(1);
+						arr[9][2].set_top(1);
+						++arr[8][2];
+						++arr[9][2];
+						if (queue == 1) { rectangle[17][12].setFillColor(Color::Blue); }
+						else { rectangle[17][12].setFillColor(Color::Red); }
+					}
+					else { ms_position = 0; };
+					sensor_klick[17][12] = 1;
+					break;
+					}
+					case 174:
+					{	if (sensor_klick[17][13] == 0) {
+						arr[8][3].set_bottom(1);
+						arr[9][3].set_top(1);
+						++arr[8][3];
+						++arr[9][3];
+						if (queue == 1) { rectangle[17][13].setFillColor(Color::Blue); }
+						else { rectangle[17][13].setFillColor(Color::Red); }
+					}
+					else { ms_position = 0; };
+					sensor_klick[17][13] = 1;
+					break;
+					}
+					case 175:
+					{	if (sensor_klick[17][14] == 0) {
+						arr[8][4].set_bottom(1);
+						arr[9][4].set_top(1);
+						++arr[9][4];
+						++arr[8][4];
+						if (queue == 1) { rectangle[17][14].setFillColor(Color::Blue); }
+						else { rectangle[17][14].setFillColor(Color::Red); }
+					}
+					else { ms_position = 0; };
+					sensor_klick[17][14] = 1;
+					break;
+					}
+					case 176:
+					{	if (sensor_klick[17][15] == 0) {
+						arr[8][5].set_bottom(1);
+						arr[9][5].set_top(1);
+						++arr[9][5];
+						++arr[8][5];
+						if (queue == 1) { rectangle[17][15].setFillColor(Color::Blue); }
+						else { rectangle[17][15].setFillColor(Color::Red); }
+					}
+					else { ms_position = 0; };
+					sensor_klick[17][15] = 1;
+					break;
+					}
+					case 177:
+					{	if (sensor_klick[17][16] == 0) {
+						arr[8][6].set_bottom(1);
+						arr[9][6].set_top(1);
+						++arr[9][6];
+						++arr[8][6];
+						if (queue == 1) { rectangle[17][16].setFillColor(Color::Blue); }
+						else { rectangle[17][16].setFillColor(Color::Red); }
+					}
+					else { ms_position = 0; };
+					sensor_klick[17][16] = 1;
+					break;
+					}
+					case 178:
+					{	if (sensor_klick[17][17] == 0) {
+						arr[8][7].set_bottom(1);
+						arr[9][7].set_top(1);
+						++arr[9][7];
+						++arr[8][7];
+						if (queue == 1) { rectangle[17][17].setFillColor(Color::Blue); }
+						else { rectangle[17][17].setFillColor(Color::Red); }
+					}
+					else { ms_position = 0; };
+					sensor_klick[17][17] = 1;
+					break;
+					}
+					case 179:
+					{	if (sensor_klick[17][18] == 0) {
+						arr[8][8].set_bottom(1);
+						arr[9][8].set_top(1);
+						++arr[9][8];
+						++arr[8][8];
+						if (queue == 1) { rectangle[17][18].setFillColor(Color::Blue); }
+						else { rectangle[17][18].setFillColor(Color::Red); }
+					}
+					else { ms_position = 0; };
+					sensor_klick[17][18] = 1;
+					break;
+					}
+					case 180:
+					{	if (sensor_klick[17][19] == 0) {
+						arr[8][9].set_bottom(1);
+						arr[9][9].set_top(1);
+						++arr[9][9];
+						++arr[8][9];
+						if (queue == 1) { rectangle[17][19].setFillColor(Color::Blue); }
+						else { rectangle[17][19].setFillColor(Color::Red); }
+					}
+					else { ms_position = 0; };
+					sensor_klick[17][19] = 1;
+					break;
+					}
+					case 0: {
 						break;
 					}
 					};
-				}
-				//проход массива объектов(проверка на 4 палочки в квадрате):
-				for (int i = 0; i < 10; i++)
-				{
-					for (int j = 0; j < 10; j++)
-					{
-						if (arr[i][j].get_count() == 4)
+					//проход массива объектов(проверка на 4 палочки в квадрате):
+					if(ms_position!=0){
+					if (queue == 1) {
+						for (int i = 0; i < 10; i++)
 						{
-
-							xx[i][j].nolik_txt.loadFromFile("images/o.png");					//загрузили текстуру
-							xx[i][j].nolik;													//объявили спрайт 
-							xx[i][j].nolik.setTexture(xx[i][j].nolik_txt);					//загрузили текстуру в спрайт
-							xx[i][j].nolik.setPosition(arr[i][j].coord_x, arr[i][j].coord_y); //задали позицию		
-							window.draw(xx[i][j].nolik);										//test
-							++player_o;
-							++arr[i][j];
+							for (int j = 0; j < 10; j++)
+							{
+								if (arr[i][j].get_count() == 4)
+								{
+									xx[i][j].krestik_txt.loadFromFile("images/x.png");					//загрузили текстуру
+									xx[i][j].krestik;													//объявили спрайт 
+									xx[i][j].krestik.setTexture(xx[i][j].krestik_txt);					//загрузили текстуру в спрайт
+									xx[i][j].krestik.setPosition(arr[i][j].coord_x, arr[i][j].coord_y); //задали позицию		
+									// сохраняем координаты клеток, в которых нужно рисовать крестики:	
+									size_krestik++;
+									fig1[size_krestik - 1].set_figure_i(i).set_figure_j(j);
+									queue_2++;
+									++player_x;
+									++arr[i][j];
+								}
+							}
 						}
-						else { 
-							player_o.set_step(false);
-							player_x.set_step(true);
+						if (queue_2 == 0) {
+							queue = 0;
+						}
+					}
+					else {
+						for (int i = 0; i < 10; i++)
+						{
+							for (int j = 0; j < 10; j++)
+							{
+								if (arr[i][j].get_count() == 4)
+								{
+									xx[i][j].nolik_txt.loadFromFile("images/o.png");					//загрузили текстуру
+									xx[i][j].nolik;													//объявили спрайт 
+									xx[i][j].nolik.setTexture(xx[i][j].nolik_txt);					//загрузили текстуру в спрайт
+									xx[i][j].nolik.setPosition(arr[i][j].coord_x, arr[i][j].coord_y); //задали позицию		
+
+								    // сохраняем координаты клеток, в которых нужно рисовать нолики:
+									size_nolik++;
+									fig2[size_nolik - 1].set_figure_i(i).set_figure_j(j);
+									queue_2++;
+									++player_o;
+									++arr[i][j];
+									
+								}
+							}
+						}
+						if (queue_2 == 0) {
+							queue = 1;
 						}
 					}
 				}
 			}
-		
+				
+			}//PollEvent
 			
-
-			
-			for (int i = 0; i < size_rect_x; i++) {
-				for (int j = 0; j < size_rect_y; j++) {
+	//прорисовка объектов:
+			for (int i = 0; i < 20; i++) {
+				for (int j = 0; j < 20; j++) {
 					window.draw(rectangle[i][j]);
 				}
 			}
-			for (int i = 0; i < 10; i++) {
-				for (int j = 0; j < 10; j++) {
-					
+		
+				for (int i = 0; i < size_krestik; i++)
+				{
+					window.draw(xx[fig1[i].get_figure_i()][fig1[i].get_figure_j()].krestik);
 				}
-			}
+				for (int i = 0; i < size_nolik; i++)
+				{
+					window.draw(xx[fig2[i].get_figure_i()][fig2[i].get_figure_j()].nolik);
+				}
 			window.display();
-		};//game loop ########
-	}
+		} //game loop ########
 };
 
 
