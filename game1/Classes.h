@@ -38,13 +38,14 @@ class Menu {
 	Game gm;
 public:
 	void draw_menu(RenderWindow & window);
-
+	
 };
 
 class Player {
-	int count; // кол-во крестиков или ноликов
+	int count = 0; // кол-во крестиков или ноликов
 
 public:
+	int get_count() { return count; };
 	bool step = false; // кто сейчас ходит
 	bool get_step() { return step; }
 	int  get__count() { return count; }

@@ -1,9 +1,12 @@
 #include<iostream>
 #include <SFML/Graphics.hpp>
 #include"Classes.h"
-#include"Stuff.h"
+#include <sstream> // работа со строками в потоке
 using namespace std;
 using namespace sf;
+
+// функции:
+bool winnerDetected(int count1, int count2);
 
 // ################## class Figure ##################
 Figure & Figure::set_figure_i(int i) {
@@ -15,7 +18,6 @@ Figure & Figure::set_figure_j(int j) {
 	return *this;
 };
 
-
 // ################## class Player ##################
 Player & Player::set_step(bool stp) {
 	step = stp;
@@ -25,7 +27,6 @@ Player & Player::operator ++() {
 	++count;
 	return *this;
 };
-
 
 // ################## class Lines ##################
 MyLines & MyLines::set_left(int left) {
@@ -53,7 +54,6 @@ MyLines & MyLines::set_coord(float coord_x, float coord_y) {
 	this->coord_y = coord_y;
 	return *this;
 };
-
 
 // Mouse position 
 int gt_ms_position(int ms_position, RenderWindow & window) {
@@ -278,7 +278,7 @@ void Game::draw_game(RenderWindow & window) {
 		for (int j = 0; j < 10; j++) {
 			rectangle[i][j].setSize(Vector2f(4, 34));
 			rectangle[i][j].setPosition(x, y);
-			rectangle[i][j].setFillColor(Color::Black);
+			rectangle[i][j].setFillColor(Color(128, 128, 128));
 			rectangle[i][j].setRotation(0);
 			y += 34;
 		}
@@ -291,13 +291,17 @@ void Game::draw_game(RenderWindow & window) {
 		for (int j = 10; j < 20; j++) {
 			rectangle[i][j].setSize(Vector2f(4, 30));
 			rectangle[i][j].setPosition(x, y);
-			rectangle[i][j].setFillColor(Color::Black);
+			rectangle[i][j].setFillColor(Color(128, 128, 128));
 			rectangle[i][j].setRotation(-90);
 			x += 34;
 		}
 		x = 0;
 		y += 34;
-	} //задали координаты палочек ###############
+
+	}//задали координаты палочек ###############
+	for (int j = 10; j < 20; j++) {
+		rectangle[18][j].setFillColor(Color::Black);
+	}
 
 	MyLines arr[10][10];
 	for (int i = 0; i < 10; i++) {
@@ -325,6 +329,30 @@ void Game::draw_game(RenderWindow & window) {
 		temp_x = 0;
 		temp_y += 34;
 	} // задали координаты для спрайтов
+	// Рисование текста:
+	
+	Font font;
+	font.loadFromFile("Capture_it.ttf");
+	Text text1("Krestik won", font, 25);
+	Text text2("Nolik won", font, 25);
+	Text text3("", font, 25);
+	Text text4("", font, 25);
+	Text text5("[X] moves", font, 25);
+	Text text6("[O] moves", font, 25);
+	text1.setFillColor(Color::Blue);
+	text2.setFillColor(Color::Red);
+	text3.setFillColor(Color::Blue);
+	text4.setFillColor(Color::Red);
+	text5.setFillColor(Color::Blue);
+	text6.setFillColor(Color::Red);
+	text1.setStyle(sf::Text::Bold | sf::Text::Underlined);
+	text2.setStyle(sf::Text::Bold | sf::Text::Underlined); 
+	text1.setPosition(135,340);
+	text2.setPosition(135, 340);
+	text3.setPosition(15, 345);
+	text4.setPosition(65, 345);
+	text5.setPosition(135, 345);
+	text6.setPosition(135, 345);
 
 	MyLines xx[10][10], oo[10][10];
 	
@@ -339,24 +367,24 @@ void Game::draw_game(RenderWindow & window) {
 			sensor_klick[i][j] = 0;
 		}
 	}
-
+	bool first_klick = true;// начинаем ставить палочки со 
+						    //второго клика(1-й клик - клик по "New Game")
 	int queue = 1; // 0 - ходит нолик, 1 - ходит крестик
+				 
 				//######## game loop
 	while (!Keyboard::isKeyPressed(Keyboard::Escape))
 	{
-		int queue_2 = 0;
+		int queue_2 = 0; // увеличивыется при закрывании квадратика
 		window.clear(Color::White);
 		ms_position = gt_ms_position(ms_position, window);
 
-		Event event;
-		while (window.pollEvent(event)) {
+	Event event;
+	while (window.pollEvent(event)) {
 			
-				if (event.type == Event::Closed) { window.close(); }
-				if (event.type == event.MouseButtonReleased && event.mouseButton.button == Mouse::Left)
-				{
-					cout << "ms_position = " << ms_position << endl; //test
-					cout << queue << endl; //test
-					switch (ms_position) {
+		if (event.type == Event::Closed) { window.close(); }
+		if (event.type == event.MouseButtonReleased && event.mouseButton.button == Mouse::Left)
+		{	if(!first_klick){
+			switch (ms_position) {
 						// vertical
 					case 1:
 					{		if (sensor_klick[0][0] == 0) {
@@ -2703,60 +2731,63 @@ void Game::draw_game(RenderWindow & window) {
 						break;
 					}
 					};
-					//проход массива объектов(проверка на 4 палочки в квадрате):
-					if(ms_position!=0){
-					if (queue == 1) {
-						for (int i = 0; i < 10; i++)
+			//проход массива объектов(проверка на 4 палочки в квадрате):
+			if(ms_position!=0){
+			if (queue == 1) {
+				for (int i = 0; i < 10; i++)
+				{
+					for (int j = 0; j < 10; j++)
+					{
+						if (arr[i][j].get_count() == 4)
 						{
-							for (int j = 0; j < 10; j++)
-							{
-								if (arr[i][j].get_count() == 4)
-								{
-									xx[i][j].krestik_txt.loadFromFile("images/x.png");					//загрузили текстуру
-									xx[i][j].krestik;													//объявили спрайт 
-									xx[i][j].krestik.setTexture(xx[i][j].krestik_txt);					//загрузили текстуру в спрайт
-									xx[i][j].krestik.setPosition(arr[i][j].coord_x, arr[i][j].coord_y); //задали позицию		
-									// сохраняем координаты клеток, в которых нужно рисовать крестики:	
-									size_krestik++;
-									fig1[size_krestik - 1].set_figure_i(i).set_figure_j(j);
-									queue_2++;
-									++player_x;
-									++arr[i][j];
-								}
-							}
+						xx[i][j].krestik_txt.loadFromFile("images/x.png");					//загрузили текстуру
+						xx[i][j].krestik;													//объявили спрайт 
+						xx[i][j].krestik.setTexture(xx[i][j].krestik_txt);					//загрузили текстуру в спрайт
+						xx[i][j].krestik.setPosition(arr[i][j].coord_x, arr[i][j].coord_y); //задали позицию		
+						// сохраняем координаты клеток, в которых нужно рисовать крестики:	
+						size_krestik++;
+						fig1[size_krestik - 1].set_figure_i(i).set_figure_j(j);
+						queue_2++; 
+						++player_x;
+						++arr[i][j];
 						}
-						if (queue_2 == 0) {
+					}
+				}
+						if (queue_2 == 0){  // закрыли квадратик или нет
 							queue = 0;
 						}
 					}
-					else {
-						for (int i = 0; i < 10; i++)
+			else {
+					for (int i = 0; i < 10; i++)
+					{
+						for (int j = 0; j < 10; j++)
 						{
-							for (int j = 0; j < 10; j++)
+							if (arr[i][j].get_count() == 4)
 							{
-								if (arr[i][j].get_count() == 4)
-								{
-									xx[i][j].nolik_txt.loadFromFile("images/o.png");					//загрузили текстуру
-									xx[i][j].nolik;													//объявили спрайт 
-									xx[i][j].nolik.setTexture(xx[i][j].nolik_txt);					//загрузили текстуру в спрайт
-									xx[i][j].nolik.setPosition(arr[i][j].coord_x, arr[i][j].coord_y); //задали позицию		
+							xx[i][j].nolik_txt.loadFromFile("images/o.png");					//загрузили текстуру
+							xx[i][j].nolik;													//объявили спрайт 
+							xx[i][j].nolik.setTexture(xx[i][j].nolik_txt);					//загрузили текстуру в спрайт
+							xx[i][j].nolik.setPosition(arr[i][j].coord_x, arr[i][j].coord_y); //задали позицию		
 
-								    // сохраняем координаты клеток, в которых нужно рисовать нолики:
-									size_nolik++;
-									fig2[size_nolik - 1].set_figure_i(i).set_figure_j(j);
-									queue_2++;
-									++player_o;
-									++arr[i][j];
+						    // сохраняем координаты клеток, в которых нужно рисовать нолики:
+							size_nolik++;
+							fig2[size_nolik - 1].set_figure_i(i).set_figure_j(j);
+							queue_2++;
+							++player_o;
+							++arr[i][j];
 									
 								}
 							}
 						}
-						if (queue_2 == 0) {
+						if (queue_2 == 0) {  // закрыли квадратик или нет
 							queue = 1;
 						}
 					}
 				}
 			}
+					first_klick = false; // начинаем ставить палочки со 
+										 //второго клика(1-й клик - клик по "New Game")
+		}
 				
 			}//PollEvent
 			
@@ -2766,7 +2797,6 @@ void Game::draw_game(RenderWindow & window) {
 					window.draw(rectangle[i][j]);
 				}
 			}
-		
 				for (int i = 0; i < size_krestik; i++)
 				{
 					window.draw(xx[fig1[i].get_figure_i()][fig1[i].get_figure_j()].krestik);
@@ -2775,16 +2805,40 @@ void Game::draw_game(RenderWindow & window) {
 				{
 					window.draw(xx[fig2[i].get_figure_i()][fig2[i].get_figure_j()].nolik);
 				}
-			window.display();
+			// проверка на конец игры и выявление победителя:
+				if(winnerDetected(player_o.get_count(), player_x.get_count()) 
+					&& player_x.get_count() > player_o.get_count()){
+			window.draw(text1); // выиграл крестик
+				}
+				if (winnerDetected(player_o.get_count(), player_x.get_count())
+					&& player_x.get_count() < player_o.get_count()) {
+			window.draw(text2); // выиграл нолик
+				}
+				// выводим текущее кол-во очков:
+				ostringstream playerScoreString_x, playerScoreString_o;
+				playerScoreString_x << player_x.get_count(); //занесли в переменную число очков(формируем строку)
+				playerScoreString_o << player_o.get_count(); //занесли в переменную число очков(формируем строку)
+								// задаем строку тексту и вызываем сформированную выше строку методом .str()
+				text3.setString("X: " + playerScoreString_x.str());
+				text4.setString("O: " + playerScoreString_o.str());
+				window.draw(text3);
+				window.draw(text4);
+				// выводим информацию, о том, кто сейчас ходит:
+				if (queue == 1) {
+					window.draw(text5);
+				}
+				else{ window.draw(text6); }
+
+				window.display();
+			
 		} //game loop ########
 };
 
-
 // ################## class Menu ##################
 void Menu::draw_menu(RenderWindow & window) {
-
 	Texture menuTexture1, menuTexture2, menuTexture3, menuTexture4,
-			menuTexture5, menuTexture6, menuTexture7, aboutTexture, menuBackground;
+			menuTexture5, menuTexture6, menuTexture7, menuTexture8, 
+			menuTexture9, menuTexture10, aboutTexture, menuBackground;
 	menuTexture1.loadFromFile("images/new.png");
 	menuTexture2.loadFromFile("images/param.png");
 	menuTexture3.loadFromFile("images/mode.png");
@@ -2792,10 +2846,14 @@ void Menu::draw_menu(RenderWindow & window) {
 	menuTexture5.loadFromFile("images/exit.png");
 	menuTexture6.loadFromFile("images/duel.png");
 	menuTexture7.loadFromFile("images/comp.png");
+	menuTexture8.loadFromFile("images/3x3.png");
+	menuTexture9.loadFromFile("images/5x5.png");
+	menuTexture10.loadFromFile("images/10x10.png");
 	aboutTexture.loadFromFile("images/abt.png");
 	menuBackground.loadFromFile("images/background.jpg");
 	Sprite menu1, menu2(menuTexture2), menu3(menuTexture3), menu4(menuTexture4),
 		menu5(menuTexture5), menu6(menuTexture6), menu7(menuTexture7),
+		menu8(menuTexture8), menu9(menuTexture9), menu10(menuTexture10),
 		abt(aboutTexture), menuBg(menuBackground); //используем конструктор с параметрами 
 	menu1.setTexture(menuTexture1); //используем функцию-модификатор
 	bool isMenu = 1;
@@ -2806,9 +2864,12 @@ void Menu::draw_menu(RenderWindow & window) {
 	menu4.setPosition(25, 190);
 	menu5.setPosition(25, 240);
 	menu6.setPosition(80, 80);
-	menu7.setPosition(25, 180);
+	menu7.setPosition(25, 150);
+	menu8.setPosition(115, 100);
+	menu9.setPosition(115, 150);
+	menu10.setPosition(85, 200);
+	abt.setPosition(15, 0);
 	menuBg.setPosition(0, 0);
-
 	//////////////////////////////МЕНЮ///////////////////
 	while (isMenu)
 	{
@@ -2817,8 +2878,6 @@ void Menu::draw_menu(RenderWindow & window) {
 		menu3.setColor(Color::Black);
 		menu4.setColor(Color::Black);
 		menu5.setColor(Color::Black);
-		menu6.setColor(Color::Black);
-		menu7.setColor(Color::Black);
 		menuNum = 0;
 		window.clear(Color::White);
 
@@ -2835,33 +2894,93 @@ void Menu::draw_menu(RenderWindow & window) {
 			if (event.type == Event::Closed) { window.close(); }
 			if (Mouse::isButtonPressed(Mouse::Left))
 			{
+				// New Game:
 				if (menuNum == 1) {
 					Game gm_ob;
 					gm_ob.draw_game(window);
-
-				}//если нажали первую кнопку, то рисуем поле 
+				}
+				// Field Parameters:
 				if (menuNum == 2) {
+					while (!Keyboard::isKeyPressed(Keyboard::Escape)) {
+						menu8.setColor(Color::Black);
+						menu9.setColor(Color::Black);
+						menu10.setColor(Color::Black);
+						if (IntRect(110, 100, 120, 50).contains(Mouse::getPosition(window))) {
+							menu8.setColor(Color::Red); menuNum = 8;
+						}
+						if (IntRect(110, 150, 120, 50).contains(Mouse::getPosition(window))) {
+							menu9.setColor(Color::Blue); menuNum = 9;
+						}
+						if (IntRect(80, 200, 180, 50).contains(Mouse::getPosition(window))) {
+							menu10.setColor(Color::Blue); menuNum = 10;
+						}
+						Event event;
+						while (window.pollEvent(event)) {
+							if (event.type == Event::Closed) { window.close(); }
+							if (Mouse::isButtonPressed(Mouse::Left)) {
+								if (menuNum == 8) {
+
+								}
+								if (menuNum == 9) {
+
+								}
+								if (menuNum == 10) {
+
+								}
+							}
+						}
+						window.clear(Color::White);
+						window.draw(menuBg);
+						window.draw(menu8);
+						window.draw(menu9);
+						window.draw(menu10);
+						window.display();
+					}
 				}
+				//Game Mode:
 				if (menuNum == 3) {
-					window.draw(menu6);
-					window.draw(menu7);
-					window.display();
-					while (!Keyboard::isKeyPressed(Keyboard::Escape));
-					if (IntRect(80, 80, 100, 50).contains(Mouse::getPosition(window))) {
-						menu6.setColor(Color::Red); menuNum = 6;
-					}
-					if (IntRect(25, 180, 200, 50).contains(Mouse::getPosition(window))) {
-						menu7.setColor(Color::Blue); menuNum = 7;
+					while (!Keyboard::isKeyPressed(Keyboard::Escape)) {
+						menu6.setColor(Color::Black);
+						menu7.setColor(Color::Black);
+						if (IntRect(80, 80, 100, 50).contains(Mouse::getPosition(window))) {
+							menu6.setColor(Color::Red); menuNum = 6;}
+						if (IntRect(25, 180, 200, 50).contains(Mouse::getPosition(window))) {
+							menu7.setColor(Color::Blue); menuNum = 7;}
+						Event event;
+						while (window.pollEvent(event)) {
+							if (event.type == Event::Closed) { window.close(); }
+							if (Mouse::isButtonPressed(Mouse::Left)) {
+								if (menuNum == 6) {
+
+								}
+								if (menuNum == 7) {
+
+								}
+							}
+						}
+						window.clear(Color::White);
+						window.draw(menuBg);
+						window.draw(menu6);
+						window.draw(menu7);
+						window.display();
 					}
 				}
+				// About:
 				if (menuNum == 4) {
-					window.draw(abt);
-					window.display();
-					while (!Keyboard::isKeyPressed(Keyboard::Escape));
+					while (!Keyboard::isKeyPressed(Keyboard::Escape)) {
+						Event event;
+						while (window.pollEvent(event)) {
+							if (event.type == Event::Closed) { window.close(); }
+						}
+						window.clear(Color::White);
+						window.draw(abt);
+						window.display();
+					}
 				}
+				// Exit:
 				if (menuNum == 5) {
-					window.close();
 					isMenu = false;
+					window.close();
 				}
 			}
 		}
@@ -2876,5 +2995,9 @@ void Menu::draw_menu(RenderWindow & window) {
 	////////////////////////////////////////////////////
 }
 
-
-
+			// ############  функции:  #############
+// проверка на конец игры
+bool winnerDetected(int count1, int count2) {
+	if (count1 + count2 == 100) return true;
+	else return false;
+};
