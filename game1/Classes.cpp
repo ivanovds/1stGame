@@ -2,11 +2,13 @@
 #include <SFML/Graphics.hpp>
 #include"Classes.h"
 #include <sstream> // работа со строками в потоке
+#include <SFML/Audio.hpp>
 using namespace std;
 using namespace sf;
 
 // функции:
-bool winnerDetected(int count1, int count2);
+bool winnerDetected(int count1, int count2, int sizeOfField);
+void comp(MyLines **arr_copy);
 
 // ################## class Figure ##################
 Figure & Figure::set_figure_i(int i) {
@@ -19,16 +21,12 @@ Figure & Figure::set_figure_j(int j) {
 };
 
 // ################## class Player ##################
-Player & Player::set_step(bool stp) {
-	step = stp;
-	return *this;
-};
 Player & Player::operator ++() {
 	++count;
 	return *this;
 };
 
-// ################## class Lines ##################
+// ################## class MYLines ##################
 MyLines & MyLines::set_left(int left) {
 	this->left = left;
 	return *this;
@@ -54,214 +52,248 @@ MyLines & MyLines::set_coord(float coord_x, float coord_y) {
 	this->coord_y = coord_y;
 	return *this;
 };
+MyLines & MyLines::set_left_rectangle_i(int i) {
+	left_rectangle_i = i;
+	return *this;
+};
+MyLines & MyLines::set_left_rectangle_j(int j) {
+	left_rectangle_j = j;
+	return *this;
+};
+MyLines & MyLines::set_right_rectangle_i(int i) {
+	right_rectangle_i = i;
+	return *this;
+};
+MyLines & MyLines::set_right_rectangle_j(int j) {
+	right_rectangle_j = j;
+	return *this;
+};
+MyLines & MyLines::set_top_rectangle_i(int i) {
+	top_rectangle_i = i;
+	return *this;
+};
+MyLines & MyLines::set_top_rectangle_j(int j) {
+	top_rectangle_j = j;
+	return *this;
+};
+MyLines & MyLines::set_bottom_rectangle_i(int i) {
+	bottom_rectangle_i = i;
+	return *this;
+};
+MyLines & MyLines::set_bottom_rectangle_j(int j) {
+	bottom_rectangle_j = j;
+	return *this;
+};
+
 
 // Mouse position 
-int gt_ms_position(int ms_position, RenderWindow & window) {
+int gt_ms_position(int ms_position, RenderWindow & window, int sizeOfField) {
 	// vertical
+	
 		if (IntRect(24, 0, 16, 34).contains(Mouse::getPosition(window))) { ms_position = 1; }
 		if (IntRect(24, 34, 16, 34).contains(Mouse::getPosition(window))) { ms_position = 2; }
 		if (IntRect(24, 68, 16, 34).contains(Mouse::getPosition(window))) { ms_position = 3; }
-		if (IntRect(24, 102, 16, 34).contains(Mouse::getPosition(window))) { ms_position = 4; }
-		if (IntRect(24, 136, 16, 34).contains(Mouse::getPosition(window))) { ms_position = 5; }
-		if (IntRect(24, 170, 16, 34).contains(Mouse::getPosition(window))) { ms_position = 6; }
-		if (IntRect(24, 204, 16, 34).contains(Mouse::getPosition(window))) { ms_position = 7; }
-		if (IntRect(24, 238, 16, 34).contains(Mouse::getPosition(window))) { ms_position = 8; }
-		if (IntRect(24, 272, 16, 34).contains(Mouse::getPosition(window))) { ms_position = 9; }
-		if (IntRect(24, 306, 16, 34).contains(Mouse::getPosition(window))) { ms_position = 10; }
+		if (IntRect(24, 102, 16, 34).contains(Mouse::getPosition(window)) && sizeOfField > 1) { ms_position = 4; }
+		if (IntRect(24, 136, 16, 34).contains(Mouse::getPosition(window)) && sizeOfField > 1) { ms_position = 5; }
+		if (IntRect(24, 170, 16, 34).contains(Mouse::getPosition(window)) && sizeOfField > 2) { ms_position = 6; }
+		if (IntRect(24, 204, 16, 34).contains(Mouse::getPosition(window)) && sizeOfField > 2) { ms_position = 7; }
+		if (IntRect(24, 238, 16, 34).contains(Mouse::getPosition(window)) && sizeOfField > 2) { ms_position = 8; }
+		if (IntRect(24, 272, 16, 34).contains(Mouse::getPosition(window)) && sizeOfField > 2) { ms_position = 9; }
+		if (IntRect(24, 306, 16, 34).contains(Mouse::getPosition(window)) && sizeOfField > 2) { ms_position = 10; }
 		
 		if (IntRect(58, 0, 16, 34).contains(Mouse::getPosition(window))) { ms_position = 11; }
 		if (IntRect(58, 34, 16, 34).contains(Mouse::getPosition(window))) { ms_position = 12; }
 		if (IntRect(58, 68, 16, 34).contains(Mouse::getPosition(window))) { ms_position = 13; }
-		if (IntRect(58, 102, 16, 34).contains(Mouse::getPosition(window))) { ms_position = 14; }
-		if (IntRect(58, 136, 16, 34).contains(Mouse::getPosition(window))) { ms_position = 15; }
-		if (IntRect(58, 170, 16, 34).contains(Mouse::getPosition(window))) { ms_position = 16; }
-		if (IntRect(58, 204, 16, 34).contains(Mouse::getPosition(window))) { ms_position = 17; }
-		if (IntRect(58, 238, 16, 34).contains(Mouse::getPosition(window))) { ms_position = 18; }
-		if (IntRect(58, 272, 16, 34).contains(Mouse::getPosition(window))) { ms_position = 19; }
-		if (IntRect(58, 306, 16, 34).contains(Mouse::getPosition(window))) { ms_position = 20; }
+		if (IntRect(58, 102, 16, 34).contains(Mouse::getPosition(window)) && sizeOfField > 1) { ms_position = 14; }
+		if (IntRect(58, 136, 16, 34).contains(Mouse::getPosition(window)) && sizeOfField > 1) { ms_position = 15; }
+		if (IntRect(58, 170, 16, 34).contains(Mouse::getPosition(window)) && sizeOfField > 2) { ms_position = 16; }
+		if (IntRect(58, 204, 16, 34).contains(Mouse::getPosition(window)) && sizeOfField > 2) { ms_position = 17; }
+		if (IntRect(58, 238, 16, 34).contains(Mouse::getPosition(window)) && sizeOfField > 2) { ms_position = 18; }
+		if (IntRect(58, 272, 16, 34).contains(Mouse::getPosition(window)) && sizeOfField > 2) { ms_position = 19; }
+		if (IntRect(58, 306, 16, 34).contains(Mouse::getPosition(window)) && sizeOfField > 2) { ms_position = 20; }
 
-		if (IntRect(92, 0, 16, 34).contains(Mouse::getPosition(window))) { ms_position = 21; }
-		if (IntRect(92, 34, 16, 34).contains(Mouse::getPosition(window))) { ms_position = 22; }
-		if (IntRect(92, 68, 16, 34).contains(Mouse::getPosition(window))) { ms_position = 23; }
-		if (IntRect(92, 102, 16, 34).contains(Mouse::getPosition(window))) { ms_position = 24; }
-		if (IntRect(92, 136, 16, 34).contains(Mouse::getPosition(window))) { ms_position = 25; }
-		if (IntRect(92, 170, 16, 34).contains(Mouse::getPosition(window))) { ms_position = 26; }
-		if (IntRect(92, 204, 16, 34).contains(Mouse::getPosition(window))) { ms_position = 27; }
-		if (IntRect(92, 238, 16, 34).contains(Mouse::getPosition(window))) { ms_position = 28; }
-		if (IntRect(92, 272, 16, 34).contains(Mouse::getPosition(window))) { ms_position = 29; }
-		if (IntRect(92, 306, 16, 34).contains(Mouse::getPosition(window))) { ms_position = 30; }
-
-
-		if (IntRect(126, 0, 16, 34).contains(Mouse::getPosition(window))) { ms_position = 31; }
-		if (IntRect(126, 34, 16, 34).contains(Mouse::getPosition(window))) { ms_position = 32; }
-		if (IntRect(126, 68, 16, 34).contains(Mouse::getPosition(window))) { ms_position = 33; }
-		if (IntRect(126, 102, 16, 34).contains(Mouse::getPosition(window))) { ms_position = 34; }
-		if (IntRect(126, 136, 16, 34).contains(Mouse::getPosition(window))) { ms_position = 35; }
-		if (IntRect(126, 170, 16, 34).contains(Mouse::getPosition(window))) { ms_position = 36; }
-		if (IntRect(126, 204, 16, 34).contains(Mouse::getPosition(window))) { ms_position = 37; }
-		if (IntRect(126, 238, 16, 34).contains(Mouse::getPosition(window))) { ms_position = 38; }
-		if (IntRect(126, 272, 16, 34).contains(Mouse::getPosition(window))) { ms_position = 39; }
-		if (IntRect(126, 306, 16, 34).contains(Mouse::getPosition(window))) { ms_position = 40; }
+		if (IntRect(92, 0, 16, 34).contains(Mouse::getPosition(window)) && sizeOfField > 1) { ms_position = 21; }
+		if (IntRect(92, 34, 16, 34).contains(Mouse::getPosition(window)) && sizeOfField > 1) { ms_position = 22; }
+		if (IntRect(92, 68, 16, 34).contains(Mouse::getPosition(window)) && sizeOfField > 1) { ms_position = 23; }
+		if (IntRect(92, 102, 16, 34).contains(Mouse::getPosition(window)) && sizeOfField > 1) { ms_position = 24; }
+		if (IntRect(92, 136, 16, 34).contains(Mouse::getPosition(window)) && sizeOfField > 1) { ms_position = 25; }
+		if (IntRect(92, 170, 16, 34).contains(Mouse::getPosition(window)) && sizeOfField > 2) { ms_position = 26; }
+		if (IntRect(92, 204, 16, 34).contains(Mouse::getPosition(window)) && sizeOfField > 2) { ms_position = 27; }
+		if (IntRect(92, 238, 16, 34).contains(Mouse::getPosition(window)) && sizeOfField > 2) { ms_position = 28; }
+		if (IntRect(92, 272, 16, 34).contains(Mouse::getPosition(window)) && sizeOfField > 2) { ms_position = 29; }
+		if (IntRect(92, 306, 16, 34).contains(Mouse::getPosition(window)) && sizeOfField > 2) { ms_position = 30; }
 
 
-		if (IntRect(160, 0, 16, 34).contains(Mouse::getPosition(window))) { ms_position = 41; }
-		if (IntRect(160, 34, 16, 34).contains(Mouse::getPosition(window))) { ms_position = 42; }
-		if (IntRect(160, 68, 16, 34).contains(Mouse::getPosition(window))) { ms_position = 43; }
-		if (IntRect(160, 102, 16, 34).contains(Mouse::getPosition(window))) { ms_position = 44; }
-		if (IntRect(160, 136, 16, 34).contains(Mouse::getPosition(window))) { ms_position = 45; }
-		if (IntRect(160, 170, 16, 34).contains(Mouse::getPosition(window))) { ms_position = 46; }
-		if (IntRect(160, 204, 16, 34).contains(Mouse::getPosition(window))) { ms_position = 47; }
-		if (IntRect(160, 238, 16, 34).contains(Mouse::getPosition(window))) { ms_position = 48; }
-		if (IntRect(160, 272, 16, 34).contains(Mouse::getPosition(window))) { ms_position = 49; }
-		if (IntRect(160, 306, 16, 34).contains(Mouse::getPosition(window))) { ms_position = 50; }
+		if (IntRect(126, 0, 16, 34).contains(Mouse::getPosition(window)) && sizeOfField > 1) { ms_position = 31; }
+		if (IntRect(126, 34, 16, 34).contains(Mouse::getPosition(window)) && sizeOfField > 1) { ms_position = 32; }
+		if (IntRect(126, 68, 16, 34).contains(Mouse::getPosition(window)) && sizeOfField > 1) { ms_position = 33; }
+		if (IntRect(126, 102, 16, 34).contains(Mouse::getPosition(window)) && sizeOfField > 1) { ms_position = 34; }
+		if (IntRect(126, 136, 16, 34).contains(Mouse::getPosition(window)) && sizeOfField > 1) { ms_position = 35; }
+		if (IntRect(126, 170, 16, 34).contains(Mouse::getPosition(window)) && sizeOfField > 2) { ms_position = 36; }
+		if (IntRect(126, 204, 16, 34).contains(Mouse::getPosition(window)) && sizeOfField > 2) { ms_position = 37; }
+		if (IntRect(126, 238, 16, 34).contains(Mouse::getPosition(window)) && sizeOfField > 2) { ms_position = 38; }
+		if (IntRect(126, 272, 16, 34).contains(Mouse::getPosition(window)) && sizeOfField > 2) { ms_position = 39; }
+		if (IntRect(126, 306, 16, 34).contains(Mouse::getPosition(window)) && sizeOfField > 2) { ms_position = 40; }
 
 
-		if (IntRect(194, 0, 16, 34).contains(Mouse::getPosition(window))) { ms_position = 51; }
-		if (IntRect(194, 34, 16, 34).contains(Mouse::getPosition(window))) { ms_position = 52; }
-		if (IntRect(194, 68, 16, 34).contains(Mouse::getPosition(window))) { ms_position = 53; }
-		if (IntRect(194, 102, 16, 34).contains(Mouse::getPosition(window))) { ms_position = 54; }
-		if (IntRect(194, 136, 16, 34).contains(Mouse::getPosition(window))) { ms_position = 55; }
-		if (IntRect(194, 170, 16, 34).contains(Mouse::getPosition(window))) { ms_position = 56; }
-		if (IntRect(194, 204, 16, 34).contains(Mouse::getPosition(window))) { ms_position = 57; }
-		if (IntRect(194, 238, 16, 34).contains(Mouse::getPosition(window))) { ms_position = 58; }
-		if (IntRect(194, 272, 16, 34).contains(Mouse::getPosition(window))) { ms_position = 59; }
-		if (IntRect(194, 306, 16, 34).contains(Mouse::getPosition(window))) { ms_position = 60; }
+		if (IntRect(160, 0, 16, 34).contains(Mouse::getPosition(window)) && sizeOfField > 2) { ms_position = 41; }
+		if (IntRect(160, 34, 16, 34).contains(Mouse::getPosition(window)) && sizeOfField > 2) { ms_position = 42; }
+		if (IntRect(160, 68, 16, 34).contains(Mouse::getPosition(window)) && sizeOfField > 2) { ms_position = 43; }
+		if (IntRect(160, 102, 16, 34).contains(Mouse::getPosition(window)) && sizeOfField > 2) { ms_position = 44; }
+		if (IntRect(160, 136, 16, 34).contains(Mouse::getPosition(window)) && sizeOfField > 2) { ms_position = 45; }
+		if (IntRect(160, 170, 16, 34).contains(Mouse::getPosition(window)) && sizeOfField > 2) { ms_position = 46; }
+		if (IntRect(160, 204, 16, 34).contains(Mouse::getPosition(window)) && sizeOfField > 2) { ms_position = 47; }
+		if (IntRect(160, 238, 16, 34).contains(Mouse::getPosition(window)) && sizeOfField > 2) { ms_position = 48; }
+		if (IntRect(160, 272, 16, 34).contains(Mouse::getPosition(window)) && sizeOfField > 2) { ms_position = 49; }
+		if (IntRect(160, 306, 16, 34).contains(Mouse::getPosition(window)) && sizeOfField > 2) { ms_position = 50; }
 
 
-		if (IntRect(228, 0, 16, 34).contains(Mouse::getPosition(window))) { ms_position = 61; }
-		if (IntRect(228, 34, 16, 34).contains(Mouse::getPosition(window))) { ms_position = 62; }
-		if (IntRect(228, 68, 16, 34).contains(Mouse::getPosition(window))) { ms_position = 63; }
-		if (IntRect(228, 102, 16, 34).contains(Mouse::getPosition(window))) { ms_position = 64; }
-		if (IntRect(228, 136, 16, 34).contains(Mouse::getPosition(window))) { ms_position = 65; }
-		if (IntRect(228, 170, 16, 34).contains(Mouse::getPosition(window))) { ms_position = 66; }
-		if (IntRect(228, 204, 16, 34).contains(Mouse::getPosition(window))) { ms_position = 67; }
-		if (IntRect(228, 238, 16, 34).contains(Mouse::getPosition(window))) { ms_position = 68; }
-		if (IntRect(228, 272, 16, 34).contains(Mouse::getPosition(window))) { ms_position = 69; }
-		if (IntRect(228, 306, 16, 34).contains(Mouse::getPosition(window))) { ms_position = 70; }
+		if (IntRect(194, 0, 16, 34).contains(Mouse::getPosition(window)) && sizeOfField > 2) { ms_position = 51; }
+		if (IntRect(194, 34, 16, 34).contains(Mouse::getPosition(window)) && sizeOfField > 2) { ms_position = 52; }
+		if (IntRect(194, 68, 16, 34).contains(Mouse::getPosition(window)) && sizeOfField > 2) { ms_position = 53; }
+		if (IntRect(194, 102, 16, 34).contains(Mouse::getPosition(window)) && sizeOfField > 2) { ms_position = 54; }
+		if (IntRect(194, 136, 16, 34).contains(Mouse::getPosition(window)) && sizeOfField > 2) { ms_position = 55; }
+		if (IntRect(194, 170, 16, 34).contains(Mouse::getPosition(window)) && sizeOfField > 2) { ms_position = 56; }
+		if (IntRect(194, 204, 16, 34).contains(Mouse::getPosition(window)) && sizeOfField > 2) { ms_position = 57; }
+		if (IntRect(194, 238, 16, 34).contains(Mouse::getPosition(window)) && sizeOfField > 2) { ms_position = 58; }
+		if (IntRect(194, 272, 16, 34).contains(Mouse::getPosition(window)) && sizeOfField > 2) { ms_position = 59; }
+		if (IntRect(194, 306, 16, 34).contains(Mouse::getPosition(window)) && sizeOfField > 2) { ms_position = 60; }
 
 
-		if (IntRect(262, 0, 16, 34).contains(Mouse::getPosition(window))) { ms_position = 71; }
-		if (IntRect(262, 34, 16, 34).contains(Mouse::getPosition(window))) { ms_position = 72; }
-		if (IntRect(262, 68, 16, 34).contains(Mouse::getPosition(window))) { ms_position = 73; }
-		if (IntRect(262, 102, 16, 34).contains(Mouse::getPosition(window))) { ms_position = 74; }
-		if (IntRect(262, 136, 16, 34).contains(Mouse::getPosition(window))) { ms_position = 75; }
-		if (IntRect(262, 170, 16, 34).contains(Mouse::getPosition(window))) { ms_position = 76; }
-		if (IntRect(262, 204, 16, 34).contains(Mouse::getPosition(window))) { ms_position = 77; }
-		if (IntRect(262, 238, 16, 34).contains(Mouse::getPosition(window))) { ms_position = 78; }
-		if (IntRect(262, 272, 16, 34).contains(Mouse::getPosition(window))) { ms_position = 79; }
-		if (IntRect(262, 306, 16, 34).contains(Mouse::getPosition(window))) { ms_position = 80; }
+		if (IntRect(228, 0, 16, 34).contains(Mouse::getPosition(window)) && sizeOfField > 2) { ms_position = 61; }
+		if (IntRect(228, 34, 16, 34).contains(Mouse::getPosition(window)) && sizeOfField > 2) { ms_position = 62; }
+		if (IntRect(228, 68, 16, 34).contains(Mouse::getPosition(window)) && sizeOfField > 2) { ms_position = 63; }
+		if (IntRect(228, 102, 16, 34).contains(Mouse::getPosition(window)) && sizeOfField > 2) { ms_position = 64; }
+		if (IntRect(228, 136, 16, 34).contains(Mouse::getPosition(window)) && sizeOfField > 2) { ms_position = 65; }
+		if (IntRect(228, 170, 16, 34).contains(Mouse::getPosition(window)) && sizeOfField > 2) { ms_position = 66; }
+		if (IntRect(228, 204, 16, 34).contains(Mouse::getPosition(window)) && sizeOfField > 2) { ms_position = 67; }
+		if (IntRect(228, 238, 16, 34).contains(Mouse::getPosition(window)) && sizeOfField > 2) { ms_position = 68; }
+		if (IntRect(228, 272, 16, 34).contains(Mouse::getPosition(window)) && sizeOfField > 2) { ms_position = 69; }
+		if (IntRect(228, 306, 16, 34).contains(Mouse::getPosition(window)) && sizeOfField > 2) { ms_position = 70; }
 
 
-		if (IntRect(296, 0, 16, 34).contains(Mouse::getPosition(window))) { ms_position = 81; }
-		if (IntRect(296, 34, 16, 34).contains(Mouse::getPosition(window))) { ms_position = 82; }
-		if (IntRect(296, 68, 16, 34).contains(Mouse::getPosition(window))) { ms_position = 83; }
-		if (IntRect(296, 102, 16, 34).contains(Mouse::getPosition(window))) { ms_position = 84; }
-		if (IntRect(296, 136, 16, 34).contains(Mouse::getPosition(window))) { ms_position = 85; }
-		if (IntRect(296, 170, 16, 34).contains(Mouse::getPosition(window))) { ms_position = 86; }
-		if (IntRect(296, 204, 16, 34).contains(Mouse::getPosition(window))) { ms_position = 87; }
-		if (IntRect(296, 238, 16, 34).contains(Mouse::getPosition(window))) { ms_position = 88; }
-		if (IntRect(296, 272, 16, 34).contains(Mouse::getPosition(window))) { ms_position = 89; }
-		if (IntRect(296, 306, 16, 34).contains(Mouse::getPosition(window))) { ms_position = 90; }
+		if (IntRect(262, 0, 16, 34).contains(Mouse::getPosition(window)) && sizeOfField > 2) { ms_position = 71; }
+		if (IntRect(262, 34, 16, 34).contains(Mouse::getPosition(window)) && sizeOfField > 2) { ms_position = 72; }
+		if (IntRect(262, 68, 16, 34).contains(Mouse::getPosition(window)) && sizeOfField > 2) { ms_position = 73; }
+		if (IntRect(262, 102, 16, 34).contains(Mouse::getPosition(window)) && sizeOfField > 2) { ms_position = 74; }
+		if (IntRect(262, 136, 16, 34).contains(Mouse::getPosition(window)) && sizeOfField > 2) { ms_position = 75; }
+		if (IntRect(262, 170, 16, 34).contains(Mouse::getPosition(window)) && sizeOfField > 2) { ms_position = 76; }
+		if (IntRect(262, 204, 16, 34).contains(Mouse::getPosition(window)) && sizeOfField > 2) { ms_position = 77; }
+		if (IntRect(262, 238, 16, 34).contains(Mouse::getPosition(window)) && sizeOfField > 2) { ms_position = 78; }
+		if (IntRect(262, 272, 16, 34).contains(Mouse::getPosition(window)) && sizeOfField > 2) { ms_position = 79; }
+		if (IntRect(262, 306, 16, 34).contains(Mouse::getPosition(window)) && sizeOfField > 2) { ms_position = 80; }
+
+
+		if (IntRect(296, 0, 16, 34).contains(Mouse::getPosition(window)) && sizeOfField > 2) { ms_position = 81; }
+		if (IntRect(296, 34, 16, 34).contains(Mouse::getPosition(window)) && sizeOfField > 2) { ms_position = 82; }
+		if (IntRect(296, 68, 16, 34).contains(Mouse::getPosition(window)) && sizeOfField > 2) { ms_position = 83; }
+		if (IntRect(296, 102, 16, 34).contains(Mouse::getPosition(window)) && sizeOfField > 2) { ms_position = 84; }
+		if (IntRect(296, 136, 16, 34).contains(Mouse::getPosition(window)) && sizeOfField > 2) { ms_position = 85; }
+		if (IntRect(296, 170, 16, 34).contains(Mouse::getPosition(window)) && sizeOfField > 2) { ms_position = 86; }
+		if (IntRect(296, 204, 16, 34).contains(Mouse::getPosition(window)) && sizeOfField > 2) { ms_position = 87; }
+		if (IntRect(296, 238, 16, 34).contains(Mouse::getPosition(window)) && sizeOfField > 2) { ms_position = 88; }
+		if (IntRect(296, 272, 16, 34).contains(Mouse::getPosition(window)) && sizeOfField > 2) { ms_position = 89; }
+		if (IntRect(296, 306, 16, 34).contains(Mouse::getPosition(window)) && sizeOfField > 2) { ms_position = 90; }
 
 	// horisontal
 		if (IntRect(0, 24, 30, 16).contains(Mouse::getPosition(window))) { ms_position = 91; }
 		if (IntRect(34, 24, 30, 16).contains(Mouse::getPosition(window))) { ms_position = 92; }
 		if (IntRect(68, 24, 30, 16).contains(Mouse::getPosition(window))) { ms_position = 93; }
-		if (IntRect(102, 24, 30, 16).contains(Mouse::getPosition(window))) { ms_position = 94; }
-		if (IntRect(136, 24, 30, 16).contains(Mouse::getPosition(window))) { ms_position = 95; }
-		if (IntRect(170, 24, 30, 16).contains(Mouse::getPosition(window))) { ms_position = 96; }
-		if (IntRect(204, 24, 30, 16).contains(Mouse::getPosition(window))) { ms_position = 97; }
-		if (IntRect(238, 24, 30, 16).contains(Mouse::getPosition(window))) { ms_position = 98; }
-		if (IntRect(272, 24, 30, 16).contains(Mouse::getPosition(window))) { ms_position = 99; }
-		if (IntRect(306, 24, 30, 16).contains(Mouse::getPosition(window))) { ms_position = 100; }
+		if (IntRect(102, 24, 30, 16).contains(Mouse::getPosition(window)) && sizeOfField > 1) { ms_position = 94; }
+		if (IntRect(136, 24, 30, 16).contains(Mouse::getPosition(window)) && sizeOfField > 1) { ms_position = 95; }
+		if (IntRect(170, 24, 30, 16).contains(Mouse::getPosition(window)) && sizeOfField > 2) { ms_position = 96; }
+		if (IntRect(204, 24, 30, 16).contains(Mouse::getPosition(window)) && sizeOfField > 2) { ms_position = 97; }
+		if (IntRect(238, 24, 30, 16).contains(Mouse::getPosition(window)) && sizeOfField > 2) { ms_position = 98; }
+		if (IntRect(272, 24, 30, 16).contains(Mouse::getPosition(window)) && sizeOfField > 2) { ms_position = 99; }
+		if (IntRect(306, 24, 30, 16).contains(Mouse::getPosition(window)) && sizeOfField > 2) { ms_position = 100; }
 
 		if (IntRect(0, 58, 30, 16).contains(Mouse::getPosition(window))) { ms_position = 101; }
 		if (IntRect(34, 58, 30, 16).contains(Mouse::getPosition(window))) { ms_position = 102; }
 		if (IntRect(68, 58, 30, 16).contains(Mouse::getPosition(window))) { ms_position = 103; }
-		if (IntRect(102, 58, 30, 16).contains(Mouse::getPosition(window))) { ms_position = 104; }
-		if (IntRect(136, 58, 30, 16).contains(Mouse::getPosition(window))) { ms_position = 105; }
-		if (IntRect(170, 58, 30, 16).contains(Mouse::getPosition(window))) { ms_position = 106; }
-		if (IntRect(204, 58, 30, 16).contains(Mouse::getPosition(window))) { ms_position = 107; }
-		if (IntRect(238, 58, 30, 16).contains(Mouse::getPosition(window))) { ms_position = 108; }
-		if (IntRect(272, 58, 30, 16).contains(Mouse::getPosition(window))) { ms_position = 109; }
-		if (IntRect(306, 58, 30, 16).contains(Mouse::getPosition(window))) { ms_position = 110; }
+		if (IntRect(102, 58, 30, 16).contains(Mouse::getPosition(window)) && sizeOfField > 1) { ms_position = 104; }
+		if (IntRect(136, 58, 30, 16).contains(Mouse::getPosition(window)) && sizeOfField > 1) { ms_position = 105; }
+		if (IntRect(170, 58, 30, 16).contains(Mouse::getPosition(window)) && sizeOfField > 2) { ms_position = 106; }
+		if (IntRect(204, 58, 30, 16).contains(Mouse::getPosition(window)) && sizeOfField > 2) { ms_position = 107; }
+		if (IntRect(238, 58, 30, 16).contains(Mouse::getPosition(window)) && sizeOfField > 2) { ms_position = 108; }
+		if (IntRect(272, 58, 30, 16).contains(Mouse::getPosition(window)) && sizeOfField > 2) { ms_position = 109; }
+		if (IntRect(306, 58, 30, 16).contains(Mouse::getPosition(window)) && sizeOfField > 2) { ms_position = 110; }
 
-		if (IntRect(0, 92, 30, 16).contains(Mouse::getPosition(window))) { ms_position = 111; }
-		if (IntRect(34, 92, 30, 16).contains(Mouse::getPosition(window))) { ms_position = 112; }
-		if (IntRect(68, 92, 30, 16).contains(Mouse::getPosition(window))) { ms_position = 113; }
-		if (IntRect(102, 92, 30, 16).contains(Mouse::getPosition(window))) { ms_position = 114; }
-		if (IntRect(136, 92, 30, 16).contains(Mouse::getPosition(window))) { ms_position = 115; }
-		if (IntRect(170, 92, 30, 16).contains(Mouse::getPosition(window))) { ms_position = 116; }
-		if (IntRect(204, 92, 30, 16).contains(Mouse::getPosition(window))) { ms_position = 117; }
-		if (IntRect(238, 92, 30, 16).contains(Mouse::getPosition(window))) { ms_position = 118; }
-		if (IntRect(272, 92, 30, 16).contains(Mouse::getPosition(window))) { ms_position = 119; }
-		if (IntRect(306, 92, 30, 16).contains(Mouse::getPosition(window))) { ms_position = 120; }
+		if (IntRect(0, 92, 30, 16).contains(Mouse::getPosition(window)) && sizeOfField > 1) { ms_position = 111; }
+		if (IntRect(34, 92, 30, 16).contains(Mouse::getPosition(window)) && sizeOfField > 1) { ms_position = 112; }
+		if (IntRect(68, 92, 30, 16).contains(Mouse::getPosition(window)) && sizeOfField > 1) { ms_position = 113; }
+		if (IntRect(102, 92, 30, 16).contains(Mouse::getPosition(window)) && sizeOfField > 1) { ms_position = 114; }
+		if (IntRect(136, 92, 30, 16).contains(Mouse::getPosition(window)) && sizeOfField > 1) { ms_position = 115; }
+		if (IntRect(170, 92, 30, 16).contains(Mouse::getPosition(window)) && sizeOfField > 2) { ms_position = 116; }
+		if (IntRect(204, 92, 30, 16).contains(Mouse::getPosition(window)) && sizeOfField > 2) { ms_position = 117; }
+		if (IntRect(238, 92, 30, 16).contains(Mouse::getPosition(window)) && sizeOfField > 2) { ms_position = 118; }
+		if (IntRect(272, 92, 30, 16).contains(Mouse::getPosition(window)) && sizeOfField > 2) { ms_position = 119; }
+		if (IntRect(306, 92, 30, 16).contains(Mouse::getPosition(window)) && sizeOfField > 2) { ms_position = 120; }
 
-		if (IntRect(0, 126, 30, 16).contains(Mouse::getPosition(window))) { ms_position = 121; }
-		if (IntRect(34, 126, 30, 16).contains(Mouse::getPosition(window))) { ms_position = 122; }
-		if (IntRect(68, 126, 30, 16).contains(Mouse::getPosition(window))) { ms_position = 123; }
-		if (IntRect(102, 126, 30, 16).contains(Mouse::getPosition(window))) { ms_position = 124; }
-		if (IntRect(136, 126, 30, 16).contains(Mouse::getPosition(window))) { ms_position = 125; }
-		if (IntRect(170, 126, 30, 16).contains(Mouse::getPosition(window))) { ms_position = 126; }
-		if (IntRect(204, 126, 30, 16).contains(Mouse::getPosition(window))) { ms_position = 127; }
-		if (IntRect(238, 126, 30, 16).contains(Mouse::getPosition(window))) { ms_position = 128; }
-		if (IntRect(272, 126, 30, 16).contains(Mouse::getPosition(window))) { ms_position = 129; }
-		if (IntRect(306, 126, 30, 16).contains(Mouse::getPosition(window))) { ms_position = 130; }
+		if (IntRect(0, 126, 30, 16).contains(Mouse::getPosition(window)) && sizeOfField > 1) { ms_position = 121; }
+		if (IntRect(34, 126, 30, 16).contains(Mouse::getPosition(window)) && sizeOfField > 1) { ms_position = 122; }
+		if (IntRect(68, 126, 30, 16).contains(Mouse::getPosition(window)) && sizeOfField > 1) { ms_position = 123; }
+		if (IntRect(102, 126, 30, 16).contains(Mouse::getPosition(window)) && sizeOfField > 1) { ms_position = 124; }
+		if (IntRect(136, 126, 30, 16).contains(Mouse::getPosition(window)) && sizeOfField > 1) { ms_position = 125; }
+		if (IntRect(170, 126, 30, 16).contains(Mouse::getPosition(window)) && sizeOfField > 2) { ms_position = 126; }
+		if (IntRect(204, 126, 30, 16).contains(Mouse::getPosition(window)) && sizeOfField > 2) { ms_position = 127; }
+		if (IntRect(238, 126, 30, 16).contains(Mouse::getPosition(window)) && sizeOfField > 2) { ms_position = 128; }
+		if (IntRect(272, 126, 30, 16).contains(Mouse::getPosition(window)) && sizeOfField > 2) { ms_position = 129; }
+		if (IntRect(306, 126, 30, 16).contains(Mouse::getPosition(window)) && sizeOfField > 2) { ms_position = 130; }
 
-		if (IntRect(0, 160, 30, 16).contains(Mouse::getPosition(window))) { ms_position = 131; }
-		if (IntRect(34, 160, 30, 16).contains(Mouse::getPosition(window))) { ms_position = 132; }
-		if (IntRect(68, 160, 30, 16).contains(Mouse::getPosition(window))) { ms_position = 133; }
-		if (IntRect(102, 160, 30, 16).contains(Mouse::getPosition(window))) { ms_position = 134; }
-		if (IntRect(136, 160, 30, 16).contains(Mouse::getPosition(window))) { ms_position = 135; }
-		if (IntRect(170, 160, 30, 16).contains(Mouse::getPosition(window))) { ms_position = 136; }
-		if (IntRect(204, 160, 30, 16).contains(Mouse::getPosition(window))) { ms_position = 137; }
-		if (IntRect(238, 160, 30, 16).contains(Mouse::getPosition(window))) { ms_position = 138; }
-		if (IntRect(272, 160, 30, 16).contains(Mouse::getPosition(window))) { ms_position = 139; }
-		if (IntRect(306, 160, 30, 16).contains(Mouse::getPosition(window))) { ms_position = 140; }
+		if (IntRect(0, 160, 30, 16).contains(Mouse::getPosition(window)) && sizeOfField > 2) { ms_position = 131; }
+		if (IntRect(34, 160, 30, 16).contains(Mouse::getPosition(window)) && sizeOfField > 2) { ms_position = 132; }
+		if (IntRect(68, 160, 30, 16).contains(Mouse::getPosition(window)) && sizeOfField > 2) { ms_position = 133; }
+		if (IntRect(102, 160, 30, 16).contains(Mouse::getPosition(window)) && sizeOfField > 2) { ms_position = 134; }
+		if (IntRect(136, 160, 30, 16).contains(Mouse::getPosition(window)) && sizeOfField > 2) { ms_position = 135; }
+		if (IntRect(170, 160, 30, 16).contains(Mouse::getPosition(window)) && sizeOfField > 2) { ms_position = 136; }
+		if (IntRect(204, 160, 30, 16).contains(Mouse::getPosition(window)) && sizeOfField > 2) { ms_position = 137; }
+		if (IntRect(238, 160, 30, 16).contains(Mouse::getPosition(window)) && sizeOfField > 2) { ms_position = 138; }
+		if (IntRect(272, 160, 30, 16).contains(Mouse::getPosition(window)) && sizeOfField > 2) { ms_position = 139; }
+		if (IntRect(306, 160, 30, 16).contains(Mouse::getPosition(window)) && sizeOfField > 2) { ms_position = 140; }
 
-		if (IntRect(0, 194, 30, 16).contains(Mouse::getPosition(window))) { ms_position = 141; }
-		if (IntRect(34, 194, 30, 16).contains(Mouse::getPosition(window))) { ms_position = 142; }
-		if (IntRect(68, 194, 30, 16).contains(Mouse::getPosition(window))) { ms_position = 143; }
-		if (IntRect(102, 194, 30, 16).contains(Mouse::getPosition(window))) { ms_position = 144; }
-		if (IntRect(136, 194, 30, 16).contains(Mouse::getPosition(window))) { ms_position = 145; }
-		if (IntRect(170, 194, 30, 16).contains(Mouse::getPosition(window))) { ms_position = 146; }
-		if (IntRect(204, 194, 30, 16).contains(Mouse::getPosition(window))) { ms_position = 147; }
-		if (IntRect(238, 194, 30, 16).contains(Mouse::getPosition(window))) { ms_position = 148; }
-		if (IntRect(272, 194, 30, 16).contains(Mouse::getPosition(window))) { ms_position = 149; }
-		if (IntRect(306, 194, 30, 16).contains(Mouse::getPosition(window))) { ms_position = 150; }
+		if (IntRect(0, 194, 30, 16).contains(Mouse::getPosition(window)) && sizeOfField > 2) { ms_position = 141; }
+		if (IntRect(34, 194, 30, 16).contains(Mouse::getPosition(window)) && sizeOfField > 2) { ms_position = 142; }
+		if (IntRect(68, 194, 30, 16).contains(Mouse::getPosition(window)) && sizeOfField > 2) { ms_position = 143; }
+		if (IntRect(102, 194, 30, 16).contains(Mouse::getPosition(window)) && sizeOfField > 2) { ms_position = 144; }
+		if (IntRect(136, 194, 30, 16).contains(Mouse::getPosition(window)) && sizeOfField > 2) { ms_position = 145; }
+		if (IntRect(170, 194, 30, 16).contains(Mouse::getPosition(window)) && sizeOfField > 2) { ms_position = 146; }
+		if (IntRect(204, 194, 30, 16).contains(Mouse::getPosition(window)) && sizeOfField > 2) { ms_position = 147; }
+		if (IntRect(238, 194, 30, 16).contains(Mouse::getPosition(window)) && sizeOfField > 2) { ms_position = 148; }
+		if (IntRect(272, 194, 30, 16).contains(Mouse::getPosition(window)) && sizeOfField > 2) { ms_position = 149; }
+		if (IntRect(306, 194, 30, 16).contains(Mouse::getPosition(window)) && sizeOfField > 2) { ms_position = 150; }
 
-		if (IntRect(0, 228, 30, 16).contains(Mouse::getPosition(window))) { ms_position = 151; }
-		if (IntRect(34, 228, 30, 16).contains(Mouse::getPosition(window))) { ms_position = 152; }
-		if (IntRect(68, 228, 30, 16).contains(Mouse::getPosition(window))) { ms_position = 153; }
-		if (IntRect(102, 228, 30, 16).contains(Mouse::getPosition(window))) { ms_position = 154; }
-		if (IntRect(136, 228, 30, 16).contains(Mouse::getPosition(window))) { ms_position = 155; }
-		if (IntRect(170, 228, 30, 16).contains(Mouse::getPosition(window))) { ms_position = 156; }
-		if (IntRect(204, 228, 30, 16).contains(Mouse::getPosition(window))) { ms_position = 157; }
-		if (IntRect(238, 228, 30, 16).contains(Mouse::getPosition(window))) { ms_position = 158; }
-		if (IntRect(272, 228, 30, 16).contains(Mouse::getPosition(window))) { ms_position = 159; }
-		if (IntRect(306, 228, 30, 16).contains(Mouse::getPosition(window))) { ms_position = 160; }
+		if (IntRect(0, 228, 30, 16).contains(Mouse::getPosition(window)) && sizeOfField > 2) { ms_position = 151; }
+		if (IntRect(34, 228, 30, 16).contains(Mouse::getPosition(window)) && sizeOfField > 2) { ms_position = 152; }
+		if (IntRect(68, 228, 30, 16).contains(Mouse::getPosition(window)) && sizeOfField > 2) { ms_position = 153; }
+		if (IntRect(102, 228, 30, 16).contains(Mouse::getPosition(window)) && sizeOfField > 2) { ms_position = 154; }
+		if (IntRect(136, 228, 30, 16).contains(Mouse::getPosition(window)) && sizeOfField > 2) { ms_position = 155; }
+		if (IntRect(170, 228, 30, 16).contains(Mouse::getPosition(window)) && sizeOfField > 2) { ms_position = 156; }
+		if (IntRect(204, 228, 30, 16).contains(Mouse::getPosition(window)) && sizeOfField > 2) { ms_position = 157; }
+		if (IntRect(238, 228, 30, 16).contains(Mouse::getPosition(window)) && sizeOfField > 2) { ms_position = 158; }
+		if (IntRect(272, 228, 30, 16).contains(Mouse::getPosition(window)) && sizeOfField > 2) { ms_position = 159; }
+		if (IntRect(306, 228, 30, 16).contains(Mouse::getPosition(window)) && sizeOfField > 2) { ms_position = 160; }
 
-		if (IntRect(0, 262, 30, 16).contains(Mouse::getPosition(window))) { ms_position = 161; }
-		if (IntRect(34, 262, 30, 16).contains(Mouse::getPosition(window))) { ms_position = 162; }
-		if (IntRect(68, 262, 30, 16).contains(Mouse::getPosition(window))) { ms_position = 163; }
-		if (IntRect(102, 262, 30, 16).contains(Mouse::getPosition(window))) { ms_position = 164; }
-		if (IntRect(136, 262, 30, 16).contains(Mouse::getPosition(window))) { ms_position = 165; }
-		if (IntRect(170, 262, 30, 16).contains(Mouse::getPosition(window))) { ms_position = 166; }
-		if (IntRect(204, 262, 30, 16).contains(Mouse::getPosition(window))) { ms_position = 167; }
-		if (IntRect(238, 262, 30, 16).contains(Mouse::getPosition(window))) { ms_position = 168; }
-		if (IntRect(272, 262, 30, 16).contains(Mouse::getPosition(window))) { ms_position = 169; }
-		if (IntRect(306, 262, 30, 16).contains(Mouse::getPosition(window))) { ms_position = 170; }
+		if (IntRect(0, 262, 30, 16).contains(Mouse::getPosition(window)) && sizeOfField > 2) { ms_position = 161; }
+		if (IntRect(34, 262, 30, 16).contains(Mouse::getPosition(window)) && sizeOfField > 2) { ms_position = 162; }
+		if (IntRect(68, 262, 30, 16).contains(Mouse::getPosition(window)) && sizeOfField > 2) { ms_position = 163; }
+		if (IntRect(102, 262, 30, 16).contains(Mouse::getPosition(window)) && sizeOfField > 2) { ms_position = 164; }
+		if (IntRect(136, 262, 30, 16).contains(Mouse::getPosition(window)) && sizeOfField > 2) { ms_position = 165; }
+		if (IntRect(170, 262, 30, 16).contains(Mouse::getPosition(window)) && sizeOfField > 2) { ms_position = 166; }
+		if (IntRect(204, 262, 30, 16).contains(Mouse::getPosition(window)) && sizeOfField > 2) { ms_position = 167; }
+		if (IntRect(238, 262, 30, 16).contains(Mouse::getPosition(window)) && sizeOfField > 2) { ms_position = 168; }
+		if (IntRect(272, 262, 30, 16).contains(Mouse::getPosition(window)) && sizeOfField > 2) { ms_position = 169; }
+		if (IntRect(306, 262, 30, 16).contains(Mouse::getPosition(window)) && sizeOfField > 2) { ms_position = 170; }
 
-		if (IntRect(0, 296, 30, 16).contains(Mouse::getPosition(window))) { ms_position = 171; }
-		if (IntRect(34, 296, 30, 16).contains(Mouse::getPosition(window))) { ms_position = 172; }
-		if (IntRect(68, 296, 30, 16).contains(Mouse::getPosition(window))) { ms_position = 173; }
-		if (IntRect(102, 296, 30, 16).contains(Mouse::getPosition(window))) { ms_position = 174; }
-		if (IntRect(136, 296, 30, 16).contains(Mouse::getPosition(window))) { ms_position = 175; }
-		if (IntRect(170, 296, 30, 16).contains(Mouse::getPosition(window))) { ms_position = 176; }
-		if (IntRect(204, 296, 30, 16).contains(Mouse::getPosition(window))) { ms_position = 177; }
-		if (IntRect(238, 296, 30, 16).contains(Mouse::getPosition(window))) { ms_position = 178; }
-		if (IntRect(272, 296, 30, 16).contains(Mouse::getPosition(window))) { ms_position = 179; }
-		if (IntRect(306, 296, 30, 16).contains(Mouse::getPosition(window))) { ms_position = 180; }
+		if (IntRect(0, 296, 30, 16).contains(Mouse::getPosition(window)) && sizeOfField > 2) { ms_position = 171; }
+		if (IntRect(34, 296, 30, 16).contains(Mouse::getPosition(window)) && sizeOfField > 2) { ms_position = 172; }
+		if (IntRect(68, 296, 30, 16).contains(Mouse::getPosition(window)) && sizeOfField > 2) { ms_position = 173; }
+		if (IntRect(102, 296, 30, 16).contains(Mouse::getPosition(window)) && sizeOfField > 2) { ms_position = 174; }
+		if (IntRect(136, 296, 30, 16).contains(Mouse::getPosition(window)) && sizeOfField > 2) { ms_position = 175; }
+		if (IntRect(170, 296, 30, 16).contains(Mouse::getPosition(window)) && sizeOfField > 2) { ms_position = 176; }
+		if (IntRect(204, 296, 30, 16).contains(Mouse::getPosition(window)) && sizeOfField > 2) { ms_position = 177; }
+		if (IntRect(238, 296, 30, 16).contains(Mouse::getPosition(window)) && sizeOfField > 2) { ms_position = 178; }
+		if (IntRect(272, 296, 30, 16).contains(Mouse::getPosition(window)) && sizeOfField > 2) { ms_position = 179; }
+		if (IntRect(306, 296, 30, 16).contains(Mouse::getPosition(window)) && sizeOfField > 2) { ms_position = 180; }
 
 		if (IntRect(0, 333, 340, 84).contains(Mouse::getPosition(window))) { ms_position = 0; } // нижняя часть поля(инфоблок)
 		
@@ -269,10 +301,9 @@ int gt_ms_position(int ms_position, RenderWindow & window) {
 }
 
 // ################## class Game ##################
-void Game::draw_game(RenderWindow & window) {
+void Game::draw_game(RenderWindow & window, int sizeOfField, int game_mode ) {
 	// ############## задаем координаты палочек
 	float x = 30, y = 0;
-	
 	RectangleShape rectangle[20][20];
 	for (int i = 0; i < 9; i++) {				// vertical
 		for (int j = 0; j < 10; j++) {
@@ -299,10 +330,30 @@ void Game::draw_game(RenderWindow & window) {
 		y += 34;
 
 	}//задали координаты палочек ###############
-	for (int j = 10; j < 20; j++) {
+	
+	 // цвет для крайних неактивных палочек:
+	if(sizeOfField == 3){							//10x10
+	for (int j = 10; j < 20; j++) {					
 		rectangle[18][j].setFillColor(Color::Black);
 	}
-
+	}
+	if (sizeOfField == 2) {							//5x5
+		for (int i = 0; i < 5; i++) {
+			rectangle[4][i].setFillColor(Color::Black);
+		}
+		for (int j = 10; j < 15; j++) {
+			rectangle[13][j].setFillColor(Color::Black);
+		}
+	}
+	if (sizeOfField == 1) {							//3x3
+		for (int i = 0; i < 3; i++) {
+			rectangle[2][i].setFillColor(Color::Black);
+		}
+		for (int j = 10; j < 13; j++) {
+			rectangle[11][j].setFillColor(Color::Black);
+		}
+	}
+	//  начальные значения для крайних квадратиков:
 	MyLines arr[10][10];
 	for (int i = 0; i < 10; i++) {
 		arr[i][0].set_left(1);
@@ -319,7 +370,64 @@ void Game::draw_game(RenderWindow & window) {
 	for (int i = 0; i < 10; i++) {
 		arr[9][i].set_bottom(1);
 		++arr[9][i];
-	}; // задали начальные значения для крайних квадратиков 
+	};  
+	//5x5:
+	if (sizeOfField == 2) {
+		for (int i = 0; i < 5; i++) {
+			arr[4][i].set_bottom(1);
+			++arr[4][i];
+		};
+		for (int i = 0; i < 5; i++) {
+			arr[i][4].set_bottom(1);
+			++arr[i][4];
+		};
+	}
+	//3x3:
+	if (sizeOfField == 1) {
+		for (int i = 0; i < 3; i++) {
+			arr[2][i].set_bottom(1);
+			++arr[2][i];
+		};
+		for (int i = 0; i < 3; i++) {
+			arr[i][2].set_bottom(1);
+			++arr[i][2];
+		};
+	}
+	// номера палочек для каждой клетки(для компа): 
+	// вертикальные:
+	for (int j = 1; j < 9; j++) {
+		for (int i = 0; i < 10; i++) {
+			arr[i][j].set_left_rectangle_i(j-1).set_left_rectangle_j(i).
+				set_right_rectangle_i(j).set_right_rectangle_j(i);
+		}
+	}
+	for (int i = 0; i < 10; i++) { // для крайних столбиков:
+		arr[i][0].set_right_rectangle_i(0).set_right_rectangle_j(i);
+		arr[i][9].set_left_rectangle_i(8).set_left_rectangle_j(i);
+	}
+	// горизонтальные:
+	for (int i = 0; i < 10; i++) {
+		for (int j = 1; j < 9; j++){
+			arr[i][j].set_top_rectangle_i(9+i).set_top_rectangle_j(9+j).
+				set_bottom_rectangle_i(10+i).set_bottom_rectangle_j(9 + j);
+		}
+	}
+	for (int i = 0; i < 10; i++) { // для крайних строчек:
+		arr[0][i].set_top_rectangle_i(9).set_top_rectangle_j(i+10);
+		arr[9][i].set_bottom_rectangle_i(18).set_bottom_rectangle_j(i+10);
+	}
+	// делаем копию массива arr для ИИ:
+	MyLines **arr_copy = new MyLines *[10];
+	for (int i = 0; i < 10; i++) {
+		arr_copy[i] = new MyLines[10];
+	}
+	for (int i = 0; i < 10; i++) {
+		for (int j = 0; j < 10; j++) {
+			arr_copy[i][j] = arr[i][j];
+		}
+	}
+
+	// задаём координаты для спрайтов:
 	float temp_x = 0, temp_y = 0;
 	for (int i = 0; i < 10; i++) {
 		for (int j = 0; j < 10; j++) {
@@ -328,40 +436,32 @@ void Game::draw_game(RenderWindow & window) {
 		}
 		temp_x = 0;
 		temp_y += 34;
-	} // задали координаты для спрайтов
+	} 
 	// Рисование текста:
-	
 	Font font;
 	font.loadFromFile("Capture_it.ttf");
-	Text text1("Krestik won", font, 25);
-	Text text2("Nolik won", font, 25);
-	Text text3("", font, 25);
-	Text text4("", font, 25);
-	Text text5("[X] moves", font, 25);
-	Text text6("[O] moves", font, 25);
+	Text text0("", font, 25);
+	Text text("", font, 25);
+	Text text1("", font, 25);
+	Text text2("", font, 25);
+	Text text3("press Esc to go to menu ", font, 10);
 	text1.setFillColor(Color::Blue);
 	text2.setFillColor(Color::Red);
-	text3.setFillColor(Color::Blue);
-	text4.setFillColor(Color::Red);
-	text5.setFillColor(Color::Blue);
-	text6.setFillColor(Color::Red);
-	text1.setStyle(sf::Text::Bold | sf::Text::Underlined);
-	text2.setStyle(sf::Text::Bold | sf::Text::Underlined); 
-	text1.setPosition(135,340);
-	text2.setPosition(135, 340);
-	text3.setPosition(15, 345);
-	text4.setPosition(65, 345);
-	text5.setPosition(135, 345);
-	text6.setPosition(135, 345);
-
-	MyLines xx[10][10], oo[10][10];
+	text3.setFillColor(Color::Black);
+	text0.setPosition(155,345);
+	text.setPosition(155, 345);
+	text1.setPosition(10, 345);
+	text2.setPosition(80, 345);
+	text3.setPosition(5, 375);
+	//  создаем оъекты
+	MyLines xx[10][10], oo[10][10]; // массивы для спрайтов
+	int size_krestik = 0 , size_nolik = 0; //количество крестиков и ноликов, которые нужно рисовать
+	Figure fig1[101], fig2[101];  // массивы для координат клеток, в которых нужно рисовать фигуры
+	int ms_position = 0; // позиция курсора
+	Player player_x, player_o; 
+	Comp player_comp;
 	
-	int size_krestik = 0 , size_nolik = 0;
-	Figure fig1[101], fig2[101]; 
-	int ms_position = 0;
-	Player player_x, player_o;
-	
-	int sensor_klick[20][20];
+	int sensor_klick[20][20];  // предотвращает повторный клик по палочке 
 	for (int i = 0; i < 20; i++) {
 		for (int j = 0; j < 20; j++) {
 			sensor_klick[i][j] = 0;
@@ -369,18 +469,22 @@ void Game::draw_game(RenderWindow & window) {
 	}
 	bool first_klick = true;// начинаем ставить палочки со 
 						    //второго клика(1-й клик - клик по "New Game")
-	int queue = 1; // 0 - ходит нолик, 1 - ходит крестик
-				 
-				//######## game loop
+	int queue(1); // 0 - ходит нолик, 1 - ходит крестик, 2 - ходит компьютер(ноликом)
+	if (game_mode == 1) {
+		queue = 2;
+	}
+	Music music;//создаем объект музыки
+	music.openFromFile("music.ogg");//загружаем файл
+	bool music_sensor = true;
+	
+	//############################################## game loop ##############################################
 	while (!Keyboard::isKeyPressed(Keyboard::Escape))
 	{
 		int queue_2 = 0; // увеличивыется при закрывании квадратика
 		window.clear(Color::White);
-		ms_position = gt_ms_position(ms_position, window);
-
+		ms_position = gt_ms_position(ms_position, window, sizeOfField); //получаем положение курсора
 	Event event;
 	while (window.pollEvent(event)) {
-			
 		if (event.type == Event::Closed) { window.close(); }
 		if (event.type == event.MouseButtonReleased && event.mouseButton.button == Mouse::Left)
 		{	if(!first_klick){
@@ -2732,7 +2836,7 @@ void Game::draw_game(RenderWindow & window) {
 					}
 					};
 			//проход массива объектов(проверка на 4 палочки в квадрате):
-			if(ms_position!=0){
+			if(ms_position!=0){ //если клацнули на палочку
 			if (queue == 1) {
 				for (int i = 0; i < 10; i++)
 				{
@@ -2743,13 +2847,13 @@ void Game::draw_game(RenderWindow & window) {
 						xx[i][j].krestik_txt.loadFromFile("images/x.png");					//загрузили текстуру
 						xx[i][j].krestik;													//объявили спрайт 
 						xx[i][j].krestik.setTexture(xx[i][j].krestik_txt);					//загрузили текстуру в спрайт
-						xx[i][j].krestik.setPosition(arr[i][j].coord_x, arr[i][j].coord_y); //задали позицию		
+						xx[i][j].krestik.setPosition(arr[i][j].get_coord_x(), arr[i][j].get_coord_y()); //задали позицию		
 						// сохраняем координаты клеток, в которых нужно рисовать крестики:	
 						size_krestik++;
 						fig1[size_krestik - 1].set_figure_i(i).set_figure_j(j);
 						queue_2++; 
 						++player_x;
-						++arr[i][j];
+						++arr[i][j]; // чтоб count стало 5
 						}
 					}
 				}
@@ -2757,7 +2861,7 @@ void Game::draw_game(RenderWindow & window) {
 							queue = 0;
 						}
 					}
-			else {
+			else if(queue == 0) {
 					for (int i = 0; i < 10; i++)
 					{
 						for (int j = 0; j < 10; j++)
@@ -2767,14 +2871,14 @@ void Game::draw_game(RenderWindow & window) {
 							xx[i][j].nolik_txt.loadFromFile("images/o.png");					//загрузили текстуру
 							xx[i][j].nolik;													//объявили спрайт 
 							xx[i][j].nolik.setTexture(xx[i][j].nolik_txt);					//загрузили текстуру в спрайт
-							xx[i][j].nolik.setPosition(arr[i][j].coord_x, arr[i][j].coord_y); //задали позицию		
+							xx[i][j].nolik.setPosition(arr[i][j].get_coord_x(), arr[i][j].get_coord_y()); //задали позицию		
 
 						    // сохраняем координаты клеток, в которых нужно рисовать нолики:
 							size_nolik++;
 							fig2[size_nolik - 1].set_figure_i(i).set_figure_j(j);
 							queue_2++;
 							++player_o;
-							++arr[i][j];
+							++arr[i][j]; // чтоб count стало 5
 									
 								}
 							}
@@ -2792,11 +2896,39 @@ void Game::draw_game(RenderWindow & window) {
 			}//PollEvent
 			
 	//прорисовка объектов:
-			for (int i = 0; i < 20; i++) {
-				for (int j = 0; j < 20; j++) {
-					window.draw(rectangle[i][j]);
+
+			if (sizeOfField == 3){						//10x10
+				for (int i = 0; i < 20; i++) {
+					for (int j = 0; j < 20; j++) {
+						window.draw(rectangle[i][j]);
+					}
 				}
 			}
+			else if (sizeOfField == 2) {					//5x5
+				for (int i = 0; i < 5; i++) {
+					for (int j = 0; j < 5; j++) {
+						window.draw(rectangle[i][j]);
+					}
+				}
+				for (int i = 9; i < 14; i++) {
+					for (int j = 10; j < 15; j++) {
+						window.draw(rectangle[i][j]);
+					}
+				}
+			}
+			else if (sizeOfField == 1 ) {					//3x3
+				for (int i = 0; i < 3; i++) {
+					for (int j = 0; j < 3; j++) {
+						window.draw(rectangle[i][j]);
+					}
+				}
+				for (int i = 9; i < 12; i++) {
+					for (int j = 10; j < 13; j++) {
+						window.draw(rectangle[i][j]);
+					}
+				}
+			}
+
 				for (int i = 0; i < size_krestik; i++)
 				{
 					window.draw(xx[fig1[i].get_figure_i()][fig1[i].get_figure_j()].krestik);
@@ -2805,37 +2937,76 @@ void Game::draw_game(RenderWindow & window) {
 				{
 					window.draw(xx[fig2[i].get_figure_i()][fig2[i].get_figure_j()].nolik);
 				}
-			// проверка на конец игры и выявление победителя:
-				if(winnerDetected(player_o.get_count(), player_x.get_count()) 
-					&& player_x.get_count() > player_o.get_count()){
-			window.draw(text1); // выиграл крестик
-				}
-				if (winnerDetected(player_o.get_count(), player_x.get_count())
-					&& player_x.get_count() < player_o.get_count()) {
-			window.draw(text2); // выиграл нолик
-				}
+			
 				// выводим текущее кол-во очков:
 				ostringstream playerScoreString_x, playerScoreString_o;
 				playerScoreString_x << player_x.get_count(); //занесли в переменную число очков(формируем строку)
 				playerScoreString_o << player_o.get_count(); //занесли в переменную число очков(формируем строку)
 								// задаем строку тексту и вызываем сформированную выше строку методом .str()
-				text3.setString("X: " + playerScoreString_x.str());
-				text4.setString("O: " + playerScoreString_o.str());
-				window.draw(text3);
-				window.draw(text4);
+				text1.setString("X: " + playerScoreString_x.str());
+				text2.setString("O: " + playerScoreString_o.str());
+				window.draw(text1);
+				window.draw(text2);
+				// проверка на конец игры и выявление победителя:
+				// выиграл крестик:
+				if (winnerDetected(player_o.get_count(), player_x.get_count(), sizeOfField) 
+					&& player_x.get_count() > player_o.get_count()) {
+					text0.setString("Krestik won");
+					text0.setFillColor(Color::Blue);
+				    text0.setStyle(sf::Text::Bold | sf::Text::Underlined);
+					queue = 100; // чтоб не отображалась в конце "инфа о том, кто ходит"
+					window.draw(text0);
+					// цикл - для одного воспроизведения музыки
+					while (music_sensor) {
+						music.play();//воспроизводим музыку
+						music_sensor = false;
+					}
+				}
+				// выиграл нолик:
+				if (winnerDetected(player_o.get_count(), player_x.get_count(), sizeOfField)	
+					&& player_x.get_count() < player_o.get_count()) {
+					text0.setString("Nolik won");
+					text0.setFillColor(Color::Red);
+					text0.setStyle(sf::Text::Bold | sf::Text::Underlined);
+					queue = 100; // чтоб не отображалась в конце "инфа о том, кто ходит"
+					window.draw(text0);
+					// цикл - для одного воспроизведения музыки
+					while (music_sensor) {
+						music.play();//воспроизводим музыку
+						music_sensor = false;
+					}
+				}
 				// выводим информацию, о том, кто сейчас ходит:
 				if (queue == 1) {
-					window.draw(text5);
-				}
-				else{ window.draw(text6); }
-
+					text0.setString("[X] moves");
+					text0.setFillColor(Color::Blue);
+					window.draw(text0);
+				}	// krestik
+				else if (queue == 0) {
+					text0.setString("[O] moves");
+					text0.setFillColor(Color::Red);
+					window.draw(text0);
+				} // nolik
+				window.draw(text3);
 				window.display();
 			
 		} //game loop ########
+		  // удаление двумерного динамического массива
+		for (int i = 0; i < 10; i++){
+			delete[]arr_copy[i];
+		};
 };
+
+//Функция, устанавливающая размер поля
+Game & Game::set_FieldSize(int size) {
+	field_size = size;
+	return *this;
+};
+
 
 // ################## class Menu ##################
 void Menu::draw_menu(RenderWindow & window) {
+	Game gm_ob;
 	Texture menuTexture1, menuTexture2, menuTexture3, menuTexture4,
 			menuTexture5, menuTexture6, menuTexture7, menuTexture8, 
 			menuTexture9, menuTexture10, aboutTexture, menuBackground;
@@ -2870,7 +3041,7 @@ void Menu::draw_menu(RenderWindow & window) {
 	menu10.setPosition(85, 200);
 	abt.setPosition(15, 0);
 	menuBg.setPosition(0, 0);
-	//////////////////////////////МЕНЮ///////////////////
+	////////////////////////////// menu loop ////////////////////////
 	while (isMenu)
 	{
 		menu1.setColor(Color::Black);
@@ -2896,12 +3067,12 @@ void Menu::draw_menu(RenderWindow & window) {
 			{
 				// New Game:
 				if (menuNum == 1) {
-					Game gm_ob;
-					gm_ob.draw_game(window);
+					gm_ob.draw_game(window, gm_ob.get_FieldSize(), game_mode);
 				}
 				// Field Parameters:
 				if (menuNum == 2) {
 					while (!Keyboard::isKeyPressed(Keyboard::Escape)) {
+						
 						menu8.setColor(Color::Black);
 						menu9.setColor(Color::Black);
 						menu10.setColor(Color::Black);
@@ -2919,13 +3090,13 @@ void Menu::draw_menu(RenderWindow & window) {
 							if (event.type == Event::Closed) { window.close(); }
 							if (Mouse::isButtonPressed(Mouse::Left)) {
 								if (menuNum == 8) {
-
+									gm_ob.set_FieldSize(1); // 3x3
 								}
 								if (menuNum == 9) {
-
+									gm_ob.set_FieldSize(2); // 5x5
 								}
 								if (menuNum == 10) {
-
+									gm_ob.set_FieldSize(3); // 10x10
 								}
 							}
 						}
@@ -2950,11 +3121,11 @@ void Menu::draw_menu(RenderWindow & window) {
 						while (window.pollEvent(event)) {
 							if (event.type == Event::Closed) { window.close(); }
 							if (Mouse::isButtonPressed(Mouse::Left)) {
-								if (menuNum == 6) {
-
+								if (menuNum == 6) { // Duel
+									game_mode = 0; 
 								}
-								if (menuNum == 7) {
-
+								if (menuNum == 7) { // Game with computer
+									game_mode = 1; 
 								}
 							}
 						}
@@ -2993,11 +3164,65 @@ void Menu::draw_menu(RenderWindow & window) {
 		window.display();
 	}
 	////////////////////////////////////////////////////
+
 }
 
 			// ############  функции:  #############
 // проверка на конец игры
-bool winnerDetected(int count1, int count2) {
+bool winnerDetected(int count1, int count2, int sizeOfField) {
+	if(sizeOfField == 3){
 	if (count1 + count2 == 100) return true;
 	else return false;
+	}
+	if (sizeOfField == 2) {
+		if (count1 + count2 == 25) return true;
+		else return false;
+	}
+	if (sizeOfField == 1) {
+		if (count1 + count2 == 9) return true;
+		else return false;
+	}
+};
+
+// очень искусственный интеллект:
+void comp(MyLines **arr_copy) {
+	bool isComp = true; 
+	// обрабатываем клетки с 3-мя палочками:
+	for (int i = 0; i < 10; i++) {
+		for (int j = 0; j < 10; j++) {
+			if (arr_copy[i][j].get_count == 3) {
+
+
+			}
+		}
+	}
+	// обрабатываем клетки без палочек:
+	for (int i = 0; i < 10; i++) {
+		for (int j = 0; j < 10; j++) {
+			if (arr_copy[i][j].get_count == 0 && isComp == true ) {
+
+				isComp = false;
+			}
+		}
+	}
+	// обрабатываем клетки с одной палочкой:
+	for (int i = 0; i < 10; i++) {
+		for (int j = 0; j < 10; j++) {
+			if (arr_copy[i][j].get_count == 1 && isComp == true) {
+
+				isComp = false;
+			}
+
+		}
+	}
+	// обрабатываем клетки с 2-мя палочками:
+	for (int i = 0; i < 10; i++) {
+		for (int j = 0; j < 10; j++) {
+			if (arr_copy[i][j].get_count == 2 && isComp == true) {
+
+				isComp = false;
+			}
+
+		}
+	}
 };
