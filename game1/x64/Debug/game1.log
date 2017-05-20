@@ -1,8 +1,4 @@
 ﻿  Classes.cpp
-  Generating Code...
-d:\univer\proga\курсач\sfml\game1\classes.cpp(3189): warning C4715: 'winnerDetected': not all control paths return a value
-  Compiling...
-  Main.cpp
-  Generating Code...
+d:\univer\proga\курсач\sfml\game1\classes.cpp(770): warning C4715: 'winnerDetected': not all control paths return a value
   game1.vcxproj -> D:\univer\Proga\курсач\sfml\x64\Debug\game1.exe
   game1.vcxproj -> D:\univer\Proga\курсач\sfml\x64\Debug\game1.pdb (Partial PDB)
