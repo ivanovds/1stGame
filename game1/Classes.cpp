@@ -8,7 +8,7 @@ using namespace sf;
 
 // функции:
 bool winnerDetected(int count1, int count2, int sizeOfField);
-void comp(MyLines **arr_copy);
+
 
 // ################## class Figure ##################
 Figure & Figure::set_figure_i(int i) {
@@ -148,8 +148,9 @@ int gt_ms_position(RenderWindow & window, int sizeOfField) {
 }
 
 // ################## class Game ##################
-void Game::draw_game(RenderWindow & window, int sizeOfField, int game_mode ) {
+void Game::start_game(RenderWindow & window, int sizeOfField) {
 	// ############## задаем координаты палочек
+	srand(time(0)); // рандомная расстановка палочек
 	float x = 30, y = 0;
 	RectangleShape rectangle[20][20];
 	for (int i = 0; i < 9; i++) {				// vertical
@@ -248,7 +249,8 @@ void Game::draw_game(RenderWindow & window, int sizeOfField, int game_mode ) {
 				set_right_rectangle_i(j).set_right_rectangle_j(i);
 		}
 	}
-	for (int i = 0; i < 10; i++) { // для крайних столбиков:
+	// для крайних столбиков:
+	for (int i = 0; i < 10; i++) { 
 		arr[i][0].set_right_rectangle_i(0).set_right_rectangle_j(i);
 		arr[i][9].set_left_rectangle_i(8).set_left_rectangle_j(i);
 	}
@@ -259,7 +261,8 @@ void Game::draw_game(RenderWindow & window, int sizeOfField, int game_mode ) {
 				set_bottom_rectangle_i(9+i).set_bottom_rectangle_j(10 + j);
 		}
 	}
-	for (int j = 0; j < 10; j++) { // для крайних строчек:
+	// для крайних строчек:
+	for (int j = 0; j < 10; j++) { 
 		arr[0][j].set_bottom_rectangle_i(9).set_bottom_rectangle_j(j+10);
 		arr[9][j].set_top_rectangle_i(17).set_top_rectangle_j(j+10);
 	}
@@ -294,20 +297,6 @@ void Game::draw_game(RenderWindow & window, int sizeOfField, int game_mode ) {
 			rec_number++;
 		}
 	}
-	
-
-
-
-	// делаем копию массива arr для ИИ:
-	MyLines **arr_copy = new MyLines *[10];
-	for (int i = 0; i < 10; i++) {
-		arr_copy[i] = new MyLines[10];
-	}
-	for (int i = 0; i < 10; i++) {
-		for (int j = 0; j < 10; j++) {
-			arr_copy[i][j] = arr[i][j];
-		}
-	}
 
 	// задаём координаты для спрайтов:
 	float temp_x = 0, temp_y = 0;
@@ -330,17 +319,16 @@ void Game::draw_game(RenderWindow & window, int sizeOfField, int game_mode ) {
 	text1.setFillColor(Color::Blue);
 	text2.setFillColor(Color::Red);
 	text3.setFillColor(Color::Black);
-	text0.setPosition(155,345);
-	text.setPosition(155, 345);
-	text1.setPosition(10, 345);
-	text2.setPosition(80, 345);
-	text3.setPosition(5, 375);
+	text0.setPosition(155,340);
+	text.setPosition(155, 340);
+	text1.setPosition(10, 340);
+	text2.setPosition(80, 340);
+	text3.setPosition(5, 368);
 	//  создаем оъекты
 	MyLines xx[10][10], oo[10][10]; // массивы для спрайтов
 	int size_krestik = 0 , size_nolik = 0; //количество крестиков и ноликов, которые нужно рисовать
 	Figure fig1[101], fig2[101];  // массивы для координат клеток, в которых нужно рисовать фигуры
 	Player player_x, player_o; 
-	Comp player_comp;
 	
 	int sensor_klick[20][20];  // предотвращает повторный клик по палочке 
 	for (int i = 0; i < 20; i++) {
@@ -350,14 +338,12 @@ void Game::draw_game(RenderWindow & window, int sizeOfField, int game_mode ) {
 	}
 	bool first_klick = true;// начинаем ставить палочки со 
 						    //второго клика(1-й клик - клик по "New Game")
-	int queue(1); // 0 - ходит нолик, 1 - ходит крестик, 2 - ходит компьютер(ноликом)
-	if (game_mode == 1) {
-		queue = 2;
-	}
+	
+	
 	Music music;//создаем объект музыки
 	music.openFromFile("music.ogg");//загружаем файл
 	bool music_sensor = true;
-	
+	bool isComp = false;
 	//############################################## game loop ##############################################
 	while (!Keyboard::isKeyPressed(Keyboard::Escape))
 	{
@@ -370,8 +356,8 @@ void Game::draw_game(RenderWindow & window, int sizeOfField, int game_mode ) {
 		if (event.type == event.MouseButtonReleased && event.mouseButton.button == Mouse::Left)
 		{	if(!first_klick){
 			if (gt_ms_position(window, sizeOfField) <= 90) {
-				for (int i = 0; i < sizeOfField; i++) {
-					for (int j = 0; j < sizeOfField; j++) {
+				for (int i = 0; i < sizeOfField ; i++) {
+					for (int j = 0; j < sizeOfField - 1; j++) {
 							if (arr[i][j].get_right_number() == gt_ms_position(window, sizeOfField)) {
 								if (sensor_klick[arr[i][j].get_right_rectangle_i()][arr[i][j].get_right_rectangle_j()] == 0) {
 								arr[i][j].set_right(1);
@@ -395,8 +381,8 @@ void Game::draw_game(RenderWindow & window, int sizeOfField, int game_mode ) {
 		}
 	}
 			else {
-				for (int i = 0; i < sizeOfField; i++) {
-					for (int j = 0; j < sizeOfField; j++) {
+				for (int i = 0; i < sizeOfField - 1; i++) {
+					for (int j = 0; j < sizeOfField ; j++) {
 					if (arr[i][j].get_bottom_number() == gt_ms_position(window, sizeOfField)) {
 						if (sensor_klick[arr[i][j].get_bottom_rectangle_i()][arr[i][j].get_bottom_rectangle_j()] == 0) {
 						arr[i][j].set_bottom(1);
@@ -422,10 +408,10 @@ void Game::draw_game(RenderWindow & window, int sizeOfField, int game_mode ) {
 			
 			//проход массива объектов(проверка на 4 палочки в квадрате):
 			if(gt_ms_position(window, sizeOfField) !=0 && klick==1){ //если (первый раз!) клацнули на палочку
-			if (queue == 1) {
-				for (int i = 0; i < 10; i++)
+			if (queue == 1) { // если походил крестик
+				for (int i = 0; i < sizeOfField; i++)
 				{
-					for (int j = 0; j < 10; j++)
+					for (int j = 0; j < sizeOfField; j++)
 					{
 						if (arr[i][j].get_count() == 4)
 						{
@@ -442,18 +428,19 @@ void Game::draw_game(RenderWindow & window, int sizeOfField, int game_mode ) {
 						}
 					}
 				}
-						if (queue_2 == 0){  // закрыли квадратик или нет
-							queue = 0;
+						if (queue_2 == 0){  // если не закрыли квадратик
+							if (get_gameMode() == 0) { queue = 0; } // если дуэль, то передаем ход нолику
+							else{ queue = 2; isComp = true; } // если игра скомпьютером - передаем компютеру
 						}
 					}
-			else if(queue == 0) {
-					for (int i = 0; i < 10; i++)
+			else if(queue == 0) { // если походил нолик
+					for (int i = 0; i < sizeOfField; i++)
 					{
-						for (int j = 0; j < 10; j++)
+						for (int j = 0; j < sizeOfField; j++)
 						{
 							if (arr[i][j].get_count() == 4)
 							{
-							xx[i][j].nolik_txt.loadFromFile("images/o.png");					//загрузили текстуру
+							xx[i][j].nolik_txt.loadFromFile("images/o.png");				//загрузили текстуру
 							xx[i][j].nolik;													//объявили спрайт 
 							xx[i][j].nolik.setTexture(xx[i][j].nolik_txt);					//загрузили текстуру в спрайт
 							xx[i][j].nolik.setPosition(arr[i][j].get_coord_x(), arr[i][j].get_coord_y()); //задали позицию		
@@ -463,13 +450,12 @@ void Game::draw_game(RenderWindow & window, int sizeOfField, int game_mode ) {
 							fig2[size_nolik - 1].set_figure_i(i).set_figure_j(j);
 							queue_2++;
 							++player_o;
-							++arr[i][j]; // чтоб count стало 5
-									
+							++arr[i][j]; // чтоб count(количество палочек в квадрате) стало 5
 								}
 							}
 						}
-						if (queue_2 == 0) {  // закрыли квадратик или нет
-							queue = 1;
+						if (queue_2 == 0) {  // если не закрыли квадратик
+							set_queue(1);
 						}
 					}
 				}
@@ -479,8 +465,236 @@ void Game::draw_game(RenderWindow & window, int sizeOfField, int game_mode ) {
 		}
 				
 			}//PollEvent
-			
-	//прорисовка объектов:
+	
+			 // очень искусственный интеллект:
+			if(queue == 2){
+	// обрабатываем клетки с 3-мя палочками:
+			for (int i = 0; i < sizeOfField; i++) {
+				for (int j = 0; j < sizeOfField; j++) {
+					if (arr[i][j].get_count() == 3) {
+						if (arr[i][j].get_left() == 0 && j > 0) {
+							arr[i][j].set_left(1);
+							++arr[i][j];
+							arr[i][j-1].set_right(1);
+							++arr[i][j-1];
+							sensor_klick[arr[i][j].get_left_rectangle_i()][arr[i][j].get_left_rectangle_j()] = 1;
+							rectangle[arr[i][j].get_left_rectangle_i()][arr[i][j].get_left_rectangle_j()].
+							setFillColor(Color::Red);
+						}
+						else if (arr[i][j].get_right() == 0 && j < sizeOfField - 1) {
+							arr[i][j].set_right(1);
+							++arr[i][j];
+							arr[i][j+1].set_left(1);
+							++arr[i][j+1];
+							sensor_klick[arr[i][j].get_right_rectangle_i()][arr[i][j].get_right_rectangle_j()] = 1;
+							rectangle[arr[i][j].get_right_rectangle_i()][arr[i][j].get_right_rectangle_j()].
+								setFillColor(Color::Red);
+						}
+						else if (arr[i][j].get_top() == 0 && i > 0) {
+							arr[i][j].set_top(1);
+							++arr[i][j];
+							arr[i-1][j].set_bottom(1);
+							++arr[i-1][j];
+							sensor_klick[arr[i][j].get_top_rectangle_i()][arr[i][j].get_top_rectangle_j()] = 1;
+							rectangle[arr[i][j].get_top_rectangle_i()][arr[i][j].get_top_rectangle_j()].
+								setFillColor(Color::Red);
+						}
+						else if(arr[i][j].get_bottom() == 0 && i < sizeOfField - 1) {
+							arr[i][j].set_bottom(1);
+							++arr[i][j];
+							arr[i+1][j].set_top(1);
+							++arr[i+1][j];
+							sensor_klick[arr[i][j].get_bottom_rectangle_i()][arr[i][j].get_bottom_rectangle_j()] = 1;
+							rectangle[arr[i][j].get_bottom_rectangle_i()][arr[i][j].get_bottom_rectangle_j()].
+								setFillColor(Color::Red);
+						}
+
+					}
+				}
+			}
+			//проверяем закрыли квадратик или нет
+			for (int i = 0; i < sizeOfField; i++)
+			{
+				for (int j = 0; j < sizeOfField; j++)
+				{
+					if (arr[i][j].get_count() == 4)
+					{
+						xx[i][j].nolik_txt.loadFromFile("images/o.png");				//загрузили текстуру
+						xx[i][j].nolik;													//объявили спрайт 
+						xx[i][j].nolik.setTexture(xx[i][j].nolik_txt);					//загрузили текстуру в спрайт
+						xx[i][j].nolik.setPosition(arr[i][j].get_coord_x(), arr[i][j].get_coord_y()); //задали позицию		
+
+						// сохраняем координаты клеток, в которых нужно рисовать нолики:
+						size_nolik++;
+						fig2[size_nolik - 1].set_figure_i(i).set_figure_j(j);
+						queue_2++;
+						++player_o;
+						++arr[i][j]; // чтоб count(количество палочек в квадрате) стало 5
+
+					}
+				}
+			}
+			if (queue_2 == 0) {  // если не закрыли квадратик
+				int rand_rectangle = 0;
+				// обрабатываем клетки без палочек:
+				for (int i = 0; i < sizeOfField; i++) {
+					for (int j = 0; j < sizeOfField; j++) {
+						if (arr[i][j].get_count() == 0 && isComp == true) {
+							rand_rectangle = rand() % 4;
+							if (rand_rectangle == 0 && j > 0) {
+								arr[i][j].set_left(1);
+								++arr[i][j];
+								arr[i][j - 1].set_right(1);
+								++arr[i][j - 1];
+								sensor_klick[arr[i][j].get_left_rectangle_i()][arr[i][j].get_left_rectangle_j()] = 1;
+								rectangle[arr[i][j].get_left_rectangle_i()][arr[i][j].get_left_rectangle_j()].
+									setFillColor(Color::Red);
+								isComp = false;
+								break;
+							}
+							else if (rand_rectangle == 1 && j < sizeOfField - 1) {
+								arr[i][j].set_right(1);
+								++arr[i][j];
+								arr[i][j + 1].set_left(1);
+								++arr[i][j + 1];
+								sensor_klick[arr[i][j].get_right_rectangle_i()][arr[i][j].get_right_rectangle_j()] = 1;
+								rectangle[arr[i][j].get_right_rectangle_i()][arr[i][j].get_right_rectangle_j()].
+									setFillColor(Color::Red);
+								isComp = false;
+								break;
+							}
+							else if (rand_rectangle == 2 && i > 0) {
+								arr[i][j].set_top(1);
+								++arr[i][j];
+								arr[i - 1][j].set_bottom(1);
+								++arr[i - 1][j];
+								sensor_klick[arr[i][j].get_top_rectangle_i()][arr[i][j].get_top_rectangle_j()] = 1;
+								rectangle[arr[i][j].get_top_rectangle_i()][arr[i][j].get_top_rectangle_j()].
+									setFillColor(Color::Red);
+								isComp = false;
+								break;
+							}
+							else if (rand_rectangle == 2 && i < sizeOfField - 1) {
+								arr[i][j].set_bottom(1);
+								++arr[i][j];
+								arr[i + 1][j].set_top(1);
+								++arr[i + 1][j];
+								sensor_klick[arr[i][j].get_bottom_rectangle_i()][arr[i][j].get_bottom_rectangle_j()] = 1;
+								rectangle[arr[i][j].get_bottom_rectangle_i()][arr[i][j].get_bottom_rectangle_j()].
+									setFillColor(Color::Red);
+								isComp = false;
+								break;
+							}
+
+						}
+					}
+				}
+				// обрабатываем клетки с одной палочкой:
+				for (int i = 0; i < sizeOfField; i++) {
+					for (int j = 0; j < sizeOfField; j++) {
+						if (arr[i][j].get_count() == 1 && isComp == true) {
+							if (arr[i][j].get_left() == 0 && j > 0) {
+								arr[i][j].set_left(1);
+								++arr[i][j];
+								arr[i][j - 1].set_right(1);
+								++arr[i][j - 1];
+								sensor_klick[arr[i][j].get_left_rectangle_i()][arr[i][j].get_left_rectangle_j()] = 1;
+								rectangle[arr[i][j].get_left_rectangle_i()][arr[i][j].get_left_rectangle_j()].
+									setFillColor(Color::Red);
+								isComp = false;
+								break;
+							}
+							else if (arr[i][j].get_right() == 0 && j < sizeOfField - 1) {
+								arr[i][j].set_right(1);
+								++arr[i][j];
+								arr[i][j + 1].set_left(1);
+								++arr[i][j + 1];
+								sensor_klick[arr[i][j].get_right_rectangle_i()][arr[i][j].get_right_rectangle_j()] = 1;
+								rectangle[arr[i][j].get_right_rectangle_i()][arr[i][j].get_right_rectangle_j()].
+									setFillColor(Color::Red);
+								isComp = false;
+								break;
+							}
+							else if (arr[i][j].get_top() == 0 && i > 0) {
+								arr[i][j].set_top(1);
+								++arr[i][j];
+								arr[i - 1][j].set_bottom(1);
+								++arr[i - 1][j];
+								sensor_klick[arr[i][j].get_top_rectangle_i()][arr[i][j].get_top_rectangle_j()] = 1;
+								rectangle[arr[i][j].get_top_rectangle_i()][arr[i][j].get_top_rectangle_j()].
+									setFillColor(Color::Red);
+								isComp = false;
+								break;
+							}
+							else if (arr[i][j].get_bottom() == 0 && i < sizeOfField - 1) {
+								arr[i][j].set_bottom(1);
+								++arr[i][j];
+								arr[i + 1][j].set_top(1);
+								++arr[i + 1][j];
+								sensor_klick[arr[i][j].get_bottom_rectangle_i()][arr[i][j].get_bottom_rectangle_j()] = 1;
+								rectangle[arr[i][j].get_bottom_rectangle_i()][arr[i][j].get_bottom_rectangle_j()].
+									setFillColor(Color::Red);
+								isComp = false;
+								break;
+							}
+						}
+					}
+
+				}
+				// обрабатываем клетки с 2-мя палочками:
+				for (int i = 0; i < sizeOfField; i++) {
+					for (int j = 0; j < sizeOfField; j++) {
+						if (arr[i][j].get_count() == 2 && isComp == true) {
+							if (arr[i][j].get_left() == 0) {
+								arr[i][j].set_left(1);
+								++arr[i][j];
+								arr[i][j - 1].set_right(1);
+								++arr[i][j - 1];
+								sensor_klick[arr[i][j].get_left_rectangle_i()][arr[i][j].get_left_rectangle_j()] = 1;
+								rectangle[arr[i][j].get_left_rectangle_i()][arr[i][j].get_left_rectangle_j()].
+									setFillColor(Color::Red);
+								isComp = false;
+							}
+							else if (arr[i][j].get_right() == 0) {
+								arr[i][j].set_right(1);
+								++arr[i][j];
+								arr[i][j + 1].set_left(1);
+								++arr[i][j + 1];
+								sensor_klick[arr[i][j].get_right_rectangle_i()][arr[i][j].get_right_rectangle_j()] = 1;
+								rectangle[arr[i][j].get_right_rectangle_i()][arr[i][j].get_right_rectangle_j()].
+									setFillColor(Color::Red);
+								isComp = false;
+							}
+							else if (arr[i][j].get_top() == 0) {
+								arr[i][j].set_top(1);
+								++arr[i][j];
+								arr[i - 1][j].set_bottom(1);
+								++arr[i - 1][j];
+								sensor_klick[arr[i][j].get_top_rectangle_i()][arr[i][j].get_top_rectangle_j()] = 1;
+								rectangle[arr[i][j].get_top_rectangle_i()][arr[i][j].get_top_rectangle_j()].
+									setFillColor(Color::Red);
+								isComp = false;
+							}
+							else {
+								arr[i][j].set_bottom(1);
+								++arr[i][j];
+								arr[i + 1][j].set_top(1);
+								++arr[i + 1][j];
+								sensor_klick[arr[i][j].get_bottom_rectangle_i()][arr[i][j].get_bottom_rectangle_j()] = 1;
+								rectangle[arr[i][j].get_bottom_rectangle_i()][arr[i][j].get_bottom_rectangle_j()].
+									setFillColor(Color::Red);
+								isComp = false;
+							}
+
+						}
+
+					}
+				}
+				set_queue(1); // передаем ход крестику
+			}
+		}
+
+	// прорисовка объектов:
 
 			if (sizeOfField == 10){						//10x10
 				for (int i = 0; i < 20; i++) {
@@ -539,7 +753,7 @@ void Game::draw_game(RenderWindow & window, int sizeOfField, int game_mode ) {
 					text0.setString("Krestik won");
 					text0.setFillColor(Color::Blue);
 				    text0.setStyle(sf::Text::Bold | sf::Text::Underlined);
-					queue = 100; // чтоб не отображалась в конце "инфа о том, кто ходит"
+					set_queue(100); // чтоб не отображалась в конце "инфа о том, кто ходит"
 					window.draw(text0);
 					// цикл - для одного воспроизведения музыки
 					while (music_sensor) {
@@ -553,7 +767,21 @@ void Game::draw_game(RenderWindow & window, int sizeOfField, int game_mode ) {
 					text0.setString("Nolik won");
 					text0.setFillColor(Color::Red);
 					text0.setStyle(sf::Text::Bold | sf::Text::Underlined);
-					queue = 100; // чтоб не отображалась в конце "инфа о том, кто ходит"
+					set_queue(100); // чтоб не отображалась в конце "инфа о том, кто ходит"
+					window.draw(text0);
+					// цикл - для одного воспроизведения музыки
+					while (music_sensor) {
+						music.play();//воспроизводим музыку
+						music_sensor = false;
+					}
+				}
+				// ничья:
+				if (winnerDetected(player_o.get_count(), player_x.get_count(), sizeOfField)
+					&& player_x.get_count() == player_o.get_count()) {
+					text0.setString("Draw");
+					text0.setFillColor(Color::Black);
+					text0.setStyle(sf::Text::Bold | sf::Text::Underlined);
+					set_queue(100); // чтоб не отображалась в конце "инфа о том, кто ходит"
 					window.draw(text0);
 					// цикл - для одного воспроизведения музыки
 					while (music_sensor) {
@@ -562,12 +790,12 @@ void Game::draw_game(RenderWindow & window, int sizeOfField, int game_mode ) {
 					}
 				}
 				// выводим информацию, о том, кто сейчас ходит:
-				if (queue == 1) {
+				if (get_queue() == 1) {
 					text0.setString("[X] moves");
 					text0.setFillColor(Color::Blue);
 					window.draw(text0);
 				}	// krestik
-				else if (queue == 0) {
+				else if (get_queue() == 0) {
 					text0.setString("[O] moves");
 					text0.setFillColor(Color::Red);
 					window.draw(text0);
@@ -576,22 +804,26 @@ void Game::draw_game(RenderWindow & window, int sizeOfField, int game_mode ) {
 				window.display();
 			
 		} //game loop ########
-		  // удаление двумерного динамического массива
-		for (int i = 0; i < 10; i++){
-			delete[]arr_copy[i];
-		};
+		queue = 1;
 };
 
-//Функция, устанавливающая размер поля
+//Функции класса Game:
 Game & Game::set_FieldSize(int size) {
 	field_size = size;
+	return *this;
+};
+Game &  Game::set_queue(int q) {
+	queue = q;
+	return *this;
+};
+Game & Game::set_gameMode(int mode) {
+	gameMode = mode;
 	return *this;
 };
 
 
 // ################## class Menu ##################
 void Menu::draw_menu(RenderWindow & window) {
-	Game gm_ob;
 	Texture menuTexture1, menuTexture2, menuTexture3, menuTexture4,
 			menuTexture5, menuTexture6, menuTexture7, menuTexture8, 
 			menuTexture9, menuTexture10, aboutTexture, menuBackground;
@@ -612,8 +844,7 @@ void Menu::draw_menu(RenderWindow & window) {
 		menu8(menuTexture8), menu9(menuTexture9), menu10(menuTexture10),
 		abt(aboutTexture), menuBg(menuBackground); //используем конструктор с параметрами 
 	menu1.setTexture(menuTexture1); //используем функцию-модификатор
-	bool isMenu = 1;
-	int menuNum = 0;
+	
 	menu1.setPosition(60, 30);
 	menu2.setPosition(35, 90);
 	menu3.setPosition(60, 140);
@@ -626,9 +857,16 @@ void Menu::draw_menu(RenderWindow & window) {
 	menu10.setPosition(85, 200);
 	abt.setPosition(15, 0);
 	menuBg.setPosition(0, 0);
+	// текст:
+	Font font;
+	font.loadFromFile("Capture_it.ttf");
+	Text text1("press Esc to go to menu ", font, 15);
+	text1.setFillColor(Color::Black);
+	text1.setPosition(70, 350);
 	////////////////////////////// menu loop ////////////////////////
 	while (isMenu)
 	{
+		
 		menu1.setColor(Color::Black);
 		menu2.setColor(Color::Black);
 		menu3.setColor(Color::Black);
@@ -652,7 +890,7 @@ void Menu::draw_menu(RenderWindow & window) {
 			{
 				// New Game:
 				if (menuNum == 1) {
-					gm_ob.draw_game(window, gm_ob.get_FieldSize(), game_mode);
+					gm_ob.start_game(window, gm_ob.get_FieldSize());
 				}
 				// Field Parameters:
 				if (menuNum == 2) {
@@ -690,6 +928,7 @@ void Menu::draw_menu(RenderWindow & window) {
 						window.draw(menu8);
 						window.draw(menu9);
 						window.draw(menu10);
+						window.draw(text1);
 						window.display();
 					}
 				}
@@ -707,10 +946,10 @@ void Menu::draw_menu(RenderWindow & window) {
 							if (event.type == Event::Closed) { window.close(); }
 							if (Mouse::isButtonPressed(Mouse::Left)) {
 								if (menuNum == 6) { // Duel
-									game_mode = 0; 
+									gm_ob.set_queue(0).set_gameMode(0);
 								}
 								if (menuNum == 7) { // Game with computer
-									game_mode = 1; 
+									gm_ob.set_queue(1).set_gameMode(1);
 								}
 							}
 						}
@@ -718,6 +957,7 @@ void Menu::draw_menu(RenderWindow & window) {
 						window.draw(menuBg);
 						window.draw(menu6);
 						window.draw(menu7);
+						window.draw(text1);
 						window.display();
 					}
 				}
@@ -730,6 +970,7 @@ void Menu::draw_menu(RenderWindow & window) {
 						}
 						window.clear(Color::White);
 						window.draw(abt);
+						window.draw(text1);
 						window.display();
 					}
 				}
@@ -740,16 +981,16 @@ void Menu::draw_menu(RenderWindow & window) {
 				}
 			}
 		}
+		
 		window.draw(menuBg);
+		
 		window.draw(menu1);
 		window.draw(menu2);
 		window.draw(menu3);
 		window.draw(menu4);
 		window.draw(menu5);
 		window.display();
-	}
-	////////////////////////////////////////////////////
-
+	} //isMenu
 }
 
 			// ############  функции:  #############
@@ -769,45 +1010,3 @@ bool winnerDetected(int count1, int count2, int sizeOfField) {
 	}
 };
 
-// очень искусственный интеллект:
-/* void comp(MyLines **arr_copy) {
-	bool isComp = true; 
-	// обрабатываем клетки с 3-мя палочками:
-	for (int i = 0; i < 10; i++) {
-		for (int j = 0; j < 10; j++) {
-			if (arr_copy[i][j].get_count == 3) {
-
-
-			}
-		}
-	}
-	// обрабатываем клетки без палочек:
-	for (int i = 0; i < 10; i++) {
-		for (int j = 0; j < 10; j++) {
-			if (arr_copy[i][j].get_count == 0 && isComp == true ) {
-
-				isComp = false;
-			}
-		}
-	}
-	// обрабатываем клетки с одной палочкой:
-	for (int i = 0; i < 10; i++) {
-		for (int j = 0; j < 10; j++) {
-			if (arr_copy[i][j].get_count == 1 && isComp == true) {
-
-				isComp = false;
-			}
-
-		}
-	}
-	// обрабатываем клетки с 2-мя палочками:
-	for (int i = 0; i < 10; i++) {
-		for (int j = 0; j < 10; j++) {
-			if (arr_copy[i][j].get_count == 2 && isComp == true) {
-
-				isComp = false;
-			}
-
-		}
-	}
-};*/

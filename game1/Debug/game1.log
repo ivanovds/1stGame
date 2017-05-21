@@ -1,2 +1,6 @@
 ﻿  Main.cpp
+  Classes.cpp
+d:\univer\proga\курсач\sfml\game1\classes.cpp(153): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+  Generating Code...
+d:\univer\proga\курсач\sfml\game1\classes.cpp(1011): warning C4715: 'winnerDetected': not all control paths return a value
 sfml-graphics-d.lib(sfml-graphics-d-2.dll) : fatal error LNK1112: module machine type 'x64' conflicts with target machine type 'X86'

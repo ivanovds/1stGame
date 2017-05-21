@@ -8,7 +8,7 @@ using namespace sf;
 	
 int main()
 {
-	RenderWindow window(sf::VideoMode(336, 390), "Dots and Boxes", Style::Close);
+	RenderWindow window(sf::VideoMode(336, 380), "Dots and Boxes", Style::Close);
 	Menu menu;
 	menu.draw_menu(window);//вызов меню
 	

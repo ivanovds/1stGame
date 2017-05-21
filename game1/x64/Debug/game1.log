@@ -1,4 +1,5 @@
 ﻿  Classes.cpp
-d:\univer\proga\курсач\sfml\game1\classes.cpp(770): warning C4715: 'winnerDetected': not all control paths return a value
+d:\univer\proga\курсач\sfml\game1\classes.cpp(153): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+d:\univer\proga\курсач\sfml\game1\classes.cpp(1011): warning C4715: 'winnerDetected': not all control paths return a value
   game1.vcxproj -> D:\univer\Proga\курсач\sfml\x64\Debug\game1.exe
   game1.vcxproj -> D:\univer\Proga\курсач\sfml\x64\Debug\game1.pdb (Partial PDB)
