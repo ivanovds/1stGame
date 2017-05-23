@@ -1,9 +1,6 @@
 #include <SFML/Graphics.hpp>
 #include<iostream>
 #include "Classes.h"
- 
-
-using namespace std;
 using namespace sf;
 	
 int main()
